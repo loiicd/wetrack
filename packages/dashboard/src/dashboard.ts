@@ -16,3 +16,10 @@ export class Dashboard {
     };
   }
 }
+
+// const dashboard = new Dashboard("1", {
+//   title: "My Dashboard",
+//   creater: "bubu",
+// });
+
+// dashboard.addChart();

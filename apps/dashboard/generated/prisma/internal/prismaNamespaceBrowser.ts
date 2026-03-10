@@ -54,7 +54,8 @@ export const ModelName = {
   Stack: 'Stack',
   Dashboard: 'Dashboard',
   DataSource: 'DataSource',
-  Chart: 'Chart'
+  Chart: 'Chart',
+  Credential: 'Credential'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -119,6 +120,18 @@ export const ChartScalarFieldEnum = {
 } as const
 
 export type ChartScalarFieldEnum = (typeof ChartScalarFieldEnum)[keyof typeof ChartScalarFieldEnum]
+
+
+export const CredentialScalarFieldEnum = {
+  id: 'id',
+  stackId: 'stackId',
+  name: 'name',
+  secret: 'secret',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CredentialScalarFieldEnum = (typeof CredentialScalarFieldEnum)[keyof typeof CredentialScalarFieldEnum]
 
 
 export const SortOrder = {

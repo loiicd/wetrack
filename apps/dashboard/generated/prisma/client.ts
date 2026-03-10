@@ -61,3 +61,8 @@ export type DataSource = Prisma.DataSourceModel
  * 
  */
 export type Chart = Prisma.ChartModel
+/**
+ * Model Credential
+ * 
+ */
+export type Credential = Prisma.CredentialModel

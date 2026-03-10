@@ -185,6 +185,7 @@ export type StackWhereInput = {
   dashboards?: Prisma.DashboardListRelationFilter
   dataSources?: Prisma.DataSourceListRelationFilter
   charts?: Prisma.ChartListRelationFilter
+  credentials?: Prisma.CredentialListRelationFilter
 }
 
 export type StackOrderByWithRelationInput = {
@@ -196,6 +197,7 @@ export type StackOrderByWithRelationInput = {
   dashboards?: Prisma.DashboardOrderByRelationAggregateInput
   dataSources?: Prisma.DataSourceOrderByRelationAggregateInput
   charts?: Prisma.ChartOrderByRelationAggregateInput
+  credentials?: Prisma.CredentialOrderByRelationAggregateInput
 }
 
 export type StackWhereUniqueInput = Prisma.AtLeast<{
@@ -210,6 +212,7 @@ export type StackWhereUniqueInput = Prisma.AtLeast<{
   dashboards?: Prisma.DashboardListRelationFilter
   dataSources?: Prisma.DataSourceListRelationFilter
   charts?: Prisma.ChartListRelationFilter
+  credentials?: Prisma.CredentialListRelationFilter
 }, "id">
 
 export type StackOrderByWithAggregationInput = {
@@ -243,6 +246,7 @@ export type StackCreateInput = {
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateInput = {
@@ -254,6 +258,7 @@ export type StackUncheckedCreateInput = {
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackUpdateInput = {
@@ -265,6 +270,7 @@ export type StackUpdateInput = {
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateInput = {
@@ -276,6 +282,7 @@ export type StackUncheckedUpdateInput = {
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUncheckedUpdateManyWithoutStackNestedInput
 }
 
 export type StackCreateManyInput = {
@@ -385,6 +392,20 @@ export type StackUpdateOneRequiredWithoutChartsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StackUpdateToOneWithWhereWithoutChartsInput, Prisma.StackUpdateWithoutChartsInput>, Prisma.StackUncheckedUpdateWithoutChartsInput>
 }
 
+export type StackCreateNestedOneWithoutCredentialsInput = {
+  create?: Prisma.XOR<Prisma.StackCreateWithoutCredentialsInput, Prisma.StackUncheckedCreateWithoutCredentialsInput>
+  connectOrCreate?: Prisma.StackCreateOrConnectWithoutCredentialsInput
+  connect?: Prisma.StackWhereUniqueInput
+}
+
+export type StackUpdateOneRequiredWithoutCredentialsNestedInput = {
+  create?: Prisma.XOR<Prisma.StackCreateWithoutCredentialsInput, Prisma.StackUncheckedCreateWithoutCredentialsInput>
+  connectOrCreate?: Prisma.StackCreateOrConnectWithoutCredentialsInput
+  upsert?: Prisma.StackUpsertWithoutCredentialsInput
+  connect?: Prisma.StackWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StackUpdateToOneWithWhereWithoutCredentialsInput, Prisma.StackUpdateWithoutCredentialsInput>, Prisma.StackUncheckedUpdateWithoutCredentialsInput>
+}
+
 export type StackCreateWithoutDashboardsInput = {
   id?: string
   name: string
@@ -393,6 +414,7 @@ export type StackCreateWithoutDashboardsInput = {
   updatedAt?: Date | string
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateWithoutDashboardsInput = {
@@ -403,6 +425,7 @@ export type StackUncheckedCreateWithoutDashboardsInput = {
   updatedAt?: Date | string
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackCreateOrConnectWithoutDashboardsInput = {
@@ -429,6 +452,7 @@ export type StackUpdateWithoutDashboardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateWithoutDashboardsInput = {
@@ -439,6 +463,7 @@ export type StackUncheckedUpdateWithoutDashboardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUncheckedUpdateManyWithoutStackNestedInput
 }
 
 export type StackCreateWithoutDataSourcesInput = {
@@ -449,6 +474,7 @@ export type StackCreateWithoutDataSourcesInput = {
   updatedAt?: Date | string
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateWithoutDataSourcesInput = {
@@ -459,6 +485,7 @@ export type StackUncheckedCreateWithoutDataSourcesInput = {
   updatedAt?: Date | string
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackCreateOrConnectWithoutDataSourcesInput = {
@@ -485,6 +512,7 @@ export type StackUpdateWithoutDataSourcesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateWithoutDataSourcesInput = {
@@ -495,6 +523,7 @@ export type StackUncheckedUpdateWithoutDataSourcesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUncheckedUpdateManyWithoutStackNestedInput
 }
 
 export type StackCreateWithoutChartsInput = {
@@ -505,6 +534,7 @@ export type StackCreateWithoutChartsInput = {
   updatedAt?: Date | string
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateWithoutChartsInput = {
@@ -515,6 +545,7 @@ export type StackUncheckedCreateWithoutChartsInput = {
   updatedAt?: Date | string
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
+  credentials?: Prisma.CredentialUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackCreateOrConnectWithoutChartsInput = {
@@ -541,6 +572,7 @@ export type StackUpdateWithoutChartsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateWithoutChartsInput = {
@@ -551,6 +583,67 @@ export type StackUncheckedUpdateWithoutChartsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
+  credentials?: Prisma.CredentialUncheckedUpdateManyWithoutStackNestedInput
+}
+
+export type StackCreateWithoutCredentialsInput = {
+  id?: string
+  name: string
+  environment: $Enums.Environment
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
+  dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
+  charts?: Prisma.ChartCreateNestedManyWithoutStackInput
+}
+
+export type StackUncheckedCreateWithoutCredentialsInput = {
+  id?: string
+  name: string
+  environment: $Enums.Environment
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
+  dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
+  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
+}
+
+export type StackCreateOrConnectWithoutCredentialsInput = {
+  where: Prisma.StackWhereUniqueInput
+  create: Prisma.XOR<Prisma.StackCreateWithoutCredentialsInput, Prisma.StackUncheckedCreateWithoutCredentialsInput>
+}
+
+export type StackUpsertWithoutCredentialsInput = {
+  update: Prisma.XOR<Prisma.StackUpdateWithoutCredentialsInput, Prisma.StackUncheckedUpdateWithoutCredentialsInput>
+  create: Prisma.XOR<Prisma.StackCreateWithoutCredentialsInput, Prisma.StackUncheckedCreateWithoutCredentialsInput>
+  where?: Prisma.StackWhereInput
+}
+
+export type StackUpdateToOneWithWhereWithoutCredentialsInput = {
+  where?: Prisma.StackWhereInput
+  data: Prisma.XOR<Prisma.StackUpdateWithoutCredentialsInput, Prisma.StackUncheckedUpdateWithoutCredentialsInput>
+}
+
+export type StackUpdateWithoutCredentialsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
+  dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
+  charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
+}
+
+export type StackUncheckedUpdateWithoutCredentialsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
+  dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
+  charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
 }
 
 
@@ -562,12 +655,14 @@ export type StackCountOutputType = {
   dashboards: number
   dataSources: number
   charts: number
+  credentials: number
 }
 
 export type StackCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dashboards?: boolean | StackCountOutputTypeCountDashboardsArgs
   dataSources?: boolean | StackCountOutputTypeCountDataSourcesArgs
   charts?: boolean | StackCountOutputTypeCountChartsArgs
+  credentials?: boolean | StackCountOutputTypeCountCredentialsArgs
 }
 
 /**
@@ -601,6 +696,13 @@ export type StackCountOutputTypeCountChartsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.ChartWhereInput
 }
 
+/**
+ * StackCountOutputType without action
+ */
+export type StackCountOutputTypeCountCredentialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CredentialWhereInput
+}
+
 
 export type StackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -611,6 +713,7 @@ export type StackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   dashboards?: boolean | Prisma.Stack$dashboardsArgs<ExtArgs>
   dataSources?: boolean | Prisma.Stack$dataSourcesArgs<ExtArgs>
   charts?: boolean | Prisma.Stack$chartsArgs<ExtArgs>
+  credentials?: boolean | Prisma.Stack$credentialsArgs<ExtArgs>
   _count?: boolean | Prisma.StackCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stack"]>
 
@@ -643,6 +746,7 @@ export type StackInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   dashboards?: boolean | Prisma.Stack$dashboardsArgs<ExtArgs>
   dataSources?: boolean | Prisma.Stack$dataSourcesArgs<ExtArgs>
   charts?: boolean | Prisma.Stack$chartsArgs<ExtArgs>
+  credentials?: boolean | Prisma.Stack$credentialsArgs<ExtArgs>
   _count?: boolean | Prisma.StackCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StackIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -654,6 +758,7 @@ export type $StackPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     dashboards: Prisma.$DashboardPayload<ExtArgs>[]
     dataSources: Prisma.$DataSourcePayload<ExtArgs>[]
     charts: Prisma.$ChartPayload<ExtArgs>[]
+    credentials: Prisma.$CredentialPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1058,6 +1163,7 @@ export interface Prisma__StackClient<T, Null = never, ExtArgs extends runtime.Ty
   dashboards<T extends Prisma.Stack$dashboardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$dashboardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DashboardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dataSources<T extends Prisma.Stack$dataSourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$dataSourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataSourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   charts<T extends Prisma.Stack$chartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$chartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  credentials<T extends Prisma.Stack$credentialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$credentialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1549,6 +1655,30 @@ export type Stack$chartsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.ChartScalarFieldEnum | Prisma.ChartScalarFieldEnum[]
+}
+
+/**
+ * Stack.credentials
+ */
+export type Stack$credentialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Credential
+   */
+  select?: Prisma.CredentialSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Credential
+   */
+  omit?: Prisma.CredentialOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CredentialInclude<ExtArgs> | null
+  where?: Prisma.CredentialWhereInput
+  orderBy?: Prisma.CredentialOrderByWithRelationInput | Prisma.CredentialOrderByWithRelationInput[]
+  cursor?: Prisma.CredentialWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CredentialScalarFieldEnum | Prisma.CredentialScalarFieldEnum[]
 }
 
 /**

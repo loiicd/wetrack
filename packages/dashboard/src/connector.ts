@@ -1,30 +1,13 @@
 import { zodToJsonSchema } from "zod-to-json-schema";
 import type { ZodSchema } from "zod/v3";
-import z from "zod/v3";
+import type { RestConnectorConfig } from "../types/connector";
 
 export class Connector {
   name: string;
   stackId?: string;
-  config: {
-    type: "api";
-    url: string;
-    method: "get" | "post" | "put";
-    headers?: Record<string, string>;
-    body?: any;
-    responseSchema: ZodSchema<any>;
-  };
+  config: RestConnectorConfig;
 
-  constructor(
-    name: string,
-    config: {
-      type: "api";
-      responseSchema: ZodSchema<any>;
-      url: string;
-      method: "get" | "post" | "put";
-      headers?: Record<string, string>;
-      body?: any;
-    },
-  ) {
+  constructor(name: string, config: RestConnectorConfig) {
     this.name = name;
     this.config = config;
   }

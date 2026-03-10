@@ -1,19 +1,19 @@
 {
-  "name": "main-stack",
+  "key": "main-stack",
   "environment": "PRODUCTION",
   "dashboards": [
     {
-      "name": "open-emergency-data-dashboard",
+      "key": "open-emergency-data-dashboard",
       "title": "Open Emergency Data Dashboard"
     },
     {
-      "name": "user-activity-dashboard",
+      "key": "user-activity-dashboard",
       "title": "User Activity Dashboard"
     }
   ],
   "dataSources": [
     {
-      "name": "github-api-interface",
+      "key": "github-api-interface",
       "type": "rest",
       "config": {
         "url": "https://jsonplaceholder.typicode.com/posts",
@@ -23,7 +23,7 @@
   ],
   "charts": [
     {
-      "name": "github-commits-chart",
+      "key": "github-commits-chart",
       "label": "GitHub Commits",
       "type": "bar",
       "dataSource": "github-api-interface"

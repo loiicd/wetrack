@@ -141,7 +141,14 @@ function NavPrimary({
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton isActive={item.isActive} tooltip={item.title} render={<a href={item.url} />}><item.icon /><span>{item.title}</span></SidebarMenuButton>
+            <SidebarMenuButton
+              isActive={item.isActive}
+              tooltip={item.title}
+              render={<a href={item.url} />}
+            >
+              <item.icon />
+              <span>{item.title}</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>
@@ -163,22 +170,33 @@ function NavSubscriptions({
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <Collapsible defaultOpen>
-        <SidebarGroupLabel render={<CollapsibleTrigger className="group/collapsible flex w-full items-center" />}>Subscriptions
-                          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" /></SidebarGroupLabel>
+        <SidebarGroupLabel
+          render={
+            <CollapsibleTrigger className="group/collapsible flex w-full items-center" />
+          }
+        >
+          Subscriptions
+          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+        </SidebarGroupLabel>
         <CollapsibleContent>
           <SidebarMenu>
             {subscriptions.map((channel) => (
               <SidebarMenuItem key={channel.name}>
-                <SidebarMenuButton render={<a href="#" />}><Avatar className="size-6 ring-2 ring-muted">
-                                          <AvatarImage src={channel.avatar} />
-                                          <AvatarFallback className="bg-primary text-xs text-primary-foreground">
-                                            {channel.name[0]}
-                                          </AvatarFallback>
-                                        </Avatar><span className="truncate">{channel.name}</span>{channel.isLive && (
-                                          <Radio className="ml-auto size-4 text-red-500" />
-                                        )}{channel.hasNew && !channel.isLive && (
-                                          <span className="ml-auto size-2 rounded-full bg-blue-500" />
-                                        )}</SidebarMenuButton>
+                <SidebarMenuButton render={<a href="#" />}>
+                  <Avatar className="size-6 ring-2 ring-muted">
+                    <AvatarImage src={channel.avatar} />
+                    <AvatarFallback className="bg-primary text-xs text-primary-foreground">
+                      {channel.name[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="truncate">{channel.name}</span>
+                  {channel.isLive && (
+                    <Radio className="ml-auto size-4 text-red-500" />
+                  )}
+                  {channel.hasNew && !channel.isLive && (
+                    <span className="ml-auto size-2 rounded-full bg-blue-500" />
+                  )}
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
             <SidebarMenuItem>
@@ -203,13 +221,22 @@ function NavYou({
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <Collapsible defaultOpen>
-        <SidebarGroupLabel render={<CollapsibleTrigger className="group/collapsible flex w-full items-center" />}>You
-                          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" /></SidebarGroupLabel>
+        <SidebarGroupLabel
+          render={
+            <CollapsibleTrigger className="group/collapsible flex w-full items-center" />
+          }
+        >
+          You
+          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+        </SidebarGroupLabel>
         <CollapsibleContent>
           <SidebarMenu>
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton render={<a href={item.url} />}><item.icon /><span>{item.title}</span></SidebarMenuButton>
+                <SidebarMenuButton render={<a href={item.url} />}>
+                  <item.icon />
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
             <SidebarMenuItem>
@@ -234,13 +261,22 @@ function NavExplore({
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <Collapsible defaultOpen>
-        <SidebarGroupLabel render={<CollapsibleTrigger className="group/collapsible flex w-full items-center" />}>Explore
-                          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" /></SidebarGroupLabel>
+        <SidebarGroupLabel
+          render={
+            <CollapsibleTrigger className="group/collapsible flex w-full items-center" />
+          }
+        >
+          Explore
+          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+        </SidebarGroupLabel>
         <CollapsibleContent>
           <SidebarMenu>
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton render={<a href={item.url} />}><item.icon /><span>{item.title}</span></SidebarMenuButton>
+                <SidebarMenuButton render={<a href={item.url} />}>
+                  <item.icon />
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
             <SidebarMenuItem>
@@ -268,7 +304,10 @@ function NavMoreFrom({
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton render={<a href={item.url} />}><item.icon /><span>{item.title}</span></SidebarMenuButton>
+            <SidebarMenuButton render={<a href={item.url} />}>
+              <item.icon />
+              <span>{item.title}</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>
@@ -287,7 +326,10 @@ function NavFooter({
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton size="sm" render={<a href={item.url} />}><item.icon /><span>{item.title}</span></SidebarMenuButton>
+            <SidebarMenuButton size="sm" render={<a href={item.url} />}>
+              <item.icon />
+              <span>{item.title}</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>
@@ -385,12 +427,23 @@ function SiteHeader() {
       {/* Right: Avatar */}
       <div className="flex h-(--header-height) items-center gap-1 px-4">
         <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="ghost" className="flex h-auto items-center gap-2 px-2 py-1" />}><Avatar className="size-8">
-                                  <AvatarImage src={data.user.avatar} alt={data.user.name} />
-                                  <AvatarFallback>{getInitials(data.user.name)}</AvatarFallback>
-                                </Avatar><span className="hidden font-medium sm:inline">
-                                  {data.user.name}
-                                </span><ChevronDown className="size-3 text-muted-foreground" /></DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="ghost"
+                className="flex h-auto items-center gap-2 px-2 py-1"
+              />
+            }
+          >
+            <Avatar className="size-8">
+              <AvatarImage src={data.user.avatar} alt={data.user.name} />
+              <AvatarFallback>{getInitials(data.user.name)}</AvatarFallback>
+            </Avatar>
+            <span className="hidden font-medium sm:inline">
+              {data.user.name}
+            </span>
+            <ChevronDown className="size-3 text-muted-foreground" />
+          </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
@@ -481,10 +534,14 @@ function MobileHeader() {
           <span className="sr-only">Search</span>
         </Button>
         <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="size-9" />}><Avatar className="size-8">
-                                  <AvatarImage src={data.user.avatar} alt={data.user.name} />
-                                  <AvatarFallback>{getInitials(data.user.name)}</AvatarFallback>
-                                </Avatar></DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={<Button variant="ghost" size="icon" className="size-9" />}
+          >
+            <Avatar className="size-8">
+              <AvatarImage src={data.user.avatar} alt={data.user.name} />
+              <AvatarFallback>{getInitials(data.user.name)}</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
@@ -556,50 +613,25 @@ function MobileBottomNav() {
   );
 }
 
-function ContentGrid() {
-  return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-      </div>
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-      </div>
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-      </div>
-    </div>
-  );
-}
-
-export function ApplicationShell11() {
+export function ApplicationShell11({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="w-full [--header-height:calc(--spacing(14))]">
       <SidebarProvider
         className="flex flex-col"
         style={{ "--sidebar-width-icon": "3rem" } as React.CSSProperties}
       >
-        {/* Desktop layout */}
         <SiteHeader />
         <div className="hidden flex-1 pt-(--header-height) md:flex">
           <AppSidebar />
-          <SidebarInset>
-            <ContentGrid />
-          </SidebarInset>
+          <SidebarInset>{children}</SidebarInset>
         </div>
-
-        {/* Mobile layout */}
         <div className="flex flex-col md:hidden">
           <MobileHeader />
-          <div className="pb-16">
-            <ContentGrid />
-          </div>
+          <div className="pb-16">{children}</div>
           <MobileBottomNav />
         </div>
       </SidebarProvider>

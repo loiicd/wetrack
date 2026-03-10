@@ -17,7 +17,7 @@ export const POST = async (request: NextRequest) => {
 
 const main = async (data: z.infer<typeof stackSchema>) => {
   const stack = await stackInterface.create({
-    name: data.name,
+    key: data.key,
     environment: data.environment,
   });
 
@@ -34,7 +34,9 @@ const main = async (data: z.infer<typeof stackSchema>) => {
     data.dataSources.map(async (dataSource) => {
       dataSourceInterface.create({
         stackId: stack.id,
-        ...dataSource,
+        name: dataSource.key,
+        type: dataSource.type,
+        config: dataSource.config,
       });
     }),
   );

@@ -15,7 +15,7 @@ enum Environment {
 
 model Stack {
   id          String      @id @default(uuid())
-  name        String
+  key         String
   environment Environment
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -28,18 +28,20 @@ model Stack {
 
 model Dashboard {
   id        String   @id @default(uuid())
-  name      String
+  key       String
   stackId   String
   title     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   stack Stack @relation(fields: [stackId], references: [id])
+
+  @@index([stackId, key])
 }
 
 model DataSource {
   id        String   @id @default(uuid())
-  name      String
+  key       String
   stackId   String
   type      String
   config    Json
@@ -52,7 +54,7 @@ model DataSource {
 
 model Chart {
   id           String   @id @default(uuid())
-  name         String
+  key          String
   stackId      String
   dataSourceId String
   createdAt    DateTime @default(now())
@@ -64,8 +66,8 @@ model Chart {
 
 model Credential {
   id        String   @id @default(uuid())
+  key       String
   stackId   String
-  name      String
   secret    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

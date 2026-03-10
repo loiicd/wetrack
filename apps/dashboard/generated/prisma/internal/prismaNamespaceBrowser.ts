@@ -76,7 +76,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const StackScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  key: 'key',
   environment: 'environment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -87,7 +87,7 @@ export type StackScalarFieldEnum = (typeof StackScalarFieldEnum)[keyof typeof St
 
 export const DashboardScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  key: 'key',
   stackId: 'stackId',
   title: 'title',
   createdAt: 'createdAt',
@@ -99,7 +99,7 @@ export type DashboardScalarFieldEnum = (typeof DashboardScalarFieldEnum)[keyof t
 
 export const DataSourceScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  key: 'key',
   stackId: 'stackId',
   type: 'type',
   config: 'config',
@@ -112,7 +112,7 @@ export type DataSourceScalarFieldEnum = (typeof DataSourceScalarFieldEnum)[keyof
 
 export const ChartScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  key: 'key',
   stackId: 'stackId',
   dataSourceId: 'dataSourceId',
   createdAt: 'createdAt',
@@ -124,8 +124,8 @@ export type ChartScalarFieldEnum = (typeof ChartScalarFieldEnum)[keyof typeof Ch
 
 export const CredentialScalarFieldEnum = {
   id: 'id',
+  key: 'key',
   stackId: 'stackId',
-  name: 'name',
   secret: 'secret',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

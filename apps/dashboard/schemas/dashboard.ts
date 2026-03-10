@@ -1,12 +1,12 @@
 import z from "zod";
 
 const dashboardSchema = z.object({
-  name: z.string(),
+  key: z.string(),
   title: z.string(),
 });
 
 const dataSourceSchema = z.object({
-  name: z.string(),
+  key: z.string(),
   type: z.enum(["rest"]),
   config: z.object({
     url: z.string(),
@@ -15,14 +15,14 @@ const dataSourceSchema = z.object({
 });
 
 const chartSchema = z.object({
-  name: z.string(),
+  key: z.string(),
   label: z.string(),
   type: z.enum(["bar"]),
   dataSource: z.string(),
 });
 
 export const stackSchema = z.object({
-  name: z.string(),
+  key: z.string(),
   environment: z.enum(["PRODUCTION", "STAGING"]),
   dataSources: z.array(dataSourceSchema),
   charts: z.array(chartSchema),

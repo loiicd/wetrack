@@ -1,0 +1,27 @@
+import { dashboardInterface } from "@/lib/database/dashboard";
+import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import Link from "next/link";
+
+const DashboardList = async ({ stackKey }: { stackKey: string }) => {
+  const dashboards = await dashboardInterface.getLatestByStackKey(stackKey);
+
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {dashboards.map((dashboard) => (
+        <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
+          <Card>
+            <CardHeader>
+              <CardTitle>{dashboard.title}</CardTitle>
+              <CardDescription>
+                {dashboard.updatedAt.toLocaleDateString("de-DE")}{" "}
+                {dashboard.updatedAt.toLocaleTimeString("de-DE")}
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
+      ))}
+    </div>
+  );
+};
+
+export default DashboardList;

@@ -81,7 +81,7 @@ const DashboardContent = async ({
   return (
     <div className="flex flex-col gap-4">
       <DashboardBreadcrumb />
-      <div className="bg-gray-200 p-2 rounded">{dashboard.title}</div>
+      <div className="bg-gray-200 p-2 rounded">{dashboard.label}</div>
       <ChartGrid widgets={widgets} />
     </div>
   );

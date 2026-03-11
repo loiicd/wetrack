@@ -1,18 +1,17 @@
-"use cache";
-
-import DashboardList from "@/components/dashbaordList";
+import DashboardCard from "@/components/cards/dashboardCard";
 import Container from "@/components/layout/container";
-import { cacheLife } from "next/cache";
-import { Suspense } from "react";
+import { dashboardInterface } from "@/lib/database/dashboard";
 
 const Page = async () => {
-  cacheLife("weeks");
+  const dashboards = await dashboardInterface.getMany();
 
   return (
     <Container>
-      <Suspense>
-        <DashboardList stackKey="main-stack" />
-      </Suspense>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {dashboards.map((dashboard) => (
+          <DashboardCard key={dashboard.id} dashboard={dashboard} />
+        ))}
+      </div>
     </Container>
   );
 };

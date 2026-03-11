@@ -18,15 +18,6 @@ export const Environment = {
 export type Environment = (typeof Environment)[keyof typeof Environment]
 
 
-export const Status = {
-  ACTIVE: 'ACTIVE',
-  BUILDING: 'BUILDING',
-  INACTIVE: 'INACTIVE'
-} as const
-
-export type Status = (typeof Status)[keyof typeof Status]
-
-
 export const TransformFunction = {
   SUM: 'SUM',
   AVG: 'AVG',

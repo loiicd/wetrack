@@ -20,15 +20,27 @@ export type DashboardModel = runtime.Types.Result.DefaultSelection<Prisma.$Dashb
 
 export type AggregateDashboard = {
   _count: DashboardCountAggregateOutputType | null
+  _avg: DashboardAvgAggregateOutputType | null
+  _sum: DashboardSumAggregateOutputType | null
   _min: DashboardMinAggregateOutputType | null
   _max: DashboardMaxAggregateOutputType | null
+}
+
+export type DashboardAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type DashboardSumAggregateOutputType = {
+  version: number | null
 }
 
 export type DashboardMinAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
-  title: string | null
+  label: string | null
+  description: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,8 +48,10 @@ export type DashboardMinAggregateOutputType = {
 export type DashboardMaxAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
-  title: string | null
+  label: string | null
+  description: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -45,19 +59,31 @@ export type DashboardMaxAggregateOutputType = {
 export type DashboardCountAggregateOutputType = {
   id: number
   key: number
+  version: number
   stackId: number
-  title: number
+  label: number
+  description: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
+export type DashboardAvgAggregateInputType = {
+  version?: true
+}
+
+export type DashboardSumAggregateInputType = {
+  version?: true
+}
+
 export type DashboardMinAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
-  title?: true
+  label?: true
+  description?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -65,8 +91,10 @@ export type DashboardMinAggregateInputType = {
 export type DashboardMaxAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
-  title?: true
+  label?: true
+  description?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -74,8 +102,10 @@ export type DashboardMaxAggregateInputType = {
 export type DashboardCountAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
-  title?: true
+  label?: true
+  description?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -119,6 +149,18 @@ export type DashboardAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: DashboardAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: DashboardSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: DashboardMinAggregateInputType
@@ -149,6 +191,8 @@ export type DashboardGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: DashboardCountAggregateInputType | true
+  _avg?: DashboardAvgAggregateInputType
+  _sum?: DashboardSumAggregateInputType
   _min?: DashboardMinAggregateInputType
   _max?: DashboardMaxAggregateInputType
 }
@@ -156,11 +200,15 @@ export type DashboardGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type DashboardGroupByOutputType = {
   id: string
   key: string
+  version: number
   stackId: string
-  title: string
+  label: string
+  description: string | null
   createdAt: Date
   updatedAt: Date
   _count: DashboardCountAggregateOutputType | null
+  _avg: DashboardAvgAggregateOutputType | null
+  _sum: DashboardSumAggregateOutputType | null
   _min: DashboardMinAggregateOutputType | null
   _max: DashboardMaxAggregateOutputType | null
 }
@@ -186,8 +234,10 @@ export type DashboardWhereInput = {
   NOT?: Prisma.DashboardWhereInput | Prisma.DashboardWhereInput[]
   id?: Prisma.StringFilter<"Dashboard"> | string
   key?: Prisma.StringFilter<"Dashboard"> | string
+  version?: Prisma.IntFilter<"Dashboard"> | number
   stackId?: Prisma.StringFilter<"Dashboard"> | string
-  title?: Prisma.StringFilter<"Dashboard"> | string
+  label?: Prisma.StringFilter<"Dashboard"> | string
+  description?: Prisma.StringNullableFilter<"Dashboard"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
@@ -196,8 +246,10 @@ export type DashboardWhereInput = {
 export type DashboardOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   stack?: Prisma.StackOrderByWithRelationInput
@@ -209,8 +261,10 @@ export type DashboardWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.DashboardWhereInput[]
   NOT?: Prisma.DashboardWhereInput | Prisma.DashboardWhereInput[]
   key?: Prisma.StringFilter<"Dashboard"> | string
+  version?: Prisma.IntFilter<"Dashboard"> | number
   stackId?: Prisma.StringFilter<"Dashboard"> | string
-  title?: Prisma.StringFilter<"Dashboard"> | string
+  label?: Prisma.StringFilter<"Dashboard"> | string
+  description?: Prisma.StringNullableFilter<"Dashboard"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
@@ -219,13 +273,17 @@ export type DashboardWhereUniqueInput = Prisma.AtLeast<{
 export type DashboardOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DashboardCountOrderByAggregateInput
+  _avg?: Prisma.DashboardAvgOrderByAggregateInput
   _max?: Prisma.DashboardMaxOrderByAggregateInput
   _min?: Prisma.DashboardMinOrderByAggregateInput
+  _sum?: Prisma.DashboardSumOrderByAggregateInput
 }
 
 export type DashboardScalarWhereWithAggregatesInput = {
@@ -234,8 +292,10 @@ export type DashboardScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DashboardScalarWhereWithAggregatesInput | Prisma.DashboardScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Dashboard"> | string
   key?: Prisma.StringWithAggregatesFilter<"Dashboard"> | string
+  version?: Prisma.IntWithAggregatesFilter<"Dashboard"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Dashboard"> | string
-  title?: Prisma.StringWithAggregatesFilter<"Dashboard"> | string
+  label?: Prisma.StringWithAggregatesFilter<"Dashboard"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Dashboard"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Dashboard"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Dashboard"> | Date | string
 }
@@ -243,7 +303,9 @@ export type DashboardScalarWhereWithAggregatesInput = {
 export type DashboardCreateInput = {
   id?: string
   key: string
-  title: string
+  version?: number
+  label: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutDashboardsInput
@@ -252,8 +314,10 @@ export type DashboardCreateInput = {
 export type DashboardUncheckedCreateInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
-  title: string
+  label: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -261,7 +325,9 @@ export type DashboardUncheckedCreateInput = {
 export type DashboardUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutDashboardsNestedInput
@@ -270,8 +336,10 @@ export type DashboardUpdateInput = {
 export type DashboardUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -279,8 +347,10 @@ export type DashboardUncheckedUpdateInput = {
 export type DashboardCreateManyInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
-  title: string
+  label: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -288,7 +358,9 @@ export type DashboardCreateManyInput = {
 export type DashboardUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -296,8 +368,10 @@ export type DashboardUpdateManyMutationInput = {
 export type DashboardUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -315,17 +389,25 @@ export type DashboardOrderByRelationAggregateInput = {
 export type DashboardCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type DashboardAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type DashboardMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -333,10 +415,16 @@ export type DashboardMaxOrderByAggregateInput = {
 export type DashboardMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  title?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type DashboardSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type DashboardCreateNestedManyWithoutStackInput = {
@@ -381,10 +469,16 @@ export type DashboardUncheckedUpdateManyWithoutStackNestedInput = {
   deleteMany?: Prisma.DashboardScalarWhereInput | Prisma.DashboardScalarWhereInput[]
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type DashboardCreateWithoutStackInput = {
   id?: string
   key: string
-  title: string
+  version?: number
+  label: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -392,7 +486,9 @@ export type DashboardCreateWithoutStackInput = {
 export type DashboardUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
-  title: string
+  version?: number
+  label: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -429,8 +525,10 @@ export type DashboardScalarWhereInput = {
   NOT?: Prisma.DashboardScalarWhereInput | Prisma.DashboardScalarWhereInput[]
   id?: Prisma.StringFilter<"Dashboard"> | string
   key?: Prisma.StringFilter<"Dashboard"> | string
+  version?: Prisma.IntFilter<"Dashboard"> | number
   stackId?: Prisma.StringFilter<"Dashboard"> | string
-  title?: Prisma.StringFilter<"Dashboard"> | string
+  label?: Prisma.StringFilter<"Dashboard"> | string
+  description?: Prisma.StringNullableFilter<"Dashboard"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
 }
@@ -438,7 +536,9 @@ export type DashboardScalarWhereInput = {
 export type DashboardCreateManyStackInput = {
   id?: string
   key: string
-  title: string
+  version?: number
+  label: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -446,7 +546,9 @@ export type DashboardCreateManyStackInput = {
 export type DashboardUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -454,7 +556,9 @@ export type DashboardUpdateWithoutStackInput = {
 export type DashboardUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -462,7 +566,9 @@ export type DashboardUncheckedUpdateWithoutStackInput = {
 export type DashboardUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -472,8 +578,10 @@ export type DashboardUncheckedUpdateManyWithoutStackInput = {
 export type DashboardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
-  title?: boolean
+  label?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
@@ -482,8 +590,10 @@ export type DashboardSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type DashboardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
-  title?: boolean
+  label?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
@@ -492,8 +602,10 @@ export type DashboardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type DashboardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
-  title?: boolean
+  label?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
@@ -502,13 +614,15 @@ export type DashboardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type DashboardSelectScalar = {
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
-  title?: boolean
+  label?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DashboardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "stackId" | "title" | "createdAt" | "updatedAt", ExtArgs["result"]["dashboard"]>
+export type DashboardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "label" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["dashboard"]>
 export type DashboardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
 }
@@ -527,8 +641,10 @@ export type $DashboardPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
+    version: number
     stackId: string
-    title: string
+    label: string
+    description: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["dashboard"]>
@@ -957,8 +1073,10 @@ export interface Prisma__DashboardClient<T, Null = never, ExtArgs extends runtim
 export interface DashboardFieldRefs {
   readonly id: Prisma.FieldRef<"Dashboard", 'String'>
   readonly key: Prisma.FieldRef<"Dashboard", 'String'>
+  readonly version: Prisma.FieldRef<"Dashboard", 'Int'>
   readonly stackId: Prisma.FieldRef<"Dashboard", 'String'>
-  readonly title: Prisma.FieldRef<"Dashboard", 'String'>
+  readonly label: Prisma.FieldRef<"Dashboard", 'String'>
+  readonly description: Prisma.FieldRef<"Dashboard", 'String'>
   readonly createdAt: Prisma.FieldRef<"Dashboard", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Dashboard", 'DateTime'>
 }

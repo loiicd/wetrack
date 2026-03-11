@@ -2,7 +2,8 @@ import z from "zod";
 
 const dashboardSchema = z.object({
   key: z.string(),
-  title: z.string(),
+  label: z.string(),
+  description: z.string().optional(),
 });
 
 const dataSourceSchema = z.object({
@@ -16,8 +17,6 @@ const dataSourceSchema = z.object({
 
 const chartSchema = z.object({
   key: z.string(),
-  label: z.string(),
-  type: z.enum(["bar"]),
   dataSource: z.string(),
 });
 
@@ -37,10 +36,10 @@ const transformSchema = z.object({
 
 export const stackSchema = z.object({
   key: z.string(),
-  environment: z.enum(["PRODUCTION", "STAGING"]),
-  dataSources: z.array(dataSourceSchema),
-  charts: z.array(chartSchema),
-  dashboards: z.array(dashboardSchema),
-  queries: z.array(querySchema),
-  transforms: z.array(transformSchema),
+  environment: z.enum(["PRODUCTION", "STAGING", "DEVELOPMENT"]),
+  dataSources: z.array(dataSourceSchema).optional(),
+  charts: z.array(chartSchema).optional(),
+  dashboards: z.array(dashboardSchema).optional(),
+  queries: z.array(querySchema).optional(),
+  transforms: z.array(transformSchema).optional(),
 });

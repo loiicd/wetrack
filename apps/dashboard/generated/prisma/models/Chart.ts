@@ -20,13 +20,24 @@ export type ChartModel = runtime.Types.Result.DefaultSelection<Prisma.$ChartPayl
 
 export type AggregateChart = {
   _count: ChartCountAggregateOutputType | null
+  _avg: ChartAvgAggregateOutputType | null
+  _sum: ChartSumAggregateOutputType | null
   _min: ChartMinAggregateOutputType | null
   _max: ChartMaxAggregateOutputType | null
+}
+
+export type ChartAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type ChartSumAggregateOutputType = {
+  version: number | null
 }
 
 export type ChartMinAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   dataSourceId: string | null
   createdAt: Date | null
@@ -36,6 +47,7 @@ export type ChartMinAggregateOutputType = {
 export type ChartMaxAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   dataSourceId: string | null
   createdAt: Date | null
@@ -45,6 +57,7 @@ export type ChartMaxAggregateOutputType = {
 export type ChartCountAggregateOutputType = {
   id: number
   key: number
+  version: number
   stackId: number
   dataSourceId: number
   createdAt: number
@@ -53,9 +66,18 @@ export type ChartCountAggregateOutputType = {
 }
 
 
+export type ChartAvgAggregateInputType = {
+  version?: true
+}
+
+export type ChartSumAggregateInputType = {
+  version?: true
+}
+
 export type ChartMinAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   dataSourceId?: true
   createdAt?: true
@@ -65,6 +87,7 @@ export type ChartMinAggregateInputType = {
 export type ChartMaxAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   dataSourceId?: true
   createdAt?: true
@@ -74,6 +97,7 @@ export type ChartMaxAggregateInputType = {
 export type ChartCountAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   dataSourceId?: true
   createdAt?: true
@@ -119,6 +143,18 @@ export type ChartAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ChartAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ChartSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ChartMinAggregateInputType
@@ -149,6 +185,8 @@ export type ChartGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: ChartCountAggregateInputType | true
+  _avg?: ChartAvgAggregateInputType
+  _sum?: ChartSumAggregateInputType
   _min?: ChartMinAggregateInputType
   _max?: ChartMaxAggregateInputType
 }
@@ -156,11 +194,14 @@ export type ChartGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type ChartGroupByOutputType = {
   id: string
   key: string
+  version: number
   stackId: string
   dataSourceId: string
   createdAt: Date
   updatedAt: Date
   _count: ChartCountAggregateOutputType | null
+  _avg: ChartAvgAggregateOutputType | null
+  _sum: ChartSumAggregateOutputType | null
   _min: ChartMinAggregateOutputType | null
   _max: ChartMaxAggregateOutputType | null
 }
@@ -186,6 +227,7 @@ export type ChartWhereInput = {
   NOT?: Prisma.ChartWhereInput | Prisma.ChartWhereInput[]
   id?: Prisma.StringFilter<"Chart"> | string
   key?: Prisma.StringFilter<"Chart"> | string
+  version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
   dataSourceId?: Prisma.StringFilter<"Chart"> | string
   createdAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
@@ -197,6 +239,7 @@ export type ChartWhereInput = {
 export type ChartOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -211,6 +254,7 @@ export type ChartWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ChartWhereInput[]
   NOT?: Prisma.ChartWhereInput | Prisma.ChartWhereInput[]
   key?: Prisma.StringFilter<"Chart"> | string
+  version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
   dataSourceId?: Prisma.StringFilter<"Chart"> | string
   createdAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
@@ -222,13 +266,16 @@ export type ChartWhereUniqueInput = Prisma.AtLeast<{
 export type ChartOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ChartCountOrderByAggregateInput
+  _avg?: Prisma.ChartAvgOrderByAggregateInput
   _max?: Prisma.ChartMaxOrderByAggregateInput
   _min?: Prisma.ChartMinOrderByAggregateInput
+  _sum?: Prisma.ChartSumOrderByAggregateInput
 }
 
 export type ChartScalarWhereWithAggregatesInput = {
@@ -237,6 +284,7 @@ export type ChartScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ChartScalarWhereWithAggregatesInput | Prisma.ChartScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Chart"> | string
   key?: Prisma.StringWithAggregatesFilter<"Chart"> | string
+  version?: Prisma.IntWithAggregatesFilter<"Chart"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
   dataSourceId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Chart"> | Date | string
@@ -246,6 +294,7 @@ export type ChartScalarWhereWithAggregatesInput = {
 export type ChartCreateInput = {
   id?: string
   key: string
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutChartsInput
@@ -255,6 +304,7 @@ export type ChartCreateInput = {
 export type ChartUncheckedCreateInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   dataSourceId: string
   createdAt?: Date | string
@@ -264,6 +314,7 @@ export type ChartUncheckedCreateInput = {
 export type ChartUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutChartsNestedInput
@@ -273,6 +324,7 @@ export type ChartUpdateInput = {
 export type ChartUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -282,6 +334,7 @@ export type ChartUncheckedUpdateInput = {
 export type ChartCreateManyInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   dataSourceId: string
   createdAt?: Date | string
@@ -291,6 +344,7 @@ export type ChartCreateManyInput = {
 export type ChartUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -298,6 +352,7 @@ export type ChartUpdateManyMutationInput = {
 export type ChartUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -317,15 +372,21 @@ export type ChartOrderByRelationAggregateInput = {
 export type ChartCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
+export type ChartAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
+}
+
 export type ChartMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -335,10 +396,15 @@ export type ChartMaxOrderByAggregateInput = {
 export type ChartMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ChartSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type ChartCreateNestedManyWithoutStackInput = {
@@ -428,6 +494,7 @@ export type ChartUncheckedUpdateManyWithoutDataSourceNestedInput = {
 export type ChartCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   dataSource: Prisma.DataSourceCreateNestedOneWithoutChartsInput
@@ -436,6 +503,7 @@ export type ChartCreateWithoutStackInput = {
 export type ChartUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   dataSourceId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -473,6 +541,7 @@ export type ChartScalarWhereInput = {
   NOT?: Prisma.ChartScalarWhereInput | Prisma.ChartScalarWhereInput[]
   id?: Prisma.StringFilter<"Chart"> | string
   key?: Prisma.StringFilter<"Chart"> | string
+  version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
   dataSourceId?: Prisma.StringFilter<"Chart"> | string
   createdAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
@@ -482,6 +551,7 @@ export type ChartScalarWhereInput = {
 export type ChartCreateWithoutDataSourceInput = {
   id?: string
   key: string
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutChartsInput
@@ -490,6 +560,7 @@ export type ChartCreateWithoutDataSourceInput = {
 export type ChartUncheckedCreateWithoutDataSourceInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -524,6 +595,7 @@ export type ChartUpdateManyWithWhereWithoutDataSourceInput = {
 export type ChartCreateManyStackInput = {
   id?: string
   key: string
+  version?: number
   dataSourceId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -532,6 +604,7 @@ export type ChartCreateManyStackInput = {
 export type ChartUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dataSource?: Prisma.DataSourceUpdateOneRequiredWithoutChartsNestedInput
@@ -540,6 +613,7 @@ export type ChartUpdateWithoutStackInput = {
 export type ChartUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -548,6 +622,7 @@ export type ChartUncheckedUpdateWithoutStackInput = {
 export type ChartUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -556,6 +631,7 @@ export type ChartUncheckedUpdateManyWithoutStackInput = {
 export type ChartCreateManyDataSourceInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -564,6 +640,7 @@ export type ChartCreateManyDataSourceInput = {
 export type ChartUpdateWithoutDataSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutChartsNestedInput
@@ -572,6 +649,7 @@ export type ChartUpdateWithoutDataSourceInput = {
 export type ChartUncheckedUpdateWithoutDataSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -580,6 +658,7 @@ export type ChartUncheckedUpdateWithoutDataSourceInput = {
 export type ChartUncheckedUpdateManyWithoutDataSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -590,6 +669,7 @@ export type ChartUncheckedUpdateManyWithoutDataSourceInput = {
 export type ChartSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   createdAt?: boolean
@@ -601,6 +681,7 @@ export type ChartSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type ChartSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   createdAt?: boolean
@@ -612,6 +693,7 @@ export type ChartSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type ChartSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   createdAt?: boolean
@@ -623,13 +705,14 @@ export type ChartSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type ChartSelectScalar = {
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ChartOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "stackId" | "dataSourceId" | "createdAt" | "updatedAt", ExtArgs["result"]["chart"]>
+export type ChartOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "dataSourceId" | "createdAt" | "updatedAt", ExtArgs["result"]["chart"]>
 export type ChartInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
@@ -652,6 +735,7 @@ export type $ChartPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
+    version: number
     stackId: string
     dataSourceId: string
     createdAt: Date
@@ -1083,6 +1167,7 @@ export interface Prisma__ChartClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface ChartFieldRefs {
   readonly id: Prisma.FieldRef<"Chart", 'String'>
   readonly key: Prisma.FieldRef<"Chart", 'String'>
+  readonly version: Prisma.FieldRef<"Chart", 'Int'>
   readonly stackId: Prisma.FieldRef<"Chart", 'String'>
   readonly dataSourceId: Prisma.FieldRef<"Chart", 'String'>
   readonly createdAt: Prisma.FieldRef<"Chart", 'DateTime'>

@@ -13,12 +13,6 @@ enum Environment {
   DEVELOPMENT
 }
 
-enum Status {
-  ACTIVE
-  BUILDING
-  INACTIVE
-}
-
 enum TransformFunction {
   SUM
   AVG
@@ -28,7 +22,7 @@ enum TransformFunction {
 model Stack {
   id          String      @id @default(uuid())
   key         String
-  status      Status
+  version     Int         @default(1)
   environment Environment
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -42,12 +36,14 @@ model Stack {
 }
 
 model Dashboard {
-  id        String   @id @default(uuid())
-  key       String
-  stackId   String
-  title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  key         String
+  version     Int      @default(1)
+  stackId     String
+  label       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   stack Stack @relation(fields: [stackId], references: [id])
 
@@ -57,6 +53,7 @@ model Dashboard {
 model DataSource {
   id        String   @id @default(uuid())
   key       String
+  version   Int      @default(1)
   stackId   String
   type      String
   config    Json
@@ -71,6 +68,7 @@ model DataSource {
 model Chart {
   id           String   @id @default(uuid())
   key          String
+  version      Int      @default(1)
   stackId      String
   dataSourceId String
   createdAt    DateTime @default(now())
@@ -83,6 +81,7 @@ model Chart {
 model Query {
   id           String   @id @default(uuid())
   key          String
+  version      Int      @default(1)
   stackId      String
   dataSourceId String
   jsonPath     String
@@ -97,6 +96,7 @@ model Query {
 model Transform {
   id           String            @id @default(uuid())
   key          String
+  version      Int               @default(1)
   stackId      String
   queryId      String
   function     TransformFunction
@@ -112,6 +112,7 @@ model Transform {
 model Credential {
   id        String   @id @default(uuid())
   key       String
+  version   Int      @default(1)
   stackId   String
   secret    String
   createdAt DateTime @default(now())

@@ -4,12 +4,16 @@ import prisma from "./prisma";
 export const dataSourceInterface = {
   async create(data: {
     key: string;
-    name: string;
     type: string;
     config: any;
     stackId: string;
   }) {
-    return await prisma.dataSource.create({ data });
+    return await prisma.dataSource.create({
+      data: {
+        version: 1,
+        ...data,
+      },
+    });
   },
 
   async createMany(data: DataSourceCreateManyInput[]) {
@@ -31,5 +35,9 @@ export const dataSourceInterface = {
     return await prisma.dataSource.findMany({
       where: { stackId },
     });
+  },
+
+  async getMany() {
+    return await prisma.dataSource.findMany();
   },
 };

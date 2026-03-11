@@ -1,11 +1,16 @@
-import json from "@/example/stack.json";
+// import json from "@/example/stack.json";
+import json from "@/example/onlyDashboard.json";
 import axios from "axios";
 
+const host = "http://localhost:3000";
+// const host = "https://wetrack-dashboard.vercel.app";
+
 const testApi = async () => {
-  const url = "http://localhost:3000/api/dashboard";
+  const url = `${host}/api/dashboard`;
 
   const response = await axios.post(url, json);
-  console.log(response.data);
+  console.log(response.status);
+  console.log(response.statusText);
 };
 
 testApi();

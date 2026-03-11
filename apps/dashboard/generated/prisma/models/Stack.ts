@@ -20,14 +20,24 @@ export type StackModel = runtime.Types.Result.DefaultSelection<Prisma.$StackPayl
 
 export type AggregateStack = {
   _count: StackCountAggregateOutputType | null
+  _avg: StackAvgAggregateOutputType | null
+  _sum: StackSumAggregateOutputType | null
   _min: StackMinAggregateOutputType | null
   _max: StackMaxAggregateOutputType | null
+}
+
+export type StackAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type StackSumAggregateOutputType = {
+  version: number | null
 }
 
 export type StackMinAggregateOutputType = {
   id: string | null
   key: string | null
-  status: $Enums.Status | null
+  version: number | null
   environment: $Enums.Environment | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -36,7 +46,7 @@ export type StackMinAggregateOutputType = {
 export type StackMaxAggregateOutputType = {
   id: string | null
   key: string | null
-  status: $Enums.Status | null
+  version: number | null
   environment: $Enums.Environment | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,7 +55,7 @@ export type StackMaxAggregateOutputType = {
 export type StackCountAggregateOutputType = {
   id: number
   key: number
-  status: number
+  version: number
   environment: number
   createdAt: number
   updatedAt: number
@@ -53,10 +63,18 @@ export type StackCountAggregateOutputType = {
 }
 
 
+export type StackAvgAggregateInputType = {
+  version?: true
+}
+
+export type StackSumAggregateInputType = {
+  version?: true
+}
+
 export type StackMinAggregateInputType = {
   id?: true
   key?: true
-  status?: true
+  version?: true
   environment?: true
   createdAt?: true
   updatedAt?: true
@@ -65,7 +83,7 @@ export type StackMinAggregateInputType = {
 export type StackMaxAggregateInputType = {
   id?: true
   key?: true
-  status?: true
+  version?: true
   environment?: true
   createdAt?: true
   updatedAt?: true
@@ -74,7 +92,7 @@ export type StackMaxAggregateInputType = {
 export type StackCountAggregateInputType = {
   id?: true
   key?: true
-  status?: true
+  version?: true
   environment?: true
   createdAt?: true
   updatedAt?: true
@@ -119,6 +137,18 @@ export type StackAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: StackAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: StackSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: StackMinAggregateInputType
@@ -149,6 +179,8 @@ export type StackGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: StackCountAggregateInputType | true
+  _avg?: StackAvgAggregateInputType
+  _sum?: StackSumAggregateInputType
   _min?: StackMinAggregateInputType
   _max?: StackMaxAggregateInputType
 }
@@ -156,11 +188,13 @@ export type StackGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type StackGroupByOutputType = {
   id: string
   key: string
-  status: $Enums.Status
+  version: number
   environment: $Enums.Environment
   createdAt: Date
   updatedAt: Date
   _count: StackCountAggregateOutputType | null
+  _avg: StackAvgAggregateOutputType | null
+  _sum: StackSumAggregateOutputType | null
   _min: StackMinAggregateOutputType | null
   _max: StackMaxAggregateOutputType | null
 }
@@ -186,7 +220,7 @@ export type StackWhereInput = {
   NOT?: Prisma.StackWhereInput | Prisma.StackWhereInput[]
   id?: Prisma.StringFilter<"Stack"> | string
   key?: Prisma.StringFilter<"Stack"> | string
-  status?: Prisma.EnumStatusFilter<"Stack"> | $Enums.Status
+  version?: Prisma.IntFilter<"Stack"> | number
   environment?: Prisma.EnumEnvironmentFilter<"Stack"> | $Enums.Environment
   createdAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
@@ -201,7 +235,7 @@ export type StackWhereInput = {
 export type StackOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -219,7 +253,7 @@ export type StackWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StackWhereInput[]
   NOT?: Prisma.StackWhereInput | Prisma.StackWhereInput[]
   key?: Prisma.StringFilter<"Stack"> | string
-  status?: Prisma.EnumStatusFilter<"Stack"> | $Enums.Status
+  version?: Prisma.IntFilter<"Stack"> | number
   environment?: Prisma.EnumEnvironmentFilter<"Stack"> | $Enums.Environment
   createdAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
@@ -234,13 +268,15 @@ export type StackWhereUniqueInput = Prisma.AtLeast<{
 export type StackOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StackCountOrderByAggregateInput
+  _avg?: Prisma.StackAvgOrderByAggregateInput
   _max?: Prisma.StackMaxOrderByAggregateInput
   _min?: Prisma.StackMinOrderByAggregateInput
+  _sum?: Prisma.StackSumOrderByAggregateInput
 }
 
 export type StackScalarWhereWithAggregatesInput = {
@@ -249,7 +285,7 @@ export type StackScalarWhereWithAggregatesInput = {
   NOT?: Prisma.StackScalarWhereWithAggregatesInput | Prisma.StackScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Stack"> | string
   key?: Prisma.StringWithAggregatesFilter<"Stack"> | string
-  status?: Prisma.EnumStatusWithAggregatesFilter<"Stack"> | $Enums.Status
+  version?: Prisma.IntWithAggregatesFilter<"Stack"> | number
   environment?: Prisma.EnumEnvironmentWithAggregatesFilter<"Stack"> | $Enums.Environment
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Stack"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Stack"> | Date | string
@@ -258,7 +294,7 @@ export type StackScalarWhereWithAggregatesInput = {
 export type StackCreateInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -273,7 +309,7 @@ export type StackCreateInput = {
 export type StackUncheckedCreateInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -288,7 +324,7 @@ export type StackUncheckedCreateInput = {
 export type StackUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -303,7 +339,7 @@ export type StackUpdateInput = {
 export type StackUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -318,7 +354,7 @@ export type StackUncheckedUpdateInput = {
 export type StackCreateManyInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -327,7 +363,7 @@ export type StackCreateManyInput = {
 export type StackUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -336,7 +372,7 @@ export type StackUpdateManyMutationInput = {
 export type StackUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -345,16 +381,20 @@ export type StackUncheckedUpdateManyInput = {
 export type StackCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
+export type StackAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
+}
+
 export type StackMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -363,10 +403,14 @@ export type StackMaxOrderByAggregateInput = {
 export type StackMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type StackSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type StackScalarRelationFilter = {
@@ -378,8 +422,12 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type EnumStatusFieldUpdateOperationsInput = {
-  set?: $Enums.Status
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type EnumEnvironmentFieldUpdateOperationsInput = {
@@ -477,7 +525,7 @@ export type StackUpdateOneRequiredWithoutCredentialsNestedInput = {
 export type StackCreateWithoutDashboardsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -491,7 +539,7 @@ export type StackCreateWithoutDashboardsInput = {
 export type StackUncheckedCreateWithoutDashboardsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -521,7 +569,7 @@ export type StackUpdateToOneWithWhereWithoutDashboardsInput = {
 export type StackUpdateWithoutDashboardsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -535,7 +583,7 @@ export type StackUpdateWithoutDashboardsInput = {
 export type StackUncheckedUpdateWithoutDashboardsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -549,7 +597,7 @@ export type StackUncheckedUpdateWithoutDashboardsInput = {
 export type StackCreateWithoutDataSourcesInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -563,7 +611,7 @@ export type StackCreateWithoutDataSourcesInput = {
 export type StackUncheckedCreateWithoutDataSourcesInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -593,7 +641,7 @@ export type StackUpdateToOneWithWhereWithoutDataSourcesInput = {
 export type StackUpdateWithoutDataSourcesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -607,7 +655,7 @@ export type StackUpdateWithoutDataSourcesInput = {
 export type StackUncheckedUpdateWithoutDataSourcesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -621,7 +669,7 @@ export type StackUncheckedUpdateWithoutDataSourcesInput = {
 export type StackCreateWithoutChartsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -635,7 +683,7 @@ export type StackCreateWithoutChartsInput = {
 export type StackUncheckedCreateWithoutChartsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -665,7 +713,7 @@ export type StackUpdateToOneWithWhereWithoutChartsInput = {
 export type StackUpdateWithoutChartsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -679,7 +727,7 @@ export type StackUpdateWithoutChartsInput = {
 export type StackUncheckedUpdateWithoutChartsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -693,7 +741,7 @@ export type StackUncheckedUpdateWithoutChartsInput = {
 export type StackCreateWithoutQueriesInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -707,7 +755,7 @@ export type StackCreateWithoutQueriesInput = {
 export type StackUncheckedCreateWithoutQueriesInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -737,7 +785,7 @@ export type StackUpdateToOneWithWhereWithoutQueriesInput = {
 export type StackUpdateWithoutQueriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -751,7 +799,7 @@ export type StackUpdateWithoutQueriesInput = {
 export type StackUncheckedUpdateWithoutQueriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -765,7 +813,7 @@ export type StackUncheckedUpdateWithoutQueriesInput = {
 export type StackCreateWithoutTransformsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -779,7 +827,7 @@ export type StackCreateWithoutTransformsInput = {
 export type StackUncheckedCreateWithoutTransformsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -809,7 +857,7 @@ export type StackUpdateToOneWithWhereWithoutTransformsInput = {
 export type StackUpdateWithoutTransformsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -823,7 +871,7 @@ export type StackUpdateWithoutTransformsInput = {
 export type StackUncheckedUpdateWithoutTransformsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -837,7 +885,7 @@ export type StackUncheckedUpdateWithoutTransformsInput = {
 export type StackCreateWithoutCredentialsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -851,7 +899,7 @@ export type StackCreateWithoutCredentialsInput = {
 export type StackUncheckedCreateWithoutCredentialsInput = {
   id?: string
   key: string
-  status: $Enums.Status
+  version?: number
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -881,7 +929,7 @@ export type StackUpdateToOneWithWhereWithoutCredentialsInput = {
 export type StackUpdateWithoutCredentialsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -895,7 +943,7 @@ export type StackUpdateWithoutCredentialsInput = {
 export type StackUncheckedUpdateWithoutCredentialsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -985,7 +1033,7 @@ export type StackCountOutputTypeCountCredentialsArgs<ExtArgs extends runtime.Typ
 export type StackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
-  status?: boolean
+  version?: boolean
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1001,7 +1049,7 @@ export type StackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type StackSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
-  status?: boolean
+  version?: boolean
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1010,7 +1058,7 @@ export type StackSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type StackSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
-  status?: boolean
+  version?: boolean
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1019,13 +1067,13 @@ export type StackSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type StackSelectScalar = {
   id?: boolean
   key?: boolean
-  status?: boolean
+  version?: boolean
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StackOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "status" | "environment" | "createdAt" | "updatedAt", ExtArgs["result"]["stack"]>
+export type StackOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "environment" | "createdAt" | "updatedAt", ExtArgs["result"]["stack"]>
 export type StackInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dashboards?: boolean | Prisma.Stack$dashboardsArgs<ExtArgs>
   dataSources?: boolean | Prisma.Stack$dataSourcesArgs<ExtArgs>
@@ -1051,7 +1099,7 @@ export type $StackPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
-    status: $Enums.Status
+    version: number
     environment: $Enums.Environment
     createdAt: Date
     updatedAt: Date
@@ -1486,7 +1534,7 @@ export interface Prisma__StackClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface StackFieldRefs {
   readonly id: Prisma.FieldRef<"Stack", 'String'>
   readonly key: Prisma.FieldRef<"Stack", 'String'>
-  readonly status: Prisma.FieldRef<"Stack", 'Status'>
+  readonly version: Prisma.FieldRef<"Stack", 'Int'>
   readonly environment: Prisma.FieldRef<"Stack", 'Environment'>
   readonly createdAt: Prisma.FieldRef<"Stack", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Stack", 'DateTime'>

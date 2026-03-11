@@ -20,13 +20,24 @@ export type TransformModel = runtime.Types.Result.DefaultSelection<Prisma.$Trans
 
 export type AggregateTransform = {
   _count: TransformCountAggregateOutputType | null
+  _avg: TransformAvgAggregateOutputType | null
+  _sum: TransformSumAggregateOutputType | null
   _min: TransformMinAggregateOutputType | null
   _max: TransformMaxAggregateOutputType | null
+}
+
+export type TransformAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type TransformSumAggregateOutputType = {
+  version: number | null
 }
 
 export type TransformMinAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   queryId: string | null
   function: $Enums.TransformFunction | null
@@ -39,6 +50,7 @@ export type TransformMinAggregateOutputType = {
 export type TransformMaxAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   queryId: string | null
   function: $Enums.TransformFunction | null
@@ -51,6 +63,7 @@ export type TransformMaxAggregateOutputType = {
 export type TransformCountAggregateOutputType = {
   id: number
   key: number
+  version: number
   stackId: number
   queryId: number
   function: number
@@ -62,9 +75,18 @@ export type TransformCountAggregateOutputType = {
 }
 
 
+export type TransformAvgAggregateInputType = {
+  version?: true
+}
+
+export type TransformSumAggregateInputType = {
+  version?: true
+}
+
 export type TransformMinAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   queryId?: true
   function?: true
@@ -77,6 +99,7 @@ export type TransformMinAggregateInputType = {
 export type TransformMaxAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   queryId?: true
   function?: true
@@ -89,6 +112,7 @@ export type TransformMaxAggregateInputType = {
 export type TransformCountAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   queryId?: true
   function?: true
@@ -137,6 +161,18 @@ export type TransformAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TransformAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TransformSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TransformMinAggregateInputType
@@ -167,6 +203,8 @@ export type TransformGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: TransformCountAggregateInputType | true
+  _avg?: TransformAvgAggregateInputType
+  _sum?: TransformSumAggregateInputType
   _min?: TransformMinAggregateInputType
   _max?: TransformMaxAggregateInputType
 }
@@ -174,6 +212,7 @@ export type TransformGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 export type TransformGroupByOutputType = {
   id: string
   key: string
+  version: number
   stackId: string
   queryId: string
   function: $Enums.TransformFunction
@@ -182,6 +221,8 @@ export type TransformGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   _count: TransformCountAggregateOutputType | null
+  _avg: TransformAvgAggregateOutputType | null
+  _sum: TransformSumAggregateOutputType | null
   _min: TransformMinAggregateOutputType | null
   _max: TransformMaxAggregateOutputType | null
 }
@@ -207,6 +248,7 @@ export type TransformWhereInput = {
   NOT?: Prisma.TransformWhereInput | Prisma.TransformWhereInput[]
   id?: Prisma.StringFilter<"Transform"> | string
   key?: Prisma.StringFilter<"Transform"> | string
+  version?: Prisma.IntFilter<"Transform"> | number
   stackId?: Prisma.StringFilter<"Transform"> | string
   queryId?: Prisma.StringFilter<"Transform"> | string
   function?: Prisma.EnumTransformFunctionFilter<"Transform"> | $Enums.TransformFunction
@@ -221,6 +263,7 @@ export type TransformWhereInput = {
 export type TransformOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   queryId?: Prisma.SortOrder
   function?: Prisma.SortOrder
@@ -238,6 +281,7 @@ export type TransformWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TransformWhereInput[]
   NOT?: Prisma.TransformWhereInput | Prisma.TransformWhereInput[]
   key?: Prisma.StringFilter<"Transform"> | string
+  version?: Prisma.IntFilter<"Transform"> | number
   stackId?: Prisma.StringFilter<"Transform"> | string
   queryId?: Prisma.StringFilter<"Transform"> | string
   function?: Prisma.EnumTransformFunctionFilter<"Transform"> | $Enums.TransformFunction
@@ -252,6 +296,7 @@ export type TransformWhereUniqueInput = Prisma.AtLeast<{
 export type TransformOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   queryId?: Prisma.SortOrder
   function?: Prisma.SortOrder
@@ -260,8 +305,10 @@ export type TransformOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TransformCountOrderByAggregateInput
+  _avg?: Prisma.TransformAvgOrderByAggregateInput
   _max?: Prisma.TransformMaxOrderByAggregateInput
   _min?: Prisma.TransformMinOrderByAggregateInput
+  _sum?: Prisma.TransformSumOrderByAggregateInput
 }
 
 export type TransformScalarWhereWithAggregatesInput = {
@@ -270,6 +317,7 @@ export type TransformScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TransformScalarWhereWithAggregatesInput | Prisma.TransformScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Transform"> | string
   key?: Prisma.StringWithAggregatesFilter<"Transform"> | string
+  version?: Prisma.IntWithAggregatesFilter<"Transform"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Transform"> | string
   queryId?: Prisma.StringWithAggregatesFilter<"Transform"> | string
   function?: Prisma.EnumTransformFunctionWithAggregatesFilter<"Transform"> | $Enums.TransformFunction
@@ -282,6 +330,7 @@ export type TransformScalarWhereWithAggregatesInput = {
 export type TransformCreateInput = {
   id?: string
   key: string
+  version?: number
   function: $Enums.TransformFunction
   field: string
   groupByField?: string | null
@@ -294,6 +343,7 @@ export type TransformCreateInput = {
 export type TransformUncheckedCreateInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   queryId: string
   function: $Enums.TransformFunction
@@ -306,6 +356,7 @@ export type TransformUncheckedCreateInput = {
 export type TransformUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
   groupByField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -318,6 +369,7 @@ export type TransformUpdateInput = {
 export type TransformUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   queryId?: Prisma.StringFieldUpdateOperationsInput | string
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
@@ -330,6 +382,7 @@ export type TransformUncheckedUpdateInput = {
 export type TransformCreateManyInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   queryId: string
   function: $Enums.TransformFunction
@@ -342,6 +395,7 @@ export type TransformCreateManyInput = {
 export type TransformUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
   groupByField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -352,6 +406,7 @@ export type TransformUpdateManyMutationInput = {
 export type TransformUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   queryId?: Prisma.StringFieldUpdateOperationsInput | string
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
@@ -374,6 +429,7 @@ export type TransformOrderByRelationAggregateInput = {
 export type TransformCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   queryId?: Prisma.SortOrder
   function?: Prisma.SortOrder
@@ -383,9 +439,14 @@ export type TransformCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type TransformAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
+}
+
 export type TransformMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   queryId?: Prisma.SortOrder
   function?: Prisma.SortOrder
@@ -398,6 +459,7 @@ export type TransformMaxOrderByAggregateInput = {
 export type TransformMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   queryId?: Prisma.SortOrder
   function?: Prisma.SortOrder
@@ -405,6 +467,10 @@ export type TransformMinOrderByAggregateInput = {
   groupByField?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type TransformSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type TransformCreateNestedManyWithoutStackInput = {
@@ -495,13 +561,10 @@ export type EnumTransformFunctionFieldUpdateOperationsInput = {
   set?: $Enums.TransformFunction
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type TransformCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   function: $Enums.TransformFunction
   field: string
   groupByField?: string | null
@@ -513,6 +576,7 @@ export type TransformCreateWithoutStackInput = {
 export type TransformUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   queryId: string
   function: $Enums.TransformFunction
   field: string
@@ -553,6 +617,7 @@ export type TransformScalarWhereInput = {
   NOT?: Prisma.TransformScalarWhereInput | Prisma.TransformScalarWhereInput[]
   id?: Prisma.StringFilter<"Transform"> | string
   key?: Prisma.StringFilter<"Transform"> | string
+  version?: Prisma.IntFilter<"Transform"> | number
   stackId?: Prisma.StringFilter<"Transform"> | string
   queryId?: Prisma.StringFilter<"Transform"> | string
   function?: Prisma.EnumTransformFunctionFilter<"Transform"> | $Enums.TransformFunction
@@ -565,6 +630,7 @@ export type TransformScalarWhereInput = {
 export type TransformCreateWithoutQueryInput = {
   id?: string
   key: string
+  version?: number
   function: $Enums.TransformFunction
   field: string
   groupByField?: string | null
@@ -576,6 +642,7 @@ export type TransformCreateWithoutQueryInput = {
 export type TransformUncheckedCreateWithoutQueryInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   function: $Enums.TransformFunction
   field: string
@@ -613,6 +680,7 @@ export type TransformUpdateManyWithWhereWithoutQueryInput = {
 export type TransformCreateManyStackInput = {
   id?: string
   key: string
+  version?: number
   queryId: string
   function: $Enums.TransformFunction
   field: string
@@ -624,6 +692,7 @@ export type TransformCreateManyStackInput = {
 export type TransformUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
   groupByField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -635,6 +704,7 @@ export type TransformUpdateWithoutStackInput = {
 export type TransformUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   queryId?: Prisma.StringFieldUpdateOperationsInput | string
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
@@ -646,6 +716,7 @@ export type TransformUncheckedUpdateWithoutStackInput = {
 export type TransformUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   queryId?: Prisma.StringFieldUpdateOperationsInput | string
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
@@ -657,6 +728,7 @@ export type TransformUncheckedUpdateManyWithoutStackInput = {
 export type TransformCreateManyQueryInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   function: $Enums.TransformFunction
   field: string
@@ -668,6 +740,7 @@ export type TransformCreateManyQueryInput = {
 export type TransformUpdateWithoutQueryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
   groupByField?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -679,6 +752,7 @@ export type TransformUpdateWithoutQueryInput = {
 export type TransformUncheckedUpdateWithoutQueryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
@@ -690,6 +764,7 @@ export type TransformUncheckedUpdateWithoutQueryInput = {
 export type TransformUncheckedUpdateManyWithoutQueryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   function?: Prisma.EnumTransformFunctionFieldUpdateOperationsInput | $Enums.TransformFunction
   field?: Prisma.StringFieldUpdateOperationsInput | string
@@ -703,6 +778,7 @@ export type TransformUncheckedUpdateManyWithoutQueryInput = {
 export type TransformSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   queryId?: boolean
   function?: boolean
@@ -717,6 +793,7 @@ export type TransformSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type TransformSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   queryId?: boolean
   function?: boolean
@@ -731,6 +808,7 @@ export type TransformSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type TransformSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   queryId?: boolean
   function?: boolean
@@ -745,6 +823,7 @@ export type TransformSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type TransformSelectScalar = {
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   queryId?: boolean
   function?: boolean
@@ -754,7 +833,7 @@ export type TransformSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TransformOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "stackId" | "queryId" | "function" | "field" | "groupByField" | "createdAt" | "updatedAt", ExtArgs["result"]["transform"]>
+export type TransformOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "queryId" | "function" | "field" | "groupByField" | "createdAt" | "updatedAt", ExtArgs["result"]["transform"]>
 export type TransformInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
@@ -777,6 +856,7 @@ export type $TransformPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
+    version: number
     stackId: string
     queryId: string
     function: $Enums.TransformFunction
@@ -1211,6 +1291,7 @@ export interface Prisma__TransformClient<T, Null = never, ExtArgs extends runtim
 export interface TransformFieldRefs {
   readonly id: Prisma.FieldRef<"Transform", 'String'>
   readonly key: Prisma.FieldRef<"Transform", 'String'>
+  readonly version: Prisma.FieldRef<"Transform", 'Int'>
   readonly stackId: Prisma.FieldRef<"Transform", 'String'>
   readonly queryId: Prisma.FieldRef<"Transform", 'String'>
   readonly function: Prisma.FieldRef<"Transform", 'TransformFunction'>

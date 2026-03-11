@@ -1,0 +1,16 @@
+{
+  "key": "test-dashboard",
+  "environment": "DEVELOPMENT",
+  "dashboards": [
+    {
+      "key": "test-dashboard",
+      "label": "Test Dashboard",
+      "description": "A dashboard for testing purposes"
+    },
+    {
+      "key": "another-dashboard",
+      "label": "Another Dashboard",
+      "description": "Another dashboard for testing purposes"
+    }
+  ]
+}

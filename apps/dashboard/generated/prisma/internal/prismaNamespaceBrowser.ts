@@ -79,7 +79,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const StackScalarFieldEnum = {
   id: 'id',
   key: 'key',
-  status: 'status',
+  version: 'version',
   environment: 'environment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -91,8 +91,10 @@ export type StackScalarFieldEnum = (typeof StackScalarFieldEnum)[keyof typeof St
 export const DashboardScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  version: 'version',
   stackId: 'stackId',
-  title: 'title',
+  label: 'label',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -103,6 +105,7 @@ export type DashboardScalarFieldEnum = (typeof DashboardScalarFieldEnum)[keyof t
 export const DataSourceScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  version: 'version',
   stackId: 'stackId',
   type: 'type',
   config: 'config',
@@ -116,6 +119,7 @@ export type DataSourceScalarFieldEnum = (typeof DataSourceScalarFieldEnum)[keyof
 export const ChartScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  version: 'version',
   stackId: 'stackId',
   dataSourceId: 'dataSourceId',
   createdAt: 'createdAt',
@@ -128,6 +132,7 @@ export type ChartScalarFieldEnum = (typeof ChartScalarFieldEnum)[keyof typeof Ch
 export const QueryScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  version: 'version',
   stackId: 'stackId',
   dataSourceId: 'dataSourceId',
   jsonPath: 'jsonPath',
@@ -141,6 +146,7 @@ export type QueryScalarFieldEnum = (typeof QueryScalarFieldEnum)[keyof typeof Qu
 export const TransformScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  version: 'version',
   stackId: 'stackId',
   queryId: 'queryId',
   function: 'function',
@@ -156,6 +162,7 @@ export type TransformScalarFieldEnum = (typeof TransformScalarFieldEnum)[keyof t
 export const CredentialScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  version: 'version',
   stackId: 'stackId',
   secret: 'secret',
   createdAt: 'createdAt',
@@ -188,6 +195,14 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -195,12 +210,4 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

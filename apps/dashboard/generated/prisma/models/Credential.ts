@@ -20,13 +20,24 @@ export type CredentialModel = runtime.Types.Result.DefaultSelection<Prisma.$Cred
 
 export type AggregateCredential = {
   _count: CredentialCountAggregateOutputType | null
+  _avg: CredentialAvgAggregateOutputType | null
+  _sum: CredentialSumAggregateOutputType | null
   _min: CredentialMinAggregateOutputType | null
   _max: CredentialMaxAggregateOutputType | null
+}
+
+export type CredentialAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type CredentialSumAggregateOutputType = {
+  version: number | null
 }
 
 export type CredentialMinAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   secret: string | null
   createdAt: Date | null
@@ -36,6 +47,7 @@ export type CredentialMinAggregateOutputType = {
 export type CredentialMaxAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   secret: string | null
   createdAt: Date | null
@@ -45,6 +57,7 @@ export type CredentialMaxAggregateOutputType = {
 export type CredentialCountAggregateOutputType = {
   id: number
   key: number
+  version: number
   stackId: number
   secret: number
   createdAt: number
@@ -53,9 +66,18 @@ export type CredentialCountAggregateOutputType = {
 }
 
 
+export type CredentialAvgAggregateInputType = {
+  version?: true
+}
+
+export type CredentialSumAggregateInputType = {
+  version?: true
+}
+
 export type CredentialMinAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   secret?: true
   createdAt?: true
@@ -65,6 +87,7 @@ export type CredentialMinAggregateInputType = {
 export type CredentialMaxAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   secret?: true
   createdAt?: true
@@ -74,6 +97,7 @@ export type CredentialMaxAggregateInputType = {
 export type CredentialCountAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   secret?: true
   createdAt?: true
@@ -119,6 +143,18 @@ export type CredentialAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CredentialAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CredentialSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CredentialMinAggregateInputType
@@ -149,6 +185,8 @@ export type CredentialGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: CredentialCountAggregateInputType | true
+  _avg?: CredentialAvgAggregateInputType
+  _sum?: CredentialSumAggregateInputType
   _min?: CredentialMinAggregateInputType
   _max?: CredentialMaxAggregateInputType
 }
@@ -156,11 +194,14 @@ export type CredentialGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type CredentialGroupByOutputType = {
   id: string
   key: string
+  version: number
   stackId: string
   secret: string
   createdAt: Date
   updatedAt: Date
   _count: CredentialCountAggregateOutputType | null
+  _avg: CredentialAvgAggregateOutputType | null
+  _sum: CredentialSumAggregateOutputType | null
   _min: CredentialMinAggregateOutputType | null
   _max: CredentialMaxAggregateOutputType | null
 }
@@ -186,6 +227,7 @@ export type CredentialWhereInput = {
   NOT?: Prisma.CredentialWhereInput | Prisma.CredentialWhereInput[]
   id?: Prisma.StringFilter<"Credential"> | string
   key?: Prisma.StringFilter<"Credential"> | string
+  version?: Prisma.IntFilter<"Credential"> | number
   stackId?: Prisma.StringFilter<"Credential"> | string
   secret?: Prisma.StringFilter<"Credential"> | string
   createdAt?: Prisma.DateTimeFilter<"Credential"> | Date | string
@@ -196,6 +238,7 @@ export type CredentialWhereInput = {
 export type CredentialOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   secret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -209,6 +252,7 @@ export type CredentialWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CredentialWhereInput[]
   NOT?: Prisma.CredentialWhereInput | Prisma.CredentialWhereInput[]
   key?: Prisma.StringFilter<"Credential"> | string
+  version?: Prisma.IntFilter<"Credential"> | number
   stackId?: Prisma.StringFilter<"Credential"> | string
   secret?: Prisma.StringFilter<"Credential"> | string
   createdAt?: Prisma.DateTimeFilter<"Credential"> | Date | string
@@ -219,13 +263,16 @@ export type CredentialWhereUniqueInput = Prisma.AtLeast<{
 export type CredentialOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   secret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CredentialCountOrderByAggregateInput
+  _avg?: Prisma.CredentialAvgOrderByAggregateInput
   _max?: Prisma.CredentialMaxOrderByAggregateInput
   _min?: Prisma.CredentialMinOrderByAggregateInput
+  _sum?: Prisma.CredentialSumOrderByAggregateInput
 }
 
 export type CredentialScalarWhereWithAggregatesInput = {
@@ -234,6 +281,7 @@ export type CredentialScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CredentialScalarWhereWithAggregatesInput | Prisma.CredentialScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Credential"> | string
   key?: Prisma.StringWithAggregatesFilter<"Credential"> | string
+  version?: Prisma.IntWithAggregatesFilter<"Credential"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Credential"> | string
   secret?: Prisma.StringWithAggregatesFilter<"Credential"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Credential"> | Date | string
@@ -243,6 +291,7 @@ export type CredentialScalarWhereWithAggregatesInput = {
 export type CredentialCreateInput = {
   id?: string
   key: string
+  version?: number
   secret: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -252,6 +301,7 @@ export type CredentialCreateInput = {
 export type CredentialUncheckedCreateInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   secret: string
   createdAt?: Date | string
@@ -261,6 +311,7 @@ export type CredentialUncheckedCreateInput = {
 export type CredentialUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   secret?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -270,6 +321,7 @@ export type CredentialUpdateInput = {
 export type CredentialUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   secret?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -279,6 +331,7 @@ export type CredentialUncheckedUpdateInput = {
 export type CredentialCreateManyInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   secret: string
   createdAt?: Date | string
@@ -288,6 +341,7 @@ export type CredentialCreateManyInput = {
 export type CredentialUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   secret?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -296,6 +350,7 @@ export type CredentialUpdateManyMutationInput = {
 export type CredentialUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   secret?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -315,15 +370,21 @@ export type CredentialOrderByRelationAggregateInput = {
 export type CredentialCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   secret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
+export type CredentialAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
+}
+
 export type CredentialMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   secret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -333,10 +394,15 @@ export type CredentialMaxOrderByAggregateInput = {
 export type CredentialMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   secret?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type CredentialSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type CredentialCreateNestedManyWithoutStackInput = {
@@ -384,6 +450,7 @@ export type CredentialUncheckedUpdateManyWithoutStackNestedInput = {
 export type CredentialCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   secret: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -392,6 +459,7 @@ export type CredentialCreateWithoutStackInput = {
 export type CredentialUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   secret: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -429,6 +497,7 @@ export type CredentialScalarWhereInput = {
   NOT?: Prisma.CredentialScalarWhereInput | Prisma.CredentialScalarWhereInput[]
   id?: Prisma.StringFilter<"Credential"> | string
   key?: Prisma.StringFilter<"Credential"> | string
+  version?: Prisma.IntFilter<"Credential"> | number
   stackId?: Prisma.StringFilter<"Credential"> | string
   secret?: Prisma.StringFilter<"Credential"> | string
   createdAt?: Prisma.DateTimeFilter<"Credential"> | Date | string
@@ -438,6 +507,7 @@ export type CredentialScalarWhereInput = {
 export type CredentialCreateManyStackInput = {
   id?: string
   key: string
+  version?: number
   secret: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -446,6 +516,7 @@ export type CredentialCreateManyStackInput = {
 export type CredentialUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   secret?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -454,6 +525,7 @@ export type CredentialUpdateWithoutStackInput = {
 export type CredentialUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   secret?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -462,6 +534,7 @@ export type CredentialUncheckedUpdateWithoutStackInput = {
 export type CredentialUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   secret?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -472,6 +545,7 @@ export type CredentialUncheckedUpdateManyWithoutStackInput = {
 export type CredentialSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   secret?: boolean
   createdAt?: boolean
@@ -482,6 +556,7 @@ export type CredentialSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type CredentialSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   secret?: boolean
   createdAt?: boolean
@@ -492,6 +567,7 @@ export type CredentialSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type CredentialSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   secret?: boolean
   createdAt?: boolean
@@ -502,13 +578,14 @@ export type CredentialSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type CredentialSelectScalar = {
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   secret?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CredentialOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "stackId" | "secret" | "createdAt" | "updatedAt", ExtArgs["result"]["credential"]>
+export type CredentialOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "secret" | "createdAt" | "updatedAt", ExtArgs["result"]["credential"]>
 export type CredentialInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
 }
@@ -527,6 +604,7 @@ export type $CredentialPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
+    version: number
     stackId: string
     secret: string
     createdAt: Date
@@ -957,6 +1035,7 @@ export interface Prisma__CredentialClient<T, Null = never, ExtArgs extends runti
 export interface CredentialFieldRefs {
   readonly id: Prisma.FieldRef<"Credential", 'String'>
   readonly key: Prisma.FieldRef<"Credential", 'String'>
+  readonly version: Prisma.FieldRef<"Credential", 'Int'>
   readonly stackId: Prisma.FieldRef<"Credential", 'String'>
   readonly secret: Prisma.FieldRef<"Credential", 'String'>
   readonly createdAt: Prisma.FieldRef<"Credential", 'DateTime'>

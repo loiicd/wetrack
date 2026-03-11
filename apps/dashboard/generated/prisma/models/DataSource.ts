@@ -20,13 +20,24 @@ export type DataSourceModel = runtime.Types.Result.DefaultSelection<Prisma.$Data
 
 export type AggregateDataSource = {
   _count: DataSourceCountAggregateOutputType | null
+  _avg: DataSourceAvgAggregateOutputType | null
+  _sum: DataSourceSumAggregateOutputType | null
   _min: DataSourceMinAggregateOutputType | null
   _max: DataSourceMaxAggregateOutputType | null
+}
+
+export type DataSourceAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type DataSourceSumAggregateOutputType = {
+  version: number | null
 }
 
 export type DataSourceMinAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   type: string | null
   createdAt: Date | null
@@ -36,6 +47,7 @@ export type DataSourceMinAggregateOutputType = {
 export type DataSourceMaxAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   type: string | null
   createdAt: Date | null
@@ -45,6 +57,7 @@ export type DataSourceMaxAggregateOutputType = {
 export type DataSourceCountAggregateOutputType = {
   id: number
   key: number
+  version: number
   stackId: number
   type: number
   config: number
@@ -54,9 +67,18 @@ export type DataSourceCountAggregateOutputType = {
 }
 
 
+export type DataSourceAvgAggregateInputType = {
+  version?: true
+}
+
+export type DataSourceSumAggregateInputType = {
+  version?: true
+}
+
 export type DataSourceMinAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   type?: true
   createdAt?: true
@@ -66,6 +88,7 @@ export type DataSourceMinAggregateInputType = {
 export type DataSourceMaxAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   type?: true
   createdAt?: true
@@ -75,6 +98,7 @@ export type DataSourceMaxAggregateInputType = {
 export type DataSourceCountAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   type?: true
   config?: true
@@ -121,6 +145,18 @@ export type DataSourceAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: DataSourceAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: DataSourceSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: DataSourceMinAggregateInputType
@@ -151,6 +187,8 @@ export type DataSourceGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: DataSourceCountAggregateInputType | true
+  _avg?: DataSourceAvgAggregateInputType
+  _sum?: DataSourceSumAggregateInputType
   _min?: DataSourceMinAggregateInputType
   _max?: DataSourceMaxAggregateInputType
 }
@@ -158,12 +196,15 @@ export type DataSourceGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type DataSourceGroupByOutputType = {
   id: string
   key: string
+  version: number
   stackId: string
   type: string
   config: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: DataSourceCountAggregateOutputType | null
+  _avg: DataSourceAvgAggregateOutputType | null
+  _sum: DataSourceSumAggregateOutputType | null
   _min: DataSourceMinAggregateOutputType | null
   _max: DataSourceMaxAggregateOutputType | null
 }
@@ -189,6 +230,7 @@ export type DataSourceWhereInput = {
   NOT?: Prisma.DataSourceWhereInput | Prisma.DataSourceWhereInput[]
   id?: Prisma.StringFilter<"DataSource"> | string
   key?: Prisma.StringFilter<"DataSource"> | string
+  version?: Prisma.IntFilter<"DataSource"> | number
   stackId?: Prisma.StringFilter<"DataSource"> | string
   type?: Prisma.StringFilter<"DataSource"> | string
   config?: Prisma.JsonFilter<"DataSource">
@@ -202,6 +244,7 @@ export type DataSourceWhereInput = {
 export type DataSourceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   config?: Prisma.SortOrder
@@ -218,6 +261,7 @@ export type DataSourceWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.DataSourceWhereInput[]
   NOT?: Prisma.DataSourceWhereInput | Prisma.DataSourceWhereInput[]
   key?: Prisma.StringFilter<"DataSource"> | string
+  version?: Prisma.IntFilter<"DataSource"> | number
   stackId?: Prisma.StringFilter<"DataSource"> | string
   type?: Prisma.StringFilter<"DataSource"> | string
   config?: Prisma.JsonFilter<"DataSource">
@@ -231,14 +275,17 @@ export type DataSourceWhereUniqueInput = Prisma.AtLeast<{
 export type DataSourceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   config?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DataSourceCountOrderByAggregateInput
+  _avg?: Prisma.DataSourceAvgOrderByAggregateInput
   _max?: Prisma.DataSourceMaxOrderByAggregateInput
   _min?: Prisma.DataSourceMinOrderByAggregateInput
+  _sum?: Prisma.DataSourceSumOrderByAggregateInput
 }
 
 export type DataSourceScalarWhereWithAggregatesInput = {
@@ -247,6 +294,7 @@ export type DataSourceScalarWhereWithAggregatesInput = {
   NOT?: Prisma.DataSourceScalarWhereWithAggregatesInput | Prisma.DataSourceScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"DataSource"> | string
   key?: Prisma.StringWithAggregatesFilter<"DataSource"> | string
+  version?: Prisma.IntWithAggregatesFilter<"DataSource"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"DataSource"> | string
   type?: Prisma.StringWithAggregatesFilter<"DataSource"> | string
   config?: Prisma.JsonWithAggregatesFilter<"DataSource">
@@ -257,6 +305,7 @@ export type DataSourceScalarWhereWithAggregatesInput = {
 export type DataSourceCreateInput = {
   id?: string
   key: string
+  version?: number
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -269,6 +318,7 @@ export type DataSourceCreateInput = {
 export type DataSourceUncheckedCreateInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -281,6 +331,7 @@ export type DataSourceUncheckedCreateInput = {
 export type DataSourceUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -293,6 +344,7 @@ export type DataSourceUpdateInput = {
 export type DataSourceUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -305,6 +357,7 @@ export type DataSourceUncheckedUpdateInput = {
 export type DataSourceCreateManyInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -315,6 +368,7 @@ export type DataSourceCreateManyInput = {
 export type DataSourceUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -324,6 +378,7 @@ export type DataSourceUpdateManyMutationInput = {
 export type DataSourceUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -344,6 +399,7 @@ export type DataSourceOrderByRelationAggregateInput = {
 export type DataSourceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   config?: Prisma.SortOrder
@@ -351,9 +407,14 @@ export type DataSourceCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type DataSourceAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
+}
+
 export type DataSourceMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -363,10 +424,15 @@ export type DataSourceMaxOrderByAggregateInput = {
 export type DataSourceMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type DataSourceSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type DataSourceScalarRelationFilter = {
@@ -447,6 +513,7 @@ export type DataSourceUpdateOneRequiredWithoutQueriesNestedInput = {
 export type DataSourceCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -458,6 +525,7 @@ export type DataSourceCreateWithoutStackInput = {
 export type DataSourceUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -498,6 +566,7 @@ export type DataSourceScalarWhereInput = {
   NOT?: Prisma.DataSourceScalarWhereInput | Prisma.DataSourceScalarWhereInput[]
   id?: Prisma.StringFilter<"DataSource"> | string
   key?: Prisma.StringFilter<"DataSource"> | string
+  version?: Prisma.IntFilter<"DataSource"> | number
   stackId?: Prisma.StringFilter<"DataSource"> | string
   type?: Prisma.StringFilter<"DataSource"> | string
   config?: Prisma.JsonFilter<"DataSource">
@@ -508,6 +577,7 @@ export type DataSourceScalarWhereInput = {
 export type DataSourceCreateWithoutChartsInput = {
   id?: string
   key: string
+  version?: number
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -519,6 +589,7 @@ export type DataSourceCreateWithoutChartsInput = {
 export type DataSourceUncheckedCreateWithoutChartsInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -546,6 +617,7 @@ export type DataSourceUpdateToOneWithWhereWithoutChartsInput = {
 export type DataSourceUpdateWithoutChartsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -557,6 +629,7 @@ export type DataSourceUpdateWithoutChartsInput = {
 export type DataSourceUncheckedUpdateWithoutChartsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -568,6 +641,7 @@ export type DataSourceUncheckedUpdateWithoutChartsInput = {
 export type DataSourceCreateWithoutQueriesInput = {
   id?: string
   key: string
+  version?: number
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -579,6 +653,7 @@ export type DataSourceCreateWithoutQueriesInput = {
 export type DataSourceUncheckedCreateWithoutQueriesInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -606,6 +681,7 @@ export type DataSourceUpdateToOneWithWhereWithoutQueriesInput = {
 export type DataSourceUpdateWithoutQueriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -617,6 +693,7 @@ export type DataSourceUpdateWithoutQueriesInput = {
 export type DataSourceUncheckedUpdateWithoutQueriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -628,6 +705,7 @@ export type DataSourceUncheckedUpdateWithoutQueriesInput = {
 export type DataSourceCreateManyStackInput = {
   id?: string
   key: string
+  version?: number
   type: string
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -637,6 +715,7 @@ export type DataSourceCreateManyStackInput = {
 export type DataSourceUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -648,6 +727,7 @@ export type DataSourceUpdateWithoutStackInput = {
 export type DataSourceUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -659,6 +739,7 @@ export type DataSourceUncheckedUpdateWithoutStackInput = {
 export type DataSourceUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -708,6 +789,7 @@ export type DataSourceCountOutputTypeCountQueriesArgs<ExtArgs extends runtime.Ty
 export type DataSourceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   type?: boolean
   config?: boolean
@@ -722,6 +804,7 @@ export type DataSourceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type DataSourceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   type?: boolean
   config?: boolean
@@ -733,6 +816,7 @@ export type DataSourceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type DataSourceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   type?: boolean
   config?: boolean
@@ -744,6 +828,7 @@ export type DataSourceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type DataSourceSelectScalar = {
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   type?: boolean
   config?: boolean
@@ -751,7 +836,7 @@ export type DataSourceSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DataSourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "stackId" | "type" | "config" | "createdAt" | "updatedAt", ExtArgs["result"]["dataSource"]>
+export type DataSourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "type" | "config" | "createdAt" | "updatedAt", ExtArgs["result"]["dataSource"]>
 export type DataSourceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   charts?: boolean | Prisma.DataSource$chartsArgs<ExtArgs>
@@ -775,6 +860,7 @@ export type $DataSourcePayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
+    version: number
     stackId: string
     type: string
     config: runtime.JsonValue
@@ -1208,6 +1294,7 @@ export interface Prisma__DataSourceClient<T, Null = never, ExtArgs extends runti
 export interface DataSourceFieldRefs {
   readonly id: Prisma.FieldRef<"DataSource", 'String'>
   readonly key: Prisma.FieldRef<"DataSource", 'String'>
+  readonly version: Prisma.FieldRef<"DataSource", 'Int'>
   readonly stackId: Prisma.FieldRef<"DataSource", 'String'>
   readonly type: Prisma.FieldRef<"DataSource", 'String'>
   readonly config: Prisma.FieldRef<"DataSource", 'Json'>

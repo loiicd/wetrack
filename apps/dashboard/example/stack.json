@@ -13,7 +13,7 @@
   ],
   "dataSources": [
     {
-      "key": "github-api-interface",
+      "key": "jsonplaceholder-posts",
       "type": "rest",
       "config": {
         "url": "https://jsonplaceholder.typicode.com/posts",
@@ -23,10 +23,24 @@
   ],
   "charts": [
     {
-      "key": "github-commits-chart",
-      "label": "GitHub Commits",
-      "type": "bar",
-      "dataSource": "github-api-interface"
+      "key": "posts-chart",
+      "dataSource": "jsonplaceholder-posts"
+    }
+  ],
+  "queries": [
+    {
+      "key": "posts-user-id-query",
+      "dataSource": "jsonplaceholder-posts",
+      "jsonPath": "$[*].userId"
+    }
+  ],
+  "transforms": [
+    {
+      "key": "posts-per-user-transform",
+      "query": "posts-user-id-query",
+      "function": "GROUP_BY",
+      "field": "userId",
+      "groupByField": "userId"
     }
   ]
 }

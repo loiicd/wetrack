@@ -20,13 +20,24 @@ export type QueryModel = runtime.Types.Result.DefaultSelection<Prisma.$QueryPayl
 
 export type AggregateQuery = {
   _count: QueryCountAggregateOutputType | null
+  _avg: QueryAvgAggregateOutputType | null
+  _sum: QuerySumAggregateOutputType | null
   _min: QueryMinAggregateOutputType | null
   _max: QueryMaxAggregateOutputType | null
+}
+
+export type QueryAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type QuerySumAggregateOutputType = {
+  version: number | null
 }
 
 export type QueryMinAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   dataSourceId: string | null
   jsonPath: string | null
@@ -37,6 +48,7 @@ export type QueryMinAggregateOutputType = {
 export type QueryMaxAggregateOutputType = {
   id: string | null
   key: string | null
+  version: number | null
   stackId: string | null
   dataSourceId: string | null
   jsonPath: string | null
@@ -47,6 +59,7 @@ export type QueryMaxAggregateOutputType = {
 export type QueryCountAggregateOutputType = {
   id: number
   key: number
+  version: number
   stackId: number
   dataSourceId: number
   jsonPath: number
@@ -56,9 +69,18 @@ export type QueryCountAggregateOutputType = {
 }
 
 
+export type QueryAvgAggregateInputType = {
+  version?: true
+}
+
+export type QuerySumAggregateInputType = {
+  version?: true
+}
+
 export type QueryMinAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   dataSourceId?: true
   jsonPath?: true
@@ -69,6 +91,7 @@ export type QueryMinAggregateInputType = {
 export type QueryMaxAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   dataSourceId?: true
   jsonPath?: true
@@ -79,6 +102,7 @@ export type QueryMaxAggregateInputType = {
 export type QueryCountAggregateInputType = {
   id?: true
   key?: true
+  version?: true
   stackId?: true
   dataSourceId?: true
   jsonPath?: true
@@ -125,6 +149,18 @@ export type QueryAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: QueryAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: QuerySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: QueryMinAggregateInputType
@@ -155,6 +191,8 @@ export type QueryGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: QueryCountAggregateInputType | true
+  _avg?: QueryAvgAggregateInputType
+  _sum?: QuerySumAggregateInputType
   _min?: QueryMinAggregateInputType
   _max?: QueryMaxAggregateInputType
 }
@@ -162,12 +200,15 @@ export type QueryGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type QueryGroupByOutputType = {
   id: string
   key: string
+  version: number
   stackId: string
   dataSourceId: string
   jsonPath: string
   createdAt: Date
   updatedAt: Date
   _count: QueryCountAggregateOutputType | null
+  _avg: QueryAvgAggregateOutputType | null
+  _sum: QuerySumAggregateOutputType | null
   _min: QueryMinAggregateOutputType | null
   _max: QueryMaxAggregateOutputType | null
 }
@@ -193,6 +234,7 @@ export type QueryWhereInput = {
   NOT?: Prisma.QueryWhereInput | Prisma.QueryWhereInput[]
   id?: Prisma.StringFilter<"Query"> | string
   key?: Prisma.StringFilter<"Query"> | string
+  version?: Prisma.IntFilter<"Query"> | number
   stackId?: Prisma.StringFilter<"Query"> | string
   dataSourceId?: Prisma.StringFilter<"Query"> | string
   jsonPath?: Prisma.StringFilter<"Query"> | string
@@ -206,6 +248,7 @@ export type QueryWhereInput = {
 export type QueryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
@@ -222,6 +265,7 @@ export type QueryWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.QueryWhereInput[]
   NOT?: Prisma.QueryWhereInput | Prisma.QueryWhereInput[]
   key?: Prisma.StringFilter<"Query"> | string
+  version?: Prisma.IntFilter<"Query"> | number
   stackId?: Prisma.StringFilter<"Query"> | string
   dataSourceId?: Prisma.StringFilter<"Query"> | string
   jsonPath?: Prisma.StringFilter<"Query"> | string
@@ -235,14 +279,17 @@ export type QueryWhereUniqueInput = Prisma.AtLeast<{
 export type QueryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.QueryCountOrderByAggregateInput
+  _avg?: Prisma.QueryAvgOrderByAggregateInput
   _max?: Prisma.QueryMaxOrderByAggregateInput
   _min?: Prisma.QueryMinOrderByAggregateInput
+  _sum?: Prisma.QuerySumOrderByAggregateInput
 }
 
 export type QueryScalarWhereWithAggregatesInput = {
@@ -251,6 +298,7 @@ export type QueryScalarWhereWithAggregatesInput = {
   NOT?: Prisma.QueryScalarWhereWithAggregatesInput | Prisma.QueryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Query"> | string
   key?: Prisma.StringWithAggregatesFilter<"Query"> | string
+  version?: Prisma.IntWithAggregatesFilter<"Query"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Query"> | string
   dataSourceId?: Prisma.StringWithAggregatesFilter<"Query"> | string
   jsonPath?: Prisma.StringWithAggregatesFilter<"Query"> | string
@@ -261,6 +309,7 @@ export type QueryScalarWhereWithAggregatesInput = {
 export type QueryCreateInput = {
   id?: string
   key: string
+  version?: number
   jsonPath: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -272,6 +321,7 @@ export type QueryCreateInput = {
 export type QueryUncheckedCreateInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   dataSourceId: string
   jsonPath: string
@@ -283,6 +333,7 @@ export type QueryUncheckedCreateInput = {
 export type QueryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -294,6 +345,7 @@ export type QueryUpdateInput = {
 export type QueryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
@@ -305,6 +357,7 @@ export type QueryUncheckedUpdateInput = {
 export type QueryCreateManyInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   dataSourceId: string
   jsonPath: string
@@ -315,6 +368,7 @@ export type QueryCreateManyInput = {
 export type QueryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -323,6 +377,7 @@ export type QueryUpdateManyMutationInput = {
 export type QueryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
@@ -343,6 +398,7 @@ export type QueryOrderByRelationAggregateInput = {
 export type QueryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
@@ -350,9 +406,14 @@ export type QueryCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type QueryAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
+}
+
 export type QueryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
@@ -363,11 +424,16 @@ export type QueryMaxOrderByAggregateInput = {
 export type QueryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type QuerySumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type QueryScalarRelationFilter = {
@@ -476,6 +542,7 @@ export type QueryUpdateOneRequiredWithoutTransformsNestedInput = {
 export type QueryCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   jsonPath: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -486,6 +553,7 @@ export type QueryCreateWithoutStackInput = {
 export type QueryUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
+  version?: number
   dataSourceId: string
   jsonPath: string
   createdAt?: Date | string
@@ -525,6 +593,7 @@ export type QueryScalarWhereInput = {
   NOT?: Prisma.QueryScalarWhereInput | Prisma.QueryScalarWhereInput[]
   id?: Prisma.StringFilter<"Query"> | string
   key?: Prisma.StringFilter<"Query"> | string
+  version?: Prisma.IntFilter<"Query"> | number
   stackId?: Prisma.StringFilter<"Query"> | string
   dataSourceId?: Prisma.StringFilter<"Query"> | string
   jsonPath?: Prisma.StringFilter<"Query"> | string
@@ -535,6 +604,7 @@ export type QueryScalarWhereInput = {
 export type QueryCreateWithoutDataSourceInput = {
   id?: string
   key: string
+  version?: number
   jsonPath: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -545,6 +615,7 @@ export type QueryCreateWithoutDataSourceInput = {
 export type QueryUncheckedCreateWithoutDataSourceInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   jsonPath: string
   createdAt?: Date | string
@@ -581,6 +652,7 @@ export type QueryUpdateManyWithWhereWithoutDataSourceInput = {
 export type QueryCreateWithoutTransformsInput = {
   id?: string
   key: string
+  version?: number
   jsonPath: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -591,6 +663,7 @@ export type QueryCreateWithoutTransformsInput = {
 export type QueryUncheckedCreateWithoutTransformsInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   dataSourceId: string
   jsonPath: string
@@ -617,6 +690,7 @@ export type QueryUpdateToOneWithWhereWithoutTransformsInput = {
 export type QueryUpdateWithoutTransformsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -627,6 +701,7 @@ export type QueryUpdateWithoutTransformsInput = {
 export type QueryUncheckedUpdateWithoutTransformsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
@@ -637,6 +712,7 @@ export type QueryUncheckedUpdateWithoutTransformsInput = {
 export type QueryCreateManyStackInput = {
   id?: string
   key: string
+  version?: number
   dataSourceId: string
   jsonPath: string
   createdAt?: Date | string
@@ -646,6 +722,7 @@ export type QueryCreateManyStackInput = {
 export type QueryUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -656,6 +733,7 @@ export type QueryUpdateWithoutStackInput = {
 export type QueryUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -666,6 +744,7 @@ export type QueryUncheckedUpdateWithoutStackInput = {
 export type QueryUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -675,6 +754,7 @@ export type QueryUncheckedUpdateManyWithoutStackInput = {
 export type QueryCreateManyDataSourceInput = {
   id?: string
   key: string
+  version?: number
   stackId: string
   jsonPath: string
   createdAt?: Date | string
@@ -684,6 +764,7 @@ export type QueryCreateManyDataSourceInput = {
 export type QueryUpdateWithoutDataSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -694,6 +775,7 @@ export type QueryUpdateWithoutDataSourceInput = {
 export type QueryUncheckedUpdateWithoutDataSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -704,6 +786,7 @@ export type QueryUncheckedUpdateWithoutDataSourceInput = {
 export type QueryUncheckedUpdateManyWithoutDataSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -744,6 +827,7 @@ export type QueryCountOutputTypeCountTransformsArgs<ExtArgs extends runtime.Type
 export type QuerySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   jsonPath?: boolean
@@ -758,6 +842,7 @@ export type QuerySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type QuerySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   jsonPath?: boolean
@@ -770,6 +855,7 @@ export type QuerySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type QuerySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   jsonPath?: boolean
@@ -782,6 +868,7 @@ export type QuerySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type QuerySelectScalar = {
   id?: boolean
   key?: boolean
+  version?: boolean
   stackId?: boolean
   dataSourceId?: boolean
   jsonPath?: boolean
@@ -789,7 +876,7 @@ export type QuerySelectScalar = {
   updatedAt?: boolean
 }
 
-export type QueryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "stackId" | "dataSourceId" | "jsonPath" | "createdAt" | "updatedAt", ExtArgs["result"]["query"]>
+export type QueryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "dataSourceId" | "jsonPath" | "createdAt" | "updatedAt", ExtArgs["result"]["query"]>
 export type QueryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
@@ -815,6 +902,7 @@ export type $QueryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
+    version: number
     stackId: string
     dataSourceId: string
     jsonPath: string
@@ -1248,6 +1336,7 @@ export interface Prisma__QueryClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface QueryFieldRefs {
   readonly id: Prisma.FieldRef<"Query", 'String'>
   readonly key: Prisma.FieldRef<"Query", 'String'>
+  readonly version: Prisma.FieldRef<"Query", 'Int'>
   readonly stackId: Prisma.FieldRef<"Query", 'String'>
   readonly dataSourceId: Prisma.FieldRef<"Query", 'String'>
   readonly jsonPath: Prisma.FieldRef<"Query", 'String'>

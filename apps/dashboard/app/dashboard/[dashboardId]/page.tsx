@@ -7,11 +7,11 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 const DashboardContent = async ({
-  params,
+  props,
 }: {
-  params: PageProps<"/dashboard/[dashboardId]">["params"];
+  props: PageProps<"/dashboard/[dashboardId]">;
 }) => {
-  const { dashboardId } = await params;
+  const { dashboardId } = await props.params;
 
   const dashboard = await dashboardInterface.getById(dashboardId);
 
@@ -91,7 +91,7 @@ const Page = (props: PageProps<"/dashboard/[dashboardId]">) => {
   return (
     <Container>
       <Suspense fallback={<div>Loading dashboard…</div>}>
-        <DashboardContent params={props.params} />
+        <DashboardContent props={props} />
       </Suspense>
     </Container>
   );

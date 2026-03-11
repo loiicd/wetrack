@@ -21,10 +21,26 @@ const chartSchema = z.object({
   dataSource: z.string(),
 });
 
+const querySchema = z.object({
+  key: z.string(),
+  dataSource: z.string(),
+  jsonPath: z.string(),
+});
+
+const transformSchema = z.object({
+  key: z.string(),
+  query: z.string(),
+  function: z.enum(["SUM", "AVG", "GROUP_BY"]),
+  field: z.string(),
+  groupByField: z.string().optional(),
+});
+
 export const stackSchema = z.object({
   key: z.string(),
   environment: z.enum(["PRODUCTION", "STAGING"]),
   dataSources: z.array(dataSourceSchema),
   charts: z.array(chartSchema),
   dashboards: z.array(dashboardSchema),
+  queries: z.array(querySchema),
+  transforms: z.array(transformSchema),
 });

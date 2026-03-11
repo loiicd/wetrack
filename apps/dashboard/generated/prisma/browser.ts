@@ -38,6 +38,16 @@ export type DataSource = Prisma.DataSourceModel
  */
 export type Chart = Prisma.ChartModel
 /**
+ * Model Query
+ * 
+ */
+export type Query = Prisma.QueryModel
+/**
+ * Model Transform
+ * 
+ */
+export type Transform = Prisma.TransformModel
+/**
  * Model Credential
  * 
  */

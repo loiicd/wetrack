@@ -55,6 +55,8 @@ export const ModelName = {
   Dashboard: 'Dashboard',
   DataSource: 'DataSource',
   Chart: 'Chart',
+  Query: 'Query',
+  Transform: 'Transform',
   Credential: 'Credential'
 } as const
 
@@ -77,6 +79,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const StackScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  status: 'status',
   environment: 'environment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -122,6 +125,34 @@ export const ChartScalarFieldEnum = {
 export type ChartScalarFieldEnum = (typeof ChartScalarFieldEnum)[keyof typeof ChartScalarFieldEnum]
 
 
+export const QueryScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  stackId: 'stackId',
+  dataSourceId: 'dataSourceId',
+  jsonPath: 'jsonPath',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QueryScalarFieldEnum = (typeof QueryScalarFieldEnum)[keyof typeof QueryScalarFieldEnum]
+
+
+export const TransformScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  stackId: 'stackId',
+  queryId: 'queryId',
+  function: 'function',
+  field: 'field',
+  groupByField: 'groupByField',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransformScalarFieldEnum = (typeof TransformScalarFieldEnum)[keyof typeof TransformScalarFieldEnum]
+
+
 export const CredentialScalarFieldEnum = {
   id: 'id',
   key: 'key',
@@ -164,4 +195,12 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

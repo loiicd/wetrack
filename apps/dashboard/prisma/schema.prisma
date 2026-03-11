@@ -13,9 +13,22 @@ enum Environment {
   DEVELOPMENT
 }
 
+enum Status {
+  ACTIVE
+  BUILDING
+  INACTIVE
+}
+
+enum TransformFunction {
+  SUM
+  AVG
+  GROUP_BY
+}
+
 model Stack {
   id          String      @id @default(uuid())
   key         String
+  status      Status
   environment Environment
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -23,6 +36,8 @@ model Stack {
   dashboards  Dashboard[]
   dataSources DataSource[]
   charts      Chart[]
+  queries     Query[]
+  transforms  Transform[]
   credentials Credential[]
 }
 
@@ -48,8 +63,9 @@ model DataSource {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  stack  Stack   @relation(fields: [stackId], references: [id])
-  charts Chart[]
+  stack   Stack   @relation(fields: [stackId], references: [id])
+  charts  Chart[]
+  queries Query[]
 }
 
 model Chart {
@@ -62,6 +78,35 @@ model Chart {
 
   stack      Stack      @relation(fields: [stackId], references: [id])
   dataSource DataSource @relation(fields: [dataSourceId], references: [id])
+}
+
+model Query {
+  id           String   @id @default(uuid())
+  key          String
+  stackId      String
+  dataSourceId String
+  jsonPath     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  stack      Stack       @relation(fields: [stackId], references: [id])
+  dataSource DataSource  @relation(fields: [dataSourceId], references: [id])
+  transforms Transform[]
+}
+
+model Transform {
+  id           String            @id @default(uuid())
+  key          String
+  stackId      String
+  queryId      String
+  function     TransformFunction
+  field        String
+  groupByField String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  stack Stack @relation(fields: [stackId], references: [id])
+  query Query @relation(fields: [queryId], references: [id])
 }
 
 model Credential {

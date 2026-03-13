@@ -1,34 +1,18 @@
 "use client";
 
 import {
-  Baby,
   BadgeCheck,
   Bell,
   ChevronDown,
-  ChevronRight,
-  Clapperboard,
-  Clock,
   CreditCard,
-  Download,
-  Film,
-  Flag,
-  HelpCircle,
-  History,
   Home,
-  ListVideo,
   LogOut,
   type LucideIcon,
   Menu,
-  MessageSquare,
-  Music,
-  Music2,
-  PlaySquare,
-  Radio,
   Search,
-  Settings,
-  ShoppingBag,
   Sparkles,
-  ThumbsUp,
+  LayoutDashboardIcon,
+  EthernetPortIcon,
 } from "lucide-react";
 import * as React from "react";
 
@@ -36,11 +20,6 @@ import { cn } from "@/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +41,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
@@ -84,49 +62,16 @@ function getInitials(name: string) {
 
 const data = {
   user: {
-    name: "Jordan Lee",
-    email: "jordan@zerotube.io",
+    name: "Max Mustermann",
+    email: "max@zerotube.io",
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar1.jpg",
   },
   navPrimary: [
-    { title: "Home", url: "#", icon: Home, isActive: true },
-    { title: "Shorts", url: "#", icon: Clapperboard },
-    { title: "Subscriptions", url: "#", icon: PlaySquare },
-    { title: "You", url: "#", icon: History },
-  ],
-  subscriptions: [
-    { name: "Theo - t3.gg", avatar: "/avatars/theo.jpg", isLive: true },
-    { name: "Fireship", avatar: "/avatars/fireship.jpg", hasNew: true },
-    { name: "Web Dev Simplified", avatar: "/avatars/webdev.jpg" },
-    { name: "Traversy Media", avatar: "/avatars/traversy.jpg", hasNew: true },
-    { name: "The Primeagen", avatar: "/avatars/prime.jpg" },
-    { name: "Jack Herrington", avatar: "/avatars/jack.jpg", hasNew: true },
-    { name: "Coding in Public", avatar: "/avatars/cip.jpg" },
-  ],
-  navYou: [
-    { title: "History", url: "#", icon: History },
-    { title: "Playlists", url: "#", icon: ListVideo },
-    { title: "Watch later", url: "#", icon: Clock },
-    { title: "Liked videos", url: "#", icon: ThumbsUp },
-    { title: "Your videos", url: "#", icon: PlaySquare },
-    { title: "Downloads", url: "#", icon: Download },
-  ],
-  navExplore: [
-    { title: "Shopping", url: "#", icon: ShoppingBag },
-    { title: "Music", url: "#", icon: Music },
-    { title: "Movies", url: "#", icon: Film },
-  ],
-  navMoreFrom: [
-    { title: "Zerotube Studio", url: "#", icon: Radio },
-    { title: "Zerotube Music", url: "#", icon: Music2 },
-    { title: "Zerotube Kids", url: "#", icon: Baby },
-  ],
-  navFooter: [
-    { title: "Settings", url: "#", icon: Settings },
-    { title: "Report history", url: "#", icon: Flag },
-    { title: "Help", url: "#", icon: HelpCircle },
-    { title: "Send feedback", url: "#", icon: MessageSquare },
+    { title: "Home", url: "/", icon: Home, isActive: true },
+    { title: "Dashboards", url: "/dashboard", icon: LayoutDashboardIcon },
+    { title: "Data Sources", url: "/datasource", icon: EthernetPortIcon },
+    { title: "Queries", url: "/query", icon: Search },
   ],
 };
 
@@ -156,188 +101,6 @@ function NavPrimary({
   );
 }
 
-// Subscriptions section with channel avatars
-function NavSubscriptions({
-  subscriptions,
-}: {
-  subscriptions: {
-    name: string;
-    avatar: string;
-    isLive?: boolean;
-    hasNew?: boolean;
-  }[];
-}) {
-  return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <Collapsible defaultOpen>
-        <SidebarGroupLabel
-          render={
-            <CollapsibleTrigger className="group/collapsible flex w-full items-center" />
-          }
-        >
-          Subscriptions
-          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-        </SidebarGroupLabel>
-        <CollapsibleContent>
-          <SidebarMenu>
-            {subscriptions.map((channel) => (
-              <SidebarMenuItem key={channel.name}>
-                <SidebarMenuButton render={<a href="#" />}>
-                  <Avatar className="size-6 ring-2 ring-muted">
-                    <AvatarImage src={channel.avatar} />
-                    <AvatarFallback className="bg-primary text-xs text-primary-foreground">
-                      {channel.name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="truncate">{channel.name}</span>
-                  {channel.isLive && (
-                    <Radio className="ml-auto size-4 text-red-500" />
-                  )}
-                  {channel.hasNew && !channel.isLive && (
-                    <span className="ml-auto size-2 rounded-full bg-blue-500" />
-                  )}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <ChevronDown className="size-4" />
-                <span>Show more</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </CollapsibleContent>
-      </Collapsible>
-    </SidebarGroup>
-  );
-}
-
-// "You" section - History, Playlists, etc.
-function NavYou({
-  items,
-}: {
-  items: { title: string; url: string; icon: LucideIcon }[];
-}) {
-  return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <Collapsible defaultOpen>
-        <SidebarGroupLabel
-          render={
-            <CollapsibleTrigger className="group/collapsible flex w-full items-center" />
-          }
-        >
-          You
-          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-        </SidebarGroupLabel>
-        <CollapsibleContent>
-          <SidebarMenu>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton render={<a href={item.url} />}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <ChevronDown className="size-4" />
-                <span>Show more</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </CollapsibleContent>
-      </Collapsible>
-    </SidebarGroup>
-  );
-}
-
-// Explore section - Shopping, Music, Movies
-function NavExplore({
-  items,
-}: {
-  items: { title: string; url: string; icon: LucideIcon }[];
-}) {
-  return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <Collapsible defaultOpen>
-        <SidebarGroupLabel
-          render={
-            <CollapsibleTrigger className="group/collapsible flex w-full items-center" />
-          }
-        >
-          Explore
-          <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-        </SidebarGroupLabel>
-        <CollapsibleContent>
-          <SidebarMenu>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton render={<a href={item.url} />}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <ChevronDown className="size-4" />
-                <span>Show more</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </CollapsibleContent>
-      </Collapsible>
-    </SidebarGroup>
-  );
-}
-
-// More from Zerotube section
-function NavMoreFrom({
-  items,
-}: {
-  items: { title: string; url: string; icon: LucideIcon }[];
-}) {
-  return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>More from Zerotube</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton render={<a href={item.url} />}>
-              <item.icon />
-              <span>{item.title}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
-  );
-}
-
-// Footer nav - Settings, Help, etc.
-function NavFooter({
-  items,
-}: {
-  items: { title: string; url: string; icon: LucideIcon }[];
-}) {
-  return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton size="sm" render={<a href={item.url} />}>
-              <item.icon />
-              <span>{item.title}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
-  );
-}
-
-// Footer links at the very bottom
 function FooterLinks() {
   return (
     <div className="px-4 py-4 text-xs text-muted-foreground">
@@ -385,7 +148,6 @@ function SiteHeader() {
 
   return (
     <header className="fixed top-0 z-50 hidden w-full items-center border-b bg-background md:flex">
-      {/* Left: Menu + Logo */}
       <div className="flex h-(--header-height) w-(--sidebar-width-icon) shrink-0 items-center justify-center">
         <Button
           className="size-9"
@@ -405,9 +167,7 @@ function SiteHeader() {
               className="size-5 invert dark:invert-0"
             />
           </div>
-          <span className="hidden text-lg font-semibold sm:block">
-            Shadcnblocks
-          </span>
+          <span className="hidden text-lg font-semibold sm:block">WeTrack</span>
         </a>
       </div>
 
@@ -497,11 +257,6 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="min-h-0 flex-1">
           <NavPrimary items={data.navPrimary} />
-          <NavSubscriptions subscriptions={data.subscriptions} />
-          <NavYou items={data.navYou} />
-          <NavExplore items={data.navExplore} />
-          <NavMoreFrom items={data.navMoreFrom} />
-          <NavFooter items={data.navFooter} />
         </ScrollArea>
       </SidebarContent>
       <SidebarFooter className="group-data-[collapsible=icon]:hidden">

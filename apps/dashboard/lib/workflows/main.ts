@@ -1,8 +1,7 @@
 import { stackInterface } from "@/lib/database/stack";
 import { dataSourceInterface } from "@/lib/database/dataSource";
 import { queryInterface } from "@/lib/database/query";
-import { transformInterface } from "@/lib/database/transform";
-import { Environment, StackId, Status } from "@/types";
+import { Environment, StackId } from "@/types";
 import { stackSchema } from "@/schemas/dashboard";
 import z from "zod";
 import { dashboardInterface } from "../database/dashboard";
@@ -27,13 +26,13 @@ type QueryInput = {
   jsonPath: string;
 };
 
-type TransformInput = {
-  key: string;
-  query: string;
-  function: "SUM" | "AVG" | "GROUP_BY";
-  field: string;
-  groupByField?: string;
-};
+// type TransformInput = {
+//   key: string;
+//   query: string;
+//   function: "SUM" | "AVG" | "GROUP_BY";
+//   field: string;
+//   groupByField?: string;
+// };
 
 // type Chart = {
 //   key: string;
@@ -47,11 +46,10 @@ export const mainWorkflow = async (data: z.infer<typeof stackSchema>) => {
   const stackId = await createStack(stack);
 
   await createDashboards(data.dashboards, stackId);
+  await createDataSources(stackId, data.dataSources);
 
-  // await createDataSources(stackId, data.dataSources);
-
-  // const dataSourceMap = await resolveDataSourceMap(stackId);
-  // await createQueries(stackId, data.queries, dataSourceMap);
+  const dataSourceMap = await resolveDataSourceMap(stackId);
+  await createQueries(stackId, data.queries, dataSourceMap);
 
   // const queryMap = await resolveQueryMap(stackId);
   // await createTransforms(stackId, data.transforms, queryMap);
@@ -69,49 +67,73 @@ const createDashboards = async (
   dashboards: z.infer<typeof stackSchema>["dashboards"],
   stackId: StackId,
 ) => {
+  if (!dashboards?.length) {
+    return;
+  }
+
   await dashboardInterface.createMany(
     dashboards.map((d) => ({
       key: d.key,
       label: d.label,
-      description: d.describetion,
+      description: d.description,
       stackId,
     })),
   );
 };
 
-// const createDataSources = async (
-//   stackId: StackId,
-//   dataSources: DataSource[],
-// ) => {
-//   const dataSourcesToCreate = dataSources.map((dataSource) => ({
-//     stackId,
-//     key: dataSource.key,
-//     type: dataSource.type,
-//     config: dataSource.config,
-//   }));
-//   await dataSourceInterface.createMany(dataSourcesToCreate);
-// };
+const createDataSources = async (
+  stackId: StackId,
+  dataSources: DataSource[] | undefined,
+) => {
+  if (!dataSources?.length) {
+    return;
+  }
 
-// const resolveDataSourceMap = async (
-//   stackId: StackId,
-// ): Promise<Record<string, string>> => {
-//   const dataSources = await dataSourceInterface.getByStackId(stackId);
-//   return Object.fromEntries(dataSources.map((ds) => [ds.key, ds.id]));
-// };
+  const dataSourcesToCreate = dataSources.map((dataSource) => ({
+    stackId,
+    key: dataSource.key,
+    type: dataSource.type,
+    config: dataSource.config,
+  }));
 
-// const createQueries = async (
-//   stackId: StackId,
-//   queries: QueryInput[],
-//   dataSourceMap: Record<string, string>,
-// ) => {
-//   const queriesToCreate = queries.map((query) => ({
-//     stackId,
-//     key: query.key,
-//     dataSourceId: dataSourceMap[query.dataSource]!,
-//     jsonPath: query.jsonPath,
-//   }));
-//   await queryInterface.createMany(queriesToCreate);
-// };
+  await dataSourceInterface.createMany(dataSourcesToCreate);
+};
+
+const resolveDataSourceMap = async (
+  stackId: StackId,
+): Promise<Record<string, string>> => {
+  const dataSources = await dataSourceInterface.getByStackId(stackId);
+  return Object.fromEntries(dataSources.map((ds) => [ds.key, ds.id]));
+};
+
+const createQueries = async (
+  stackId: StackId,
+  queries: QueryInput[] | undefined,
+  dataSourceMap: Record<string, string>,
+) => {
+  if (!queries?.length) {
+    return;
+  }
+
+  const queriesToCreate = queries.map((query) => {
+    const dataSourceId = dataSourceMap[query.dataSource];
+
+    if (!dataSourceId) {
+      throw new Error(
+        `Data source with key '${query.dataSource}' not found for query '${query.key}'`,
+      );
+    }
+
+    return {
+      stackId,
+      key: query.key,
+      dataSourceId,
+      jsonPath: query.jsonPath,
+    };
+  });
+
+  await queryInterface.createMany(queriesToCreate);
+};
 
 // const resolveQueryMap = async (
 //   stackId: StackId,

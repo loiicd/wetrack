@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import TestDataSourceButton from "../testDataSourceButton";
 
 const DatasourceTable = async () => {
   const dataSources = await dataSourceInterface.getMany();
@@ -29,6 +30,9 @@ const DatasourceTable = async () => {
             <TableCell>{dataSource.stackId}</TableCell>
             <TableCell>
               {dataSource.createdAt.toLocaleDateString("de-DE")}
+            </TableCell>
+            <TableCell>
+              <TestDataSourceButton id={dataSource.id} />
             </TableCell>
           </TableRow>
         ))}

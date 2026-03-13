@@ -2,12 +2,9 @@ import { DataSourceCreateManyInput } from "@/generated/prisma/models";
 import prisma from "./prisma";
 
 export const dataSourceInterface = {
-  async create(data: {
-    key: string;
-    type: string;
-    config: any;
-    stackId: string;
-  }) {
+  async create(
+    data: Pick<DataSourceCreateManyInput, "key" | "type" | "config" | "stackId">,
+  ) {
     return await prisma.dataSource.create({
       data: {
         version: 1,
@@ -18,6 +15,10 @@ export const dataSourceInterface = {
 
   async createMany(data: DataSourceCreateManyInput[]) {
     await prisma.dataSource.createMany({ data });
+  },
+
+  async getById(id: string) {
+    return await prisma.dataSource.findUnique({ where: { id } });
   },
 
   async getByLatestStackKey(stackKey: string) {

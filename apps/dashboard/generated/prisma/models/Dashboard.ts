@@ -257,6 +257,7 @@ export type DashboardOrderByWithRelationInput = {
 
 export type DashboardWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  stackId_key?: Prisma.DashboardStackIdKeyCompoundUniqueInput
   AND?: Prisma.DashboardWhereInput | Prisma.DashboardWhereInput[]
   OR?: Prisma.DashboardWhereInput[]
   NOT?: Prisma.DashboardWhereInput | Prisma.DashboardWhereInput[]
@@ -268,7 +269,7 @@ export type DashboardWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Dashboard"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
-}, "id">
+}, "id" | "stackId_key">
 
 export type DashboardOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -384,6 +385,11 @@ export type DashboardListRelationFilter = {
 
 export type DashboardOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type DashboardStackIdKeyCompoundUniqueInput = {
+  stackId: string
+  key: string
 }
 
 export type DashboardCountOrderByAggregateInput = {

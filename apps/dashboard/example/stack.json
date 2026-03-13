@@ -4,11 +4,11 @@
   "dashboards": [
     {
       "key": "open-emergency-data-dashboard",
-      "title": "Open Emergency Data Dashboard"
+      "label": "Open Emergency Data Dashboard"
     },
     {
       "key": "user-activity-dashboard",
-      "title": "User Activity Dashboard"
+      "label": "User Activity Dashboard"
     }
   ],
   "dataSources": [

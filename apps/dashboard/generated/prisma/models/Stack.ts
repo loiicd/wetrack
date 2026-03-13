@@ -249,6 +249,7 @@ export type StackOrderByWithRelationInput = {
 
 export type StackWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  key_environment?: Prisma.StackKeyEnvironmentCompoundUniqueInput
   AND?: Prisma.StackWhereInput | Prisma.StackWhereInput[]
   OR?: Prisma.StackWhereInput[]
   NOT?: Prisma.StackWhereInput | Prisma.StackWhereInput[]
@@ -263,7 +264,7 @@ export type StackWhereUniqueInput = Prisma.AtLeast<{
   queries?: Prisma.QueryListRelationFilter
   transforms?: Prisma.TransformListRelationFilter
   credentials?: Prisma.CredentialListRelationFilter
-}, "id">
+}, "id" | "key_environment">
 
 export type StackOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -376,6 +377,11 @@ export type StackUncheckedUpdateManyInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StackKeyEnvironmentCompoundUniqueInput = {
+  key: string
+  environment: $Enums.Environment
 }
 
 export type StackCountOrderByAggregateInput = {

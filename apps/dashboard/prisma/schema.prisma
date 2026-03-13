@@ -33,6 +33,8 @@ model Stack {
   queries     Query[]
   transforms  Transform[]
   credentials Credential[]
+
+  @@unique([key, environment])
 }
 
 model Dashboard {
@@ -47,7 +49,7 @@ model Dashboard {
 
   stack Stack @relation(fields: [stackId], references: [id])
 
-  @@index([stackId, key])
+  @@unique([stackId, key])
 }
 
 model DataSource {

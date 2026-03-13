@@ -1,4 +1,3 @@
-import { cacheLife } from "next/cache";
 import prisma from "./prisma";
 
 export const dashboardInterface = {
@@ -8,8 +7,15 @@ export const dashboardInterface = {
     description: string;
     stackId: string;
   }) {
-    return await prisma.dashboard.create({
-      data: {
+    return await prisma.dashboard.upsert({
+      where: {
+        stackId_key: { stackId: data.stackId, key: data.key },
+      },
+      update: {
+        label: data.label,
+        description: data.description,
+      },
+      create: {
         version: 1,
         ...data,
       },
@@ -24,12 +30,24 @@ export const dashboardInterface = {
       stackId: string;
     }[],
   ) {
-    const dataWithVersion = data.map((d) => ({
-      version: 1,
-      ...d,
-      description: d.description ?? null,
-    }));
-    await prisma.dashboard.createMany({ data: dataWithVersion });
+    await Promise.all(
+      data.map((d) =>
+        prisma.dashboard.upsert({
+          where: {
+            stackId_key: { stackId: d.stackId, key: d.key },
+          },
+          update: {
+            label: d.label,
+            description: d.description ?? null,
+          },
+          create: {
+            version: 1,
+            ...d,
+            description: d.description ?? null,
+          },
+        }),
+      ),
+    );
   },
 
   async getById(id: string) {

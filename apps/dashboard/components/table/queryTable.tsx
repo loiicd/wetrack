@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TestQueryButton from "../testQueryButton";
+import EmptyTableRow from "../emptyTableRow";
+import { FrownIcon } from "lucide-react";
 
 const QueryTable = async () => {
   const queries = await queryInterface.getMany();
@@ -35,6 +37,14 @@ const QueryTable = async () => {
             </TableCell>
           </TableRow>
         ))}
+        {queries.length === 0 && (
+          <EmptyTableRow
+            colSpan={5}
+            icon={<FrownIcon />}
+            title="No data"
+            description="No data found"
+          />
+        )}
       </TableBody>
     </Table>
   );

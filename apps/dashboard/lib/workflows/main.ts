@@ -5,6 +5,7 @@ import { queryInterface } from "@/lib/database/query";
 import { stackInterface } from "@/lib/database/stack";
 import { Environment, StackId } from "@/types";
 import { stackSchema } from "@/schemas/dashboard";
+import { QueryType } from "@/generated/prisma/enums";
 import z from "zod";
 
 type Stack = {
@@ -21,11 +22,23 @@ type DataSource = {
   };
 };
 
-type QueryInput = {
+type JSONPathQueryInput = {
   key: string;
-  dataSource: string;
+  type: "jsonpath";
+  dataSource?: string;
+  sourceQuery?: string;
   jsonPath: string;
 };
+
+type SQLQueryInput = {
+  key: string;
+  type: "sql";
+  dataSource?: string;
+  sourceQuery?: string;
+  sql: string;
+};
+
+type QueryInput = JSONPathQueryInput | SQLQueryInput;
 
 type ChartInput = NonNullable<z.infer<typeof stackSchema>["charts"]>[number];
 
@@ -131,24 +144,82 @@ const createQueries = async (
     return;
   }
 
-  const queriesToCreate = queries.map((query) => {
-    const dataSourceId = dataSourceMap[query.dataSource];
+  // Topologisches Sortieren: Queries mit dataSource zuerst, dann sourceQuery-Abhängigkeiten
+  const resolved = new Set<string>();
+  const ordered: QueryInput[] = [];
 
-    if (!dataSourceId) {
+  const resolve = (q: QueryInput) => {
+    if (resolved.has(q.key)) return;
+    if (q.sourceQuery) {
+      const parent = queries.find((p) => p.key === q.sourceQuery);
+      if (parent) resolve(parent);
+    }
+    ordered.push(q);
+    resolved.add(q.key);
+  };
+
+  for (const q of queries) resolve(q);
+
+  const queriesToCreate = ordered.map((query) => {
+    const dataSourceId = query.dataSource
+      ? dataSourceMap[query.dataSource]
+      : undefined;
+
+    if (query.dataSource && !dataSourceId) {
       throw new Error(
-        `Data source with key '${query.dataSource}' not found for query '${query.key}'`,
+        `DataSource '${query.dataSource}' nicht gefunden für Query '${query.key}'.`,
       );
     }
 
-    return {
-      stackId,
-      key: query.key,
-      dataSourceId,
-      jsonPath: query.jsonPath,
-    };
+    if (query.type === "jsonpath") {
+      return {
+        stackId,
+        key: query.key,
+        type: QueryType.JSONPATH,
+        dataSourceId: dataSourceId ?? null,
+        sourceQueryId: null, // wird nach DB-Insert gesetzt
+        jsonPath: query.jsonPath,
+        sql: null,
+      };
+    } else {
+      return {
+        stackId,
+        key: query.key,
+        type: QueryType.SQL,
+        dataSourceId: dataSourceId ?? null,
+        sourceQueryId: null,
+        jsonPath: null,
+        sql: query.sql,
+      };
+    }
   });
 
   await queryInterface.createMany(queriesToCreate);
+
+  // sourceQuery-Verknüpfungen nachträglich setzen (nach Erstellung aller Keys)
+  const queryMap = await resolveQueryMap(stackId);
+  for (const query of ordered) {
+    if (query.sourceQuery) {
+      const ownId = queryMap[query.key];
+      const sourceId = queryMap[query.sourceQuery];
+      if (!ownId || !sourceId) {
+        throw new Error(
+          `sourceQuery '${query.sourceQuery}' nicht gefunden für Query '${query.key}'.`,
+        );
+      }
+      await queryInterface.create({
+        stackId,
+        key: query.key,
+        type: query.type === "jsonpath" ? QueryType.JSONPATH : QueryType.SQL,
+        dataSourceId: query.dataSource
+          ? (dataSourceMap[query.dataSource] ?? null)
+          : null,
+        sourceQueryId: sourceId,
+        jsonPath: query.type === "jsonpath" ? query.jsonPath : null,
+        sql: query.type === "sql" ? query.sql : null,
+      });
+    }
+  }
 };
 
 const resolveQueryMap = async (
@@ -193,7 +264,12 @@ const createCharts = async (
       key: chart.key,
       dashboardId,
       queryId,
-      type: "BAR" as const,
+      type:
+        chart.type === "line"
+          ? ("LINE" as const)
+          : chart.type === "stat"
+            ? ("STAT" as const)
+            : ("BAR" as const),
       label: chart.label,
       description: chart.description ?? null,
       config: chart.config,

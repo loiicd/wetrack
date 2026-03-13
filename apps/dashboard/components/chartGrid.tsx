@@ -15,9 +15,15 @@ type ChartGridProps = {
   widgets: WidgetLayout[];
   columns?: number;
   gap?: number;
+  rowHeight?: number;
 };
 
-const ChartGrid = ({ widgets, columns = 12, gap = 10 }: ChartGridProps) => {
+const ChartGrid = ({
+  widgets,
+  columns = 12,
+  gap = 10,
+  rowHeight = 160,
+}: ChartGridProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
 
@@ -37,7 +43,6 @@ const ChartGrid = ({ widgets, columns = 12, gap = 10 }: ChartGridProps) => {
 
   const columnWidth =
     containerWidth > 0 ? (containerWidth - gap * (columns - 1)) / columns : 0;
-  const rowHeight = columnWidth;
 
   const maxRow = Math.max(...widgets.map((w) => w.y + w.h), 1);
 
@@ -48,7 +53,6 @@ const ChartGrid = ({ widgets, columns = 12, gap = 10 }: ChartGridProps) => {
         position: "relative",
         width: "100%",
         height: maxRow * (rowHeight + gap) - gap,
-        minHeight: "500px",
       }}
     >
       {widgets.map((widget) => (

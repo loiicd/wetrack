@@ -143,8 +143,11 @@ export const QueryScalarFieldEnum = {
   key: 'key',
   version: 'version',
   stackId: 'stackId',
+  type: 'type',
   dataSourceId: 'dataSourceId',
+  sourceQueryId: 'sourceQueryId',
   jsonPath: 'jsonPath',
+  sql: 'sql',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

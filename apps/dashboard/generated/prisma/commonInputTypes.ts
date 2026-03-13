@@ -222,6 +222,23 @@ export type EnumChartTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumChartTypeFilter<$PrismaModel>
 }
 
+export type EnumQueryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.QueryType | Prisma.EnumQueryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel> | $Enums.QueryType
+}
+
+export type EnumQueryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.QueryType | Prisma.EnumQueryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumQueryTypeWithAggregatesFilter<$PrismaModel> | $Enums.QueryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel>
+}
+
 export type EnumTransformFunctionFilter<$PrismaModel = never> = {
   equals?: $Enums.TransformFunction | Prisma.EnumTransformFunctionFieldRefInput<$PrismaModel>
   in?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
@@ -431,6 +448,23 @@ export type NestedEnumChartTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumChartTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumChartTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumQueryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.QueryType | Prisma.EnumQueryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel> | $Enums.QueryType
+}
+
+export type NestedEnumQueryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.QueryType | Prisma.EnumQueryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.QueryType[] | Prisma.ListEnumQueryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumQueryTypeWithAggregatesFilter<$PrismaModel> | $Enums.QueryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumTransformFunctionFilter<$PrismaModel = never> = {

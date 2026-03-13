@@ -8,6 +8,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TestDataSourceButton from "../testDataSourceButton";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "../ui/empty";
+import { FrownIcon } from "lucide-react";
+import EmptyTableRow from "../emptyTableRow";
 
 const DatasourceTable = async () => {
   const dataSources = await dataSourceInterface.getMany();
@@ -36,6 +45,14 @@ const DatasourceTable = async () => {
             </TableCell>
           </TableRow>
         ))}
+        {dataSources.length === 0 && (
+          <EmptyTableRow
+            colSpan={5}
+            icon={<FrownIcon />}
+            title="No data"
+            description="No data found"
+          />
+        )}
       </TableBody>
     </Table>
   );

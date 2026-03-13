@@ -1,4 +1,7 @@
-import BarChartCard, { BarChartDatum } from "@/components/charts/barChartCard";
+import BarChartCard from "@/components/charts/barChartCard";
+import ChartErrorCard from "@/components/charts/chartErrorCard";
+import LineChartCard from "@/components/charts/lineChartCard";
+import StatCard from "@/components/charts/statCard";
 import ChartGrid from "@/components/chartGrid";
 import DashboardBreadcrumb from "@/components/dashbordBreadcrumb";
 import Container from "@/components/layout/container";
@@ -11,38 +14,15 @@ import {
 } from "@/components/ui/card";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
+import { toDataFrame } from "@/lib/dataframe";
 import { getQueryData } from "@/lib/workflows/getQueryData";
-import { BarChartConfig, barChartConfigSchema } from "@/schemas/dashboard";
+import {
+  barChartConfigSchema,
+  lineChartConfigSchema,
+  statCardConfigSchema,
+} from "@/schemas/dashboard";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-
-const isRecord = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-};
-
-const mapQueryResultToBarData = (
-  queryResult: unknown,
-  config: BarChartConfig,
-): BarChartDatum[] => {
-  if (!Array.isArray(queryResult)) {
-    return [];
-  }
-
-  return queryResult.flatMap((item) => {
-    if (!isRecord(item)) {
-      return [];
-    }
-
-    const categoryValue = item[config.categoryField];
-    const numericValue = Number(item[config.valueField]);
-
-    if (categoryValue === undefined || !Number.isFinite(numericValue)) {
-      return [];
-    }
-
-    return [{ category: String(categoryValue), value: numericValue }];
-  });
-};
 
 const DashboardContent = async ({
   props,
@@ -62,30 +42,78 @@ const DashboardContent = async ({
   const widgets = await Promise.all(
     charts.map(async (chart) => {
       try {
-        if (chart.type !== "BAR") {
-          throw new Error(
-            `Chart type '${chart.type}' wird noch nicht unterstützt.`,
-          );
+        if (chart.type === "BAR") {
+          const config = barChartConfigSchema.parse(chart.config);
+          const queryResult = await getQueryData(chart.queryId);
+          const dataFrame = toDataFrame(queryResult, [
+            config.categoryField,
+            ...config.valueFields,
+          ]);
+          return {
+            id: chart.id,
+            x: chart.layoutX,
+            y: chart.layoutY,
+            w: chart.layoutW,
+            h: chart.layoutH,
+            content: (
+              <BarChartCard
+                title={chart.label}
+                description={chart.description}
+                data={dataFrame}
+                config={config}
+              />
+            ),
+          };
         }
 
-        const config = barChartConfigSchema.parse(chart.config);
-        const queryResult = await getQueryData(chart.queryId);
-        const data = mapQueryResultToBarData(queryResult, config);
+        if (chart.type === "LINE") {
+          const config = lineChartConfigSchema.parse(chart.config);
+          const queryResult = await getQueryData(chart.queryId);
+          const dataFrame = toDataFrame(queryResult, [
+            config.xField,
+            ...config.valueFields,
+          ]);
+          return {
+            id: chart.id,
+            x: chart.layoutX,
+            y: chart.layoutY,
+            w: chart.layoutW,
+            h: chart.layoutH,
+            content: (
+              <LineChartCard
+                title={chart.label}
+                description={chart.description}
+                data={dataFrame}
+                config={config}
+              />
+            ),
+          };
+        }
 
-        return {
-          id: chart.id,
-          x: chart.layoutX,
-          y: chart.layoutY,
-          w: chart.layoutW,
-          h: chart.layoutH,
-          content: (
-            <BarChartCard
-              title={chart.label}
-              description={chart.description}
-              data={data}
-            />
-          ),
-        };
+        if (chart.type === "STAT") {
+          const config = statCardConfigSchema.parse(chart.config);
+          const queryResult = await getQueryData(chart.queryId);
+          const dataFrame = toDataFrame(queryResult, [config.valueField]);
+          return {
+            id: chart.id,
+            x: chart.layoutX,
+            y: chart.layoutY,
+            w: chart.layoutW,
+            h: chart.layoutH,
+            content: (
+              <StatCard
+                title={chart.label}
+                description={chart.description}
+                data={dataFrame}
+                config={config}
+              />
+            ),
+          };
+        }
+
+        throw new Error(
+          `Chart type '${chart.type}' wird noch nicht unterstützt.`,
+        );
       } catch (error) {
         const message =
           error instanceof Error
@@ -98,19 +126,7 @@ const DashboardContent = async ({
           y: chart.layoutY,
           w: chart.layoutW,
           h: chart.layoutH,
-          content: (
-            <Card className="h-full">
-              <CardHeader>
-                <CardTitle>{chart.label}</CardTitle>
-                <CardDescription>
-                  Chart konnte nicht geladen werden.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{message}</p>
-              </CardContent>
-            </Card>
-          ),
+          content: <ChartErrorCard title={chart.label} message={message} />,
         };
       }
     }),

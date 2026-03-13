@@ -21,6 +21,13 @@ enum TransformFunction {
 
 enum ChartType {
   BAR
+  LINE
+  STAT
+}
+
+enum QueryType {
+  JSONPATH
+  SQL
 }
 
 model Stack {
@@ -99,19 +106,24 @@ model Chart {
 }
 
 model Query {
-  id           String   @id @default(uuid())
-  key          String
-  version      Int      @default(1)
-  stackId      String
-  dataSourceId String
-  jsonPath     String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id            String    @id @default(uuid())
+  key           String
+  version       Int       @default(1)
+  stackId       String
+  type          QueryType @default(JSONPATH)
+  dataSourceId  String?
+  sourceQueryId String?
+  jsonPath      String?
+  sql           String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  stack      Stack       @relation(fields: [stackId], references: [id])
-  dataSource DataSource  @relation(fields: [dataSourceId], references: [id])
-  charts     Chart[]
-  transforms Transform[]
+  stack          Stack       @relation(fields: [stackId], references: [id])
+  dataSource     DataSource? @relation(fields: [dataSourceId], references: [id])
+  sourceQuery    Query?      @relation("QuerySource", fields: [sourceQueryId], references: [id])
+  derivedQueries Query[]     @relation("QuerySource")
+  charts         Chart[]
+  transforms     Transform[]
 
   @@unique([stackId, key])
 }

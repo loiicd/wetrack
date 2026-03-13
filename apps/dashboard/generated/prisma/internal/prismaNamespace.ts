@@ -1034,8 +1034,11 @@ export const QueryScalarFieldEnum = {
   key: 'key',
   version: 'version',
   stackId: 'stackId',
+  type: 'type',
   dataSourceId: 'dataSourceId',
+  sourceQueryId: 'sourceQueryId',
   jsonPath: 'jsonPath',
+  sql: 'sql',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1199,6 +1202,20 @@ export type EnumChartTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'ChartType[]'
  */
 export type ListEnumChartTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChartType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryType'
+ */
+export type EnumQueryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryType'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryType[]'
+ */
+export type ListEnumQueryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryType[]'>
     
 
 

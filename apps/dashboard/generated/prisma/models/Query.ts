@@ -39,8 +39,11 @@ export type QueryMinAggregateOutputType = {
   key: string | null
   version: number | null
   stackId: string | null
+  type: $Enums.QueryType | null
   dataSourceId: string | null
+  sourceQueryId: string | null
   jsonPath: string | null
+  sql: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,8 +53,11 @@ export type QueryMaxAggregateOutputType = {
   key: string | null
   version: number | null
   stackId: string | null
+  type: $Enums.QueryType | null
   dataSourceId: string | null
+  sourceQueryId: string | null
   jsonPath: string | null
+  sql: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,8 +67,11 @@ export type QueryCountAggregateOutputType = {
   key: number
   version: number
   stackId: number
+  type: number
   dataSourceId: number
+  sourceQueryId: number
   jsonPath: number
+  sql: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -82,8 +91,11 @@ export type QueryMinAggregateInputType = {
   key?: true
   version?: true
   stackId?: true
+  type?: true
   dataSourceId?: true
+  sourceQueryId?: true
   jsonPath?: true
+  sql?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -93,8 +105,11 @@ export type QueryMaxAggregateInputType = {
   key?: true
   version?: true
   stackId?: true
+  type?: true
   dataSourceId?: true
+  sourceQueryId?: true
   jsonPath?: true
+  sql?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,8 +119,11 @@ export type QueryCountAggregateInputType = {
   key?: true
   version?: true
   stackId?: true
+  type?: true
   dataSourceId?: true
+  sourceQueryId?: true
   jsonPath?: true
+  sql?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -202,8 +220,11 @@ export type QueryGroupByOutputType = {
   key: string
   version: number
   stackId: string
-  dataSourceId: string
-  jsonPath: string
+  type: $Enums.QueryType
+  dataSourceId: string | null
+  sourceQueryId: string | null
+  jsonPath: string | null
+  sql: string | null
   createdAt: Date
   updatedAt: Date
   _count: QueryCountAggregateOutputType | null
@@ -236,12 +257,17 @@ export type QueryWhereInput = {
   key?: Prisma.StringFilter<"Query"> | string
   version?: Prisma.IntFilter<"Query"> | number
   stackId?: Prisma.StringFilter<"Query"> | string
-  dataSourceId?: Prisma.StringFilter<"Query"> | string
-  jsonPath?: Prisma.StringFilter<"Query"> | string
+  type?: Prisma.EnumQueryTypeFilter<"Query"> | $Enums.QueryType
+  dataSourceId?: Prisma.StringNullableFilter<"Query"> | string | null
+  sourceQueryId?: Prisma.StringNullableFilter<"Query"> | string | null
+  jsonPath?: Prisma.StringNullableFilter<"Query"> | string | null
+  sql?: Prisma.StringNullableFilter<"Query"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Query"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Query"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
-  dataSource?: Prisma.XOR<Prisma.DataSourceScalarRelationFilter, Prisma.DataSourceWhereInput>
+  dataSource?: Prisma.XOR<Prisma.DataSourceNullableScalarRelationFilter, Prisma.DataSourceWhereInput> | null
+  sourceQuery?: Prisma.XOR<Prisma.QueryNullableScalarRelationFilter, Prisma.QueryWhereInput> | null
+  derivedQueries?: Prisma.QueryListRelationFilter
   charts?: Prisma.ChartListRelationFilter
   transforms?: Prisma.TransformListRelationFilter
 }
@@ -251,12 +277,17 @@ export type QueryOrderByWithRelationInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  dataSourceId?: Prisma.SortOrder
-  jsonPath?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  dataSourceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceQueryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  jsonPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  sql?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   stack?: Prisma.StackOrderByWithRelationInput
   dataSource?: Prisma.DataSourceOrderByWithRelationInput
+  sourceQuery?: Prisma.QueryOrderByWithRelationInput
+  derivedQueries?: Prisma.QueryOrderByRelationAggregateInput
   charts?: Prisma.ChartOrderByRelationAggregateInput
   transforms?: Prisma.TransformOrderByRelationAggregateInput
 }
@@ -270,12 +301,17 @@ export type QueryWhereUniqueInput = Prisma.AtLeast<{
   key?: Prisma.StringFilter<"Query"> | string
   version?: Prisma.IntFilter<"Query"> | number
   stackId?: Prisma.StringFilter<"Query"> | string
-  dataSourceId?: Prisma.StringFilter<"Query"> | string
-  jsonPath?: Prisma.StringFilter<"Query"> | string
+  type?: Prisma.EnumQueryTypeFilter<"Query"> | $Enums.QueryType
+  dataSourceId?: Prisma.StringNullableFilter<"Query"> | string | null
+  sourceQueryId?: Prisma.StringNullableFilter<"Query"> | string | null
+  jsonPath?: Prisma.StringNullableFilter<"Query"> | string | null
+  sql?: Prisma.StringNullableFilter<"Query"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Query"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Query"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
-  dataSource?: Prisma.XOR<Prisma.DataSourceScalarRelationFilter, Prisma.DataSourceWhereInput>
+  dataSource?: Prisma.XOR<Prisma.DataSourceNullableScalarRelationFilter, Prisma.DataSourceWhereInput> | null
+  sourceQuery?: Prisma.XOR<Prisma.QueryNullableScalarRelationFilter, Prisma.QueryWhereInput> | null
+  derivedQueries?: Prisma.QueryListRelationFilter
   charts?: Prisma.ChartListRelationFilter
   transforms?: Prisma.TransformListRelationFilter
 }, "id" | "stackId_key">
@@ -285,8 +321,11 @@ export type QueryOrderByWithAggregationInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  dataSourceId?: Prisma.SortOrder
-  jsonPath?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  dataSourceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sourceQueryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  jsonPath?: Prisma.SortOrderInput | Prisma.SortOrder
+  sql?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.QueryCountOrderByAggregateInput
@@ -304,8 +343,11 @@ export type QueryScalarWhereWithAggregatesInput = {
   key?: Prisma.StringWithAggregatesFilter<"Query"> | string
   version?: Prisma.IntWithAggregatesFilter<"Query"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Query"> | string
-  dataSourceId?: Prisma.StringWithAggregatesFilter<"Query"> | string
-  jsonPath?: Prisma.StringWithAggregatesFilter<"Query"> | string
+  type?: Prisma.EnumQueryTypeWithAggregatesFilter<"Query"> | $Enums.QueryType
+  dataSourceId?: Prisma.StringNullableWithAggregatesFilter<"Query"> | string | null
+  sourceQueryId?: Prisma.StringNullableWithAggregatesFilter<"Query"> | string | null
+  jsonPath?: Prisma.StringNullableWithAggregatesFilter<"Query"> | string | null
+  sql?: Prisma.StringNullableWithAggregatesFilter<"Query"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Query"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Query"> | Date | string
 }
@@ -314,11 +356,15 @@ export type QueryCreateInput = {
   id?: string
   key: string
   version?: number
-  jsonPath: string
+  type?: $Enums.QueryType
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutQueriesInput
-  dataSource: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
+  derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
   transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
@@ -328,10 +374,14 @@ export type QueryUncheckedCreateInput = {
   key: string
   version?: number
   stackId: string
-  dataSourceId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
   transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
@@ -340,11 +390,15 @@ export type QueryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutQueriesNestedInput
-  dataSource?: Prisma.DataSourceUpdateOneRequiredWithoutQueriesNestedInput
+  dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
+  sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
+  derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
   transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
@@ -354,10 +408,14 @@ export type QueryUncheckedUpdateInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
   transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
@@ -367,8 +425,11 @@ export type QueryCreateManyInput = {
   key: string
   version?: number
   stackId: string
-  dataSourceId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -377,7 +438,9 @@ export type QueryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -387,8 +450,11 @@ export type QueryUncheckedUpdateManyInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -408,6 +474,11 @@ export type QueryScalarRelationFilter = {
   isNot?: Prisma.QueryWhereInput
 }
 
+export type QueryNullableScalarRelationFilter = {
+  is?: Prisma.QueryWhereInput | null
+  isNot?: Prisma.QueryWhereInput | null
+}
+
 export type QueryStackIdKeyCompoundUniqueInput = {
   stackId: string
   key: string
@@ -418,8 +489,11 @@ export type QueryCountOrderByAggregateInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
+  sourceQueryId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
+  sql?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -433,8 +507,11 @@ export type QueryMaxOrderByAggregateInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
+  sourceQueryId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
+  sql?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -444,8 +521,11 @@ export type QueryMinOrderByAggregateInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   dataSourceId?: Prisma.SortOrder
+  sourceQueryId?: Prisma.SortOrder
   jsonPath?: Prisma.SortOrder
+  sql?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -552,6 +632,68 @@ export type QueryUpdateOneRequiredWithoutChartsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.QueryUpdateToOneWithWhereWithoutChartsInput, Prisma.QueryUpdateWithoutChartsInput>, Prisma.QueryUncheckedUpdateWithoutChartsInput>
 }
 
+export type QueryCreateNestedOneWithoutDerivedQueriesInput = {
+  create?: Prisma.XOR<Prisma.QueryCreateWithoutDerivedQueriesInput, Prisma.QueryUncheckedCreateWithoutDerivedQueriesInput>
+  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutDerivedQueriesInput
+  connect?: Prisma.QueryWhereUniqueInput
+}
+
+export type QueryCreateNestedManyWithoutSourceQueryInput = {
+  create?: Prisma.XOR<Prisma.QueryCreateWithoutSourceQueryInput, Prisma.QueryUncheckedCreateWithoutSourceQueryInput> | Prisma.QueryCreateWithoutSourceQueryInput[] | Prisma.QueryUncheckedCreateWithoutSourceQueryInput[]
+  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutSourceQueryInput | Prisma.QueryCreateOrConnectWithoutSourceQueryInput[]
+  createMany?: Prisma.QueryCreateManySourceQueryInputEnvelope
+  connect?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+}
+
+export type QueryUncheckedCreateNestedManyWithoutSourceQueryInput = {
+  create?: Prisma.XOR<Prisma.QueryCreateWithoutSourceQueryInput, Prisma.QueryUncheckedCreateWithoutSourceQueryInput> | Prisma.QueryCreateWithoutSourceQueryInput[] | Prisma.QueryUncheckedCreateWithoutSourceQueryInput[]
+  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutSourceQueryInput | Prisma.QueryCreateOrConnectWithoutSourceQueryInput[]
+  createMany?: Prisma.QueryCreateManySourceQueryInputEnvelope
+  connect?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+}
+
+export type EnumQueryTypeFieldUpdateOperationsInput = {
+  set?: $Enums.QueryType
+}
+
+export type QueryUpdateOneWithoutDerivedQueriesNestedInput = {
+  create?: Prisma.XOR<Prisma.QueryCreateWithoutDerivedQueriesInput, Prisma.QueryUncheckedCreateWithoutDerivedQueriesInput>
+  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutDerivedQueriesInput
+  upsert?: Prisma.QueryUpsertWithoutDerivedQueriesInput
+  disconnect?: Prisma.QueryWhereInput | boolean
+  delete?: Prisma.QueryWhereInput | boolean
+  connect?: Prisma.QueryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QueryUpdateToOneWithWhereWithoutDerivedQueriesInput, Prisma.QueryUpdateWithoutDerivedQueriesInput>, Prisma.QueryUncheckedUpdateWithoutDerivedQueriesInput>
+}
+
+export type QueryUpdateManyWithoutSourceQueryNestedInput = {
+  create?: Prisma.XOR<Prisma.QueryCreateWithoutSourceQueryInput, Prisma.QueryUncheckedCreateWithoutSourceQueryInput> | Prisma.QueryCreateWithoutSourceQueryInput[] | Prisma.QueryUncheckedCreateWithoutSourceQueryInput[]
+  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutSourceQueryInput | Prisma.QueryCreateOrConnectWithoutSourceQueryInput[]
+  upsert?: Prisma.QueryUpsertWithWhereUniqueWithoutSourceQueryInput | Prisma.QueryUpsertWithWhereUniqueWithoutSourceQueryInput[]
+  createMany?: Prisma.QueryCreateManySourceQueryInputEnvelope
+  set?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  disconnect?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  delete?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  connect?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  update?: Prisma.QueryUpdateWithWhereUniqueWithoutSourceQueryInput | Prisma.QueryUpdateWithWhereUniqueWithoutSourceQueryInput[]
+  updateMany?: Prisma.QueryUpdateManyWithWhereWithoutSourceQueryInput | Prisma.QueryUpdateManyWithWhereWithoutSourceQueryInput[]
+  deleteMany?: Prisma.QueryScalarWhereInput | Prisma.QueryScalarWhereInput[]
+}
+
+export type QueryUncheckedUpdateManyWithoutSourceQueryNestedInput = {
+  create?: Prisma.XOR<Prisma.QueryCreateWithoutSourceQueryInput, Prisma.QueryUncheckedCreateWithoutSourceQueryInput> | Prisma.QueryCreateWithoutSourceQueryInput[] | Prisma.QueryUncheckedCreateWithoutSourceQueryInput[]
+  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutSourceQueryInput | Prisma.QueryCreateOrConnectWithoutSourceQueryInput[]
+  upsert?: Prisma.QueryUpsertWithWhereUniqueWithoutSourceQueryInput | Prisma.QueryUpsertWithWhereUniqueWithoutSourceQueryInput[]
+  createMany?: Prisma.QueryCreateManySourceQueryInputEnvelope
+  set?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  disconnect?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  delete?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  connect?: Prisma.QueryWhereUniqueInput | Prisma.QueryWhereUniqueInput[]
+  update?: Prisma.QueryUpdateWithWhereUniqueWithoutSourceQueryInput | Prisma.QueryUpdateWithWhereUniqueWithoutSourceQueryInput[]
+  updateMany?: Prisma.QueryUpdateManyWithWhereWithoutSourceQueryInput | Prisma.QueryUpdateManyWithWhereWithoutSourceQueryInput[]
+  deleteMany?: Prisma.QueryScalarWhereInput | Prisma.QueryScalarWhereInput[]
+}
+
 export type QueryCreateNestedOneWithoutTransformsInput = {
   create?: Prisma.XOR<Prisma.QueryCreateWithoutTransformsInput, Prisma.QueryUncheckedCreateWithoutTransformsInput>
   connectOrCreate?: Prisma.QueryCreateOrConnectWithoutTransformsInput
@@ -570,10 +712,14 @@ export type QueryCreateWithoutStackInput = {
   id?: string
   key: string
   version?: number
-  jsonPath: string
+  type?: $Enums.QueryType
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  dataSource: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
+  derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
   transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
@@ -582,10 +728,14 @@ export type QueryUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
   version?: number
-  dataSourceId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
   transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
@@ -624,8 +774,11 @@ export type QueryScalarWhereInput = {
   key?: Prisma.StringFilter<"Query"> | string
   version?: Prisma.IntFilter<"Query"> | number
   stackId?: Prisma.StringFilter<"Query"> | string
-  dataSourceId?: Prisma.StringFilter<"Query"> | string
-  jsonPath?: Prisma.StringFilter<"Query"> | string
+  type?: Prisma.EnumQueryTypeFilter<"Query"> | $Enums.QueryType
+  dataSourceId?: Prisma.StringNullableFilter<"Query"> | string | null
+  sourceQueryId?: Prisma.StringNullableFilter<"Query"> | string | null
+  jsonPath?: Prisma.StringNullableFilter<"Query"> | string | null
+  sql?: Prisma.StringNullableFilter<"Query"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Query"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Query"> | Date | string
 }
@@ -634,10 +787,14 @@ export type QueryCreateWithoutDataSourceInput = {
   id?: string
   key: string
   version?: number
-  jsonPath: string
+  type?: $Enums.QueryType
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutQueriesInput
+  sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
+  derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
   transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
@@ -647,9 +804,13 @@ export type QueryUncheckedCreateWithoutDataSourceInput = {
   key: string
   version?: number
   stackId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
   transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
@@ -684,11 +845,15 @@ export type QueryCreateWithoutChartsInput = {
   id?: string
   key: string
   version?: number
-  jsonPath: string
+  type?: $Enums.QueryType
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutQueriesInput
-  dataSource: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
+  derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
 
@@ -697,10 +862,14 @@ export type QueryUncheckedCreateWithoutChartsInput = {
   key: string
   version?: number
   stackId: string
-  dataSourceId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
 
@@ -724,11 +893,15 @@ export type QueryUpdateWithoutChartsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutQueriesNestedInput
-  dataSource?: Prisma.DataSourceUpdateOneRequiredWithoutQueriesNestedInput
+  dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
+  sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
+  derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
 
@@ -737,22 +910,168 @@ export type QueryUncheckedUpdateWithoutChartsInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
+}
+
+export type QueryCreateWithoutDerivedQueriesInput = {
+  id?: string
+  key: string
+  version?: number
+  type?: $Enums.QueryType
+  jsonPath?: string | null
+  sql?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stack: Prisma.StackCreateNestedOneWithoutQueriesInput
+  dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
+  charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
+  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
+}
+
+export type QueryUncheckedCreateWithoutDerivedQueriesInput = {
+  id?: string
+  key: string
+  version?: number
+  stackId: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
+  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
+}
+
+export type QueryCreateOrConnectWithoutDerivedQueriesInput = {
+  where: Prisma.QueryWhereUniqueInput
+  create: Prisma.XOR<Prisma.QueryCreateWithoutDerivedQueriesInput, Prisma.QueryUncheckedCreateWithoutDerivedQueriesInput>
+}
+
+export type QueryCreateWithoutSourceQueryInput = {
+  id?: string
+  key: string
+  version?: number
+  type?: $Enums.QueryType
+  jsonPath?: string | null
+  sql?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stack: Prisma.StackCreateNestedOneWithoutQueriesInput
+  dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
+  charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
+  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
+}
+
+export type QueryUncheckedCreateWithoutSourceQueryInput = {
+  id?: string
+  key: string
+  version?: number
+  stackId: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
+  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
+  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
+}
+
+export type QueryCreateOrConnectWithoutSourceQueryInput = {
+  where: Prisma.QueryWhereUniqueInput
+  create: Prisma.XOR<Prisma.QueryCreateWithoutSourceQueryInput, Prisma.QueryUncheckedCreateWithoutSourceQueryInput>
+}
+
+export type QueryCreateManySourceQueryInputEnvelope = {
+  data: Prisma.QueryCreateManySourceQueryInput | Prisma.QueryCreateManySourceQueryInput[]
+  skipDuplicates?: boolean
+}
+
+export type QueryUpsertWithoutDerivedQueriesInput = {
+  update: Prisma.XOR<Prisma.QueryUpdateWithoutDerivedQueriesInput, Prisma.QueryUncheckedUpdateWithoutDerivedQueriesInput>
+  create: Prisma.XOR<Prisma.QueryCreateWithoutDerivedQueriesInput, Prisma.QueryUncheckedCreateWithoutDerivedQueriesInput>
+  where?: Prisma.QueryWhereInput
+}
+
+export type QueryUpdateToOneWithWhereWithoutDerivedQueriesInput = {
+  where?: Prisma.QueryWhereInput
+  data: Prisma.XOR<Prisma.QueryUpdateWithoutDerivedQueriesInput, Prisma.QueryUncheckedUpdateWithoutDerivedQueriesInput>
+}
+
+export type QueryUpdateWithoutDerivedQueriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stack?: Prisma.StackUpdateOneRequiredWithoutQueriesNestedInput
+  dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
+  sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
+  charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
+  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
+}
+
+export type QueryUncheckedUpdateWithoutDerivedQueriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  stackId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
+  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
+}
+
+export type QueryUpsertWithWhereUniqueWithoutSourceQueryInput = {
+  where: Prisma.QueryWhereUniqueInput
+  update: Prisma.XOR<Prisma.QueryUpdateWithoutSourceQueryInput, Prisma.QueryUncheckedUpdateWithoutSourceQueryInput>
+  create: Prisma.XOR<Prisma.QueryCreateWithoutSourceQueryInput, Prisma.QueryUncheckedCreateWithoutSourceQueryInput>
+}
+
+export type QueryUpdateWithWhereUniqueWithoutSourceQueryInput = {
+  where: Prisma.QueryWhereUniqueInput
+  data: Prisma.XOR<Prisma.QueryUpdateWithoutSourceQueryInput, Prisma.QueryUncheckedUpdateWithoutSourceQueryInput>
+}
+
+export type QueryUpdateManyWithWhereWithoutSourceQueryInput = {
+  where: Prisma.QueryScalarWhereInput
+  data: Prisma.XOR<Prisma.QueryUpdateManyMutationInput, Prisma.QueryUncheckedUpdateManyWithoutSourceQueryInput>
 }
 
 export type QueryCreateWithoutTransformsInput = {
   id?: string
   key: string
   version?: number
-  jsonPath: string
+  type?: $Enums.QueryType
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutQueriesInput
-  dataSource: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
+  sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
+  derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
 }
 
@@ -761,10 +1080,14 @@ export type QueryUncheckedCreateWithoutTransformsInput = {
   key: string
   version?: number
   stackId: string
-  dataSourceId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
 }
 
@@ -788,11 +1111,15 @@ export type QueryUpdateWithoutTransformsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutQueriesNestedInput
-  dataSource?: Prisma.DataSourceUpdateOneRequiredWithoutQueriesNestedInput
+  dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
+  sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
+  derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
 }
 
@@ -801,10 +1128,14 @@ export type QueryUncheckedUpdateWithoutTransformsInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
 }
 
@@ -812,8 +1143,11 @@ export type QueryCreateManyStackInput = {
   id?: string
   key: string
   version?: number
-  dataSourceId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -822,10 +1156,14 @@ export type QueryUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dataSource?: Prisma.DataSourceUpdateOneRequiredWithoutQueriesNestedInput
+  dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
+  sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
+  derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
   transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
@@ -834,10 +1172,14 @@ export type QueryUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
   transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
@@ -846,8 +1188,11 @@ export type QueryUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -857,7 +1202,10 @@ export type QueryCreateManyDataSourceInput = {
   key: string
   version?: number
   stackId: string
-  jsonPath: string
+  type?: $Enums.QueryType
+  sourceQueryId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -866,10 +1214,14 @@ export type QueryUpdateWithoutDataSourceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutQueriesNestedInput
+  sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
+  derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
   transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
@@ -879,9 +1231,13 @@ export type QueryUncheckedUpdateWithoutDataSourceInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
   transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
@@ -891,7 +1247,68 @@ export type QueryUncheckedUpdateManyWithoutDataSourceInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  jsonPath?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type QueryCreateManySourceQueryInput = {
+  id?: string
+  key: string
+  version?: number
+  stackId: string
+  type?: $Enums.QueryType
+  dataSourceId?: string | null
+  jsonPath?: string | null
+  sql?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type QueryUpdateWithoutSourceQueryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stack?: Prisma.StackUpdateOneRequiredWithoutQueriesNestedInput
+  dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
+  derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
+  charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
+  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
+}
+
+export type QueryUncheckedUpdateWithoutSourceQueryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  stackId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
+  charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
+  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
+}
+
+export type QueryUncheckedUpdateManyWithoutSourceQueryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  stackId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
+  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -902,11 +1319,13 @@ export type QueryUncheckedUpdateManyWithoutDataSourceInput = {
  */
 
 export type QueryCountOutputType = {
+  derivedQueries: number
   charts: number
   transforms: number
 }
 
 export type QueryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  derivedQueries?: boolean | QueryCountOutputTypeCountDerivedQueriesArgs
   charts?: boolean | QueryCountOutputTypeCountChartsArgs
   transforms?: boolean | QueryCountOutputTypeCountTransformsArgs
 }
@@ -919,6 +1338,13 @@ export type QueryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
    * Select specific fields to fetch from the QueryCountOutputType
    */
   select?: Prisma.QueryCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * QueryCountOutputType without action
+ */
+export type QueryCountOutputTypeCountDerivedQueriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QueryWhereInput
 }
 
 /**
@@ -941,12 +1367,17 @@ export type QuerySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   key?: boolean
   version?: boolean
   stackId?: boolean
+  type?: boolean
   dataSourceId?: boolean
+  sourceQueryId?: boolean
   jsonPath?: boolean
+  sql?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dataSource?: boolean | Prisma.Query$dataSourceArgs<ExtArgs>
+  sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
+  derivedQueries?: boolean | Prisma.Query$derivedQueriesArgs<ExtArgs>
   charts?: boolean | Prisma.Query$chartsArgs<ExtArgs>
   transforms?: boolean | Prisma.Query$transformsArgs<ExtArgs>
   _count?: boolean | Prisma.QueryCountOutputTypeDefaultArgs<ExtArgs>
@@ -957,12 +1388,16 @@ export type QuerySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   key?: boolean
   version?: boolean
   stackId?: boolean
+  type?: boolean
   dataSourceId?: boolean
+  sourceQueryId?: boolean
   jsonPath?: boolean
+  sql?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dataSource?: boolean | Prisma.Query$dataSourceArgs<ExtArgs>
+  sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
 }, ExtArgs["result"]["query"]>
 
 export type QuerySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -970,12 +1405,16 @@ export type QuerySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   key?: boolean
   version?: boolean
   stackId?: boolean
+  type?: boolean
   dataSourceId?: boolean
+  sourceQueryId?: boolean
   jsonPath?: boolean
+  sql?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dataSource?: boolean | Prisma.Query$dataSourceArgs<ExtArgs>
+  sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
 }, ExtArgs["result"]["query"]>
 
 export type QuerySelectScalar = {
@@ -983,34 +1422,43 @@ export type QuerySelectScalar = {
   key?: boolean
   version?: boolean
   stackId?: boolean
+  type?: boolean
   dataSourceId?: boolean
+  sourceQueryId?: boolean
   jsonPath?: boolean
+  sql?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type QueryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "dataSourceId" | "jsonPath" | "createdAt" | "updatedAt", ExtArgs["result"]["query"]>
+export type QueryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "type" | "dataSourceId" | "sourceQueryId" | "jsonPath" | "sql" | "createdAt" | "updatedAt", ExtArgs["result"]["query"]>
 export type QueryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dataSource?: boolean | Prisma.Query$dataSourceArgs<ExtArgs>
+  sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
+  derivedQueries?: boolean | Prisma.Query$derivedQueriesArgs<ExtArgs>
   charts?: boolean | Prisma.Query$chartsArgs<ExtArgs>
   transforms?: boolean | Prisma.Query$transformsArgs<ExtArgs>
   _count?: boolean | Prisma.QueryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type QueryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dataSource?: boolean | Prisma.Query$dataSourceArgs<ExtArgs>
+  sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
 }
 export type QueryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dataSource?: boolean | Prisma.Query$dataSourceArgs<ExtArgs>
+  sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
 }
 
 export type $QueryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Query"
   objects: {
     stack: Prisma.$StackPayload<ExtArgs>
-    dataSource: Prisma.$DataSourcePayload<ExtArgs>
+    dataSource: Prisma.$DataSourcePayload<ExtArgs> | null
+    sourceQuery: Prisma.$QueryPayload<ExtArgs> | null
+    derivedQueries: Prisma.$QueryPayload<ExtArgs>[]
     charts: Prisma.$ChartPayload<ExtArgs>[]
     transforms: Prisma.$TransformPayload<ExtArgs>[]
   }
@@ -1019,8 +1467,11 @@ export type $QueryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     key: string
     version: number
     stackId: string
-    dataSourceId: string
-    jsonPath: string
+    type: $Enums.QueryType
+    dataSourceId: string | null
+    sourceQueryId: string | null
+    jsonPath: string | null
+    sql: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["query"]>
@@ -1418,7 +1869,9 @@ readonly fields: QueryFieldRefs;
 export interface Prisma__QueryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stack<T extends Prisma.StackDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StackDefaultArgs<ExtArgs>>): Prisma.Prisma__StackClient<runtime.Types.Result.GetResult<Prisma.$StackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  dataSource<T extends Prisma.DataSourceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataSourceDefaultArgs<ExtArgs>>): Prisma.Prisma__DataSourceClient<runtime.Types.Result.GetResult<Prisma.$DataSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  dataSource<T extends Prisma.Query$dataSourceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$dataSourceArgs<ExtArgs>>): Prisma.Prisma__DataSourceClient<runtime.Types.Result.GetResult<Prisma.$DataSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sourceQuery<T extends Prisma.Query$sourceQueryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$sourceQueryArgs<ExtArgs>>): Prisma.Prisma__QueryClient<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  derivedQueries<T extends Prisma.Query$derivedQueriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$derivedQueriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   charts<T extends Prisma.Query$chartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$chartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transforms<T extends Prisma.Query$transformsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$transformsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransformPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1454,8 +1907,11 @@ export interface QueryFieldRefs {
   readonly key: Prisma.FieldRef<"Query", 'String'>
   readonly version: Prisma.FieldRef<"Query", 'Int'>
   readonly stackId: Prisma.FieldRef<"Query", 'String'>
+  readonly type: Prisma.FieldRef<"Query", 'QueryType'>
   readonly dataSourceId: Prisma.FieldRef<"Query", 'String'>
+  readonly sourceQueryId: Prisma.FieldRef<"Query", 'String'>
   readonly jsonPath: Prisma.FieldRef<"Query", 'String'>
+  readonly sql: Prisma.FieldRef<"Query", 'String'>
   readonly createdAt: Prisma.FieldRef<"Query", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Query", 'DateTime'>
 }
@@ -1851,6 +2307,68 @@ export type QueryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Queries to delete.
    */
   limit?: number
+}
+
+/**
+ * Query.dataSource
+ */
+export type Query$dataSourceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DataSource
+   */
+  select?: Prisma.DataSourceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DataSource
+   */
+  omit?: Prisma.DataSourceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DataSourceInclude<ExtArgs> | null
+  where?: Prisma.DataSourceWhereInput
+}
+
+/**
+ * Query.sourceQuery
+ */
+export type Query$sourceQueryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Query
+   */
+  select?: Prisma.QuerySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Query
+   */
+  omit?: Prisma.QueryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QueryInclude<ExtArgs> | null
+  where?: Prisma.QueryWhereInput
+}
+
+/**
+ * Query.derivedQueries
+ */
+export type Query$derivedQueriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Query
+   */
+  select?: Prisma.QuerySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Query
+   */
+  omit?: Prisma.QueryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QueryInclude<ExtArgs> | null
+  where?: Prisma.QueryWhereInput
+  orderBy?: Prisma.QueryOrderByWithRelationInput | Prisma.QueryOrderByWithRelationInput[]
+  cursor?: Prisma.QueryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QueryScalarFieldEnum | Prisma.QueryScalarFieldEnum[]
 }
 
 /**

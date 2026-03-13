@@ -28,7 +28,17 @@ export type TransformFunction = (typeof TransformFunction)[keyof typeof Transfor
 
 
 export const ChartType = {
-  BAR: 'BAR'
+  BAR: 'BAR',
+  LINE: 'LINE',
+  STAT: 'STAT'
 } as const
 
 export type ChartType = (typeof ChartType)[keyof typeof ChartType]
+
+
+export const QueryType = {
+  JSONPATH: 'JSONPATH',
+  SQL: 'SQL'
+} as const
+
+export type QueryType = (typeof QueryType)[keyof typeof QueryType]

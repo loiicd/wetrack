@@ -11,11 +11,18 @@ export class Query {
   }
 
   synthesize() {
-    return {
+    const base = {
       name: this.name,
       stackId: this.stackId,
+      type: this.config.type,
       dataSource: this.config.dataSource,
-      jsonPath: this.config.jsonPath,
+      sourceQuery: this.config.sourceQuery,
     };
+
+    if (this.config.type === "jsonpath") {
+      return { ...base, jsonPath: this.config.jsonPath };
+    } else {
+      return { ...base, sql: this.config.sql };
+    }
   }
 }

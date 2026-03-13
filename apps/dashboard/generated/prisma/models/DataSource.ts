@@ -434,9 +434,9 @@ export type DataSourceSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
 }
 
-export type DataSourceScalarRelationFilter = {
-  is?: Prisma.DataSourceWhereInput
-  isNot?: Prisma.DataSourceWhereInput
+export type DataSourceNullableScalarRelationFilter = {
+  is?: Prisma.DataSourceWhereInput | null
+  isNot?: Prisma.DataSourceWhereInput | null
 }
 
 export type DataSourceCreateNestedManyWithoutStackInput = {
@@ -487,10 +487,12 @@ export type DataSourceCreateNestedOneWithoutQueriesInput = {
   connect?: Prisma.DataSourceWhereUniqueInput
 }
 
-export type DataSourceUpdateOneRequiredWithoutQueriesNestedInput = {
+export type DataSourceUpdateOneWithoutQueriesNestedInput = {
   create?: Prisma.XOR<Prisma.DataSourceCreateWithoutQueriesInput, Prisma.DataSourceUncheckedCreateWithoutQueriesInput>
   connectOrCreate?: Prisma.DataSourceCreateOrConnectWithoutQueriesInput
   upsert?: Prisma.DataSourceUpsertWithoutQueriesInput
+  disconnect?: Prisma.DataSourceWhereInput | boolean
+  delete?: Prisma.DataSourceWhereInput | boolean
   connect?: Prisma.DataSourceWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.DataSourceUpdateToOneWithWhereWithoutQueriesInput, Prisma.DataSourceUpdateWithoutQueriesInput>, Prisma.DataSourceUncheckedUpdateWithoutQueriesInput>
 }

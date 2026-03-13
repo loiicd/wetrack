@@ -25,3 +25,10 @@ export const TransformFunction = {
 } as const
 
 export type TransformFunction = (typeof TransformFunction)[keyof typeof TransformFunction]
+
+
+export const ChartType = {
+  BAR: 'BAR'
+} as const
+
+export type ChartType = (typeof ChartType)[keyof typeof ChartType]

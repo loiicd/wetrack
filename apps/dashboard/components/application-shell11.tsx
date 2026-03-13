@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -49,17 +49,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-function getInitials(name: string) {
-  return (
-    name
-      .split(" ")
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase())
-      .join("") || "U"
-  );
-}
-
 const data = {
   user: {
     name: "Max Mustermann",
@@ -75,7 +64,6 @@ const data = {
   ],
 };
 
-// Primary nav (Home, Shorts, Subscriptions, You)
 function NavPrimary({
   items,
 }: {
@@ -171,7 +159,6 @@ function SiteHeader() {
         </a>
       </div>
 
-      {/* Center: Search Bar */}
       <div className="flex flex-1 justify-center px-4">
         <InputGroup className="h-10 max-w-xl rounded-full">
           <InputGroupAddon>
@@ -184,7 +171,6 @@ function SiteHeader() {
         </InputGroup>
       </div>
 
-      {/* Right: Avatar */}
       <div className="flex h-(--header-height) items-center gap-1 px-4">
         <DropdownMenu>
           <DropdownMenuTrigger

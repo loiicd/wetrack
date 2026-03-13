@@ -237,7 +237,6 @@ export type DataSourceWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"DataSource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DataSource"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
-  charts?: Prisma.ChartListRelationFilter
   queries?: Prisma.QueryListRelationFilter
 }
 
@@ -251,12 +250,12 @@ export type DataSourceOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   stack?: Prisma.StackOrderByWithRelationInput
-  charts?: Prisma.ChartOrderByRelationAggregateInput
   queries?: Prisma.QueryOrderByRelationAggregateInput
 }
 
 export type DataSourceWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  stackId_key?: Prisma.DataSourceStackIdKeyCompoundUniqueInput
   AND?: Prisma.DataSourceWhereInput | Prisma.DataSourceWhereInput[]
   OR?: Prisma.DataSourceWhereInput[]
   NOT?: Prisma.DataSourceWhereInput | Prisma.DataSourceWhereInput[]
@@ -268,9 +267,8 @@ export type DataSourceWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"DataSource"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DataSource"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
-  charts?: Prisma.ChartListRelationFilter
   queries?: Prisma.QueryListRelationFilter
-}, "id">
+}, "id" | "stackId_key">
 
 export type DataSourceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -311,7 +309,6 @@ export type DataSourceCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutDataSourcesInput
-  charts?: Prisma.ChartCreateNestedManyWithoutDataSourceInput
   queries?: Prisma.QueryCreateNestedManyWithoutDataSourceInput
 }
 
@@ -324,7 +321,6 @@ export type DataSourceUncheckedCreateInput = {
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutDataSourceInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutDataSourceInput
 }
 
@@ -337,7 +333,6 @@ export type DataSourceUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutDataSourcesNestedInput
-  charts?: Prisma.ChartUpdateManyWithoutDataSourceNestedInput
   queries?: Prisma.QueryUpdateManyWithoutDataSourceNestedInput
 }
 
@@ -350,7 +345,6 @@ export type DataSourceUncheckedUpdateInput = {
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  charts?: Prisma.ChartUncheckedUpdateManyWithoutDataSourceNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutDataSourceNestedInput
 }
 
@@ -394,6 +388,11 @@ export type DataSourceListRelationFilter = {
 
 export type DataSourceOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type DataSourceStackIdKeyCompoundUniqueInput = {
+  stackId: string
+  key: string
 }
 
 export type DataSourceCountOrderByAggregateInput = {
@@ -482,20 +481,6 @@ export type DataSourceUncheckedUpdateManyWithoutStackNestedInput = {
   deleteMany?: Prisma.DataSourceScalarWhereInput | Prisma.DataSourceScalarWhereInput[]
 }
 
-export type DataSourceCreateNestedOneWithoutChartsInput = {
-  create?: Prisma.XOR<Prisma.DataSourceCreateWithoutChartsInput, Prisma.DataSourceUncheckedCreateWithoutChartsInput>
-  connectOrCreate?: Prisma.DataSourceCreateOrConnectWithoutChartsInput
-  connect?: Prisma.DataSourceWhereUniqueInput
-}
-
-export type DataSourceUpdateOneRequiredWithoutChartsNestedInput = {
-  create?: Prisma.XOR<Prisma.DataSourceCreateWithoutChartsInput, Prisma.DataSourceUncheckedCreateWithoutChartsInput>
-  connectOrCreate?: Prisma.DataSourceCreateOrConnectWithoutChartsInput
-  upsert?: Prisma.DataSourceUpsertWithoutChartsInput
-  connect?: Prisma.DataSourceWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DataSourceUpdateToOneWithWhereWithoutChartsInput, Prisma.DataSourceUpdateWithoutChartsInput>, Prisma.DataSourceUncheckedUpdateWithoutChartsInput>
-}
-
 export type DataSourceCreateNestedOneWithoutQueriesInput = {
   create?: Prisma.XOR<Prisma.DataSourceCreateWithoutQueriesInput, Prisma.DataSourceUncheckedCreateWithoutQueriesInput>
   connectOrCreate?: Prisma.DataSourceCreateOrConnectWithoutQueriesInput
@@ -518,7 +503,6 @@ export type DataSourceCreateWithoutStackInput = {
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  charts?: Prisma.ChartCreateNestedManyWithoutDataSourceInput
   queries?: Prisma.QueryCreateNestedManyWithoutDataSourceInput
 }
 
@@ -530,7 +514,6 @@ export type DataSourceUncheckedCreateWithoutStackInput = {
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutDataSourceInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutDataSourceInput
 }
 
@@ -574,70 +557,6 @@ export type DataSourceScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"DataSource"> | Date | string
 }
 
-export type DataSourceCreateWithoutChartsInput = {
-  id?: string
-  key: string
-  version?: number
-  type: string
-  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  stack: Prisma.StackCreateNestedOneWithoutDataSourcesInput
-  queries?: Prisma.QueryCreateNestedManyWithoutDataSourceInput
-}
-
-export type DataSourceUncheckedCreateWithoutChartsInput = {
-  id?: string
-  key: string
-  version?: number
-  stackId: string
-  type: string
-  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  queries?: Prisma.QueryUncheckedCreateNestedManyWithoutDataSourceInput
-}
-
-export type DataSourceCreateOrConnectWithoutChartsInput = {
-  where: Prisma.DataSourceWhereUniqueInput
-  create: Prisma.XOR<Prisma.DataSourceCreateWithoutChartsInput, Prisma.DataSourceUncheckedCreateWithoutChartsInput>
-}
-
-export type DataSourceUpsertWithoutChartsInput = {
-  update: Prisma.XOR<Prisma.DataSourceUpdateWithoutChartsInput, Prisma.DataSourceUncheckedUpdateWithoutChartsInput>
-  create: Prisma.XOR<Prisma.DataSourceCreateWithoutChartsInput, Prisma.DataSourceUncheckedCreateWithoutChartsInput>
-  where?: Prisma.DataSourceWhereInput
-}
-
-export type DataSourceUpdateToOneWithWhereWithoutChartsInput = {
-  where?: Prisma.DataSourceWhereInput
-  data: Prisma.XOR<Prisma.DataSourceUpdateWithoutChartsInput, Prisma.DataSourceUncheckedUpdateWithoutChartsInput>
-}
-
-export type DataSourceUpdateWithoutChartsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  key?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  stack?: Prisma.StackUpdateOneRequiredWithoutDataSourcesNestedInput
-  queries?: Prisma.QueryUpdateManyWithoutDataSourceNestedInput
-}
-
-export type DataSourceUncheckedUpdateWithoutChartsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  key?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  queries?: Prisma.QueryUncheckedUpdateManyWithoutDataSourceNestedInput
-}
-
 export type DataSourceCreateWithoutQueriesInput = {
   id?: string
   key: string
@@ -647,7 +566,6 @@ export type DataSourceCreateWithoutQueriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutDataSourcesInput
-  charts?: Prisma.ChartCreateNestedManyWithoutDataSourceInput
 }
 
 export type DataSourceUncheckedCreateWithoutQueriesInput = {
@@ -659,7 +577,6 @@ export type DataSourceUncheckedCreateWithoutQueriesInput = {
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutDataSourceInput
 }
 
 export type DataSourceCreateOrConnectWithoutQueriesInput = {
@@ -687,7 +604,6 @@ export type DataSourceUpdateWithoutQueriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutDataSourcesNestedInput
-  charts?: Prisma.ChartUpdateManyWithoutDataSourceNestedInput
 }
 
 export type DataSourceUncheckedUpdateWithoutQueriesInput = {
@@ -699,7 +615,6 @@ export type DataSourceUncheckedUpdateWithoutQueriesInput = {
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  charts?: Prisma.ChartUncheckedUpdateManyWithoutDataSourceNestedInput
 }
 
 export type DataSourceCreateManyStackInput = {
@@ -720,7 +635,6 @@ export type DataSourceUpdateWithoutStackInput = {
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  charts?: Prisma.ChartUpdateManyWithoutDataSourceNestedInput
   queries?: Prisma.QueryUpdateManyWithoutDataSourceNestedInput
 }
 
@@ -732,7 +646,6 @@ export type DataSourceUncheckedUpdateWithoutStackInput = {
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  charts?: Prisma.ChartUncheckedUpdateManyWithoutDataSourceNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutDataSourceNestedInput
 }
 
@@ -752,12 +665,10 @@ export type DataSourceUncheckedUpdateManyWithoutStackInput = {
  */
 
 export type DataSourceCountOutputType = {
-  charts: number
   queries: number
 }
 
 export type DataSourceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  charts?: boolean | DataSourceCountOutputTypeCountChartsArgs
   queries?: boolean | DataSourceCountOutputTypeCountQueriesArgs
 }
 
@@ -769,13 +680,6 @@ export type DataSourceCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
    * Select specific fields to fetch from the DataSourceCountOutputType
    */
   select?: Prisma.DataSourceCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * DataSourceCountOutputType without action
- */
-export type DataSourceCountOutputTypeCountChartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ChartWhereInput
 }
 
 /**
@@ -796,7 +700,6 @@ export type DataSourceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  charts?: boolean | Prisma.DataSource$chartsArgs<ExtArgs>
   queries?: boolean | Prisma.DataSource$queriesArgs<ExtArgs>
   _count?: boolean | Prisma.DataSourceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dataSource"]>
@@ -839,7 +742,6 @@ export type DataSourceSelectScalar = {
 export type DataSourceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "type" | "config" | "createdAt" | "updatedAt", ExtArgs["result"]["dataSource"]>
 export type DataSourceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  charts?: boolean | Prisma.DataSource$chartsArgs<ExtArgs>
   queries?: boolean | Prisma.DataSource$queriesArgs<ExtArgs>
   _count?: boolean | Prisma.DataSourceCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -854,7 +756,6 @@ export type $DataSourcePayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "DataSource"
   objects: {
     stack: Prisma.$StackPayload<ExtArgs>
-    charts: Prisma.$ChartPayload<ExtArgs>[]
     queries: Prisma.$QueryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1261,7 +1162,6 @@ readonly fields: DataSourceFieldRefs;
 export interface Prisma__DataSourceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stack<T extends Prisma.StackDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StackDefaultArgs<ExtArgs>>): Prisma.Prisma__StackClient<runtime.Types.Result.GetResult<Prisma.$StackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  charts<T extends Prisma.DataSource$chartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataSource$chartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   queries<T extends Prisma.DataSource$queriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataSource$queriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1693,30 +1593,6 @@ export type DataSourceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many DataSources to delete.
    */
   limit?: number
-}
-
-/**
- * DataSource.charts
- */
-export type DataSource$chartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Chart
-   */
-  select?: Prisma.ChartSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Chart
-   */
-  omit?: Prisma.ChartOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ChartInclude<ExtArgs> | null
-  where?: Prisma.ChartWhereInput
-  orderBy?: Prisma.ChartOrderByWithRelationInput | Prisma.ChartOrderByWithRelationInput[]
-  cursor?: Prisma.ChartWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ChartScalarFieldEnum | Prisma.ChartScalarFieldEnum[]
 }
 
 /**

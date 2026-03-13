@@ -3,10 +3,20 @@ import prisma from "./prisma";
 
 export const dataSourceInterface = {
   async create(
-    data: Pick<DataSourceCreateManyInput, "key" | "type" | "config" | "stackId">,
+    data: Pick<
+      DataSourceCreateManyInput,
+      "key" | "type" | "config" | "stackId"
+    >,
   ) {
-    return await prisma.dataSource.create({
-      data: {
+    return await prisma.dataSource.upsert({
+      where: {
+        stackId_key: { stackId: data.stackId, key: data.key },
+      },
+      update: {
+        type: data.type,
+        config: data.config,
+      },
+      create: {
         version: 1,
         ...data,
       },
@@ -14,7 +24,27 @@ export const dataSourceInterface = {
   },
 
   async createMany(data: DataSourceCreateManyInput[]) {
-    await prisma.dataSource.createMany({ data });
+    await Promise.all(
+      data.map((d) =>
+        prisma.dataSource.upsert({
+          where: {
+            stackId_key: { stackId: d.stackId, key: d.key },
+          },
+          update: {
+            type: d.type,
+            config: d.config,
+            version: d.version ?? 1,
+          },
+          create: {
+            stackId: d.stackId,
+            key: d.key,
+            type: d.type,
+            config: d.config,
+            version: d.version ?? 1,
+          },
+        }),
+      ),
+    );
   },
 
   async getById(id: string) {

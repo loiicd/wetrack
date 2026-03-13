@@ -121,7 +121,16 @@ export const ChartScalarFieldEnum = {
   key: 'key',
   version: 'version',
   stackId: 'stackId',
-  dataSourceId: 'dataSourceId',
+  dashboardId: 'dashboardId',
+  queryId: 'queryId',
+  type: 'type',
+  label: 'label',
+  description: 'description',
+  config: 'config',
+  layoutX: 'layoutX',
+  layoutY: 'layoutY',
+  layoutW: 'layoutW',
+  layoutH: 'layoutH',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

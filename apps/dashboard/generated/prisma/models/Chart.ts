@@ -28,10 +28,18 @@ export type AggregateChart = {
 
 export type ChartAvgAggregateOutputType = {
   version: number | null
+  layoutX: number | null
+  layoutY: number | null
+  layoutW: number | null
+  layoutH: number | null
 }
 
 export type ChartSumAggregateOutputType = {
   version: number | null
+  layoutX: number | null
+  layoutY: number | null
+  layoutW: number | null
+  layoutH: number | null
 }
 
 export type ChartMinAggregateOutputType = {
@@ -39,7 +47,15 @@ export type ChartMinAggregateOutputType = {
   key: string | null
   version: number | null
   stackId: string | null
-  dataSourceId: string | null
+  dashboardId: string | null
+  queryId: string | null
+  type: $Enums.ChartType | null
+  label: string | null
+  description: string | null
+  layoutX: number | null
+  layoutY: number | null
+  layoutW: number | null
+  layoutH: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,7 +65,15 @@ export type ChartMaxAggregateOutputType = {
   key: string | null
   version: number | null
   stackId: string | null
-  dataSourceId: string | null
+  dashboardId: string | null
+  queryId: string | null
+  type: $Enums.ChartType | null
+  label: string | null
+  description: string | null
+  layoutX: number | null
+  layoutY: number | null
+  layoutW: number | null
+  layoutH: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,7 +83,16 @@ export type ChartCountAggregateOutputType = {
   key: number
   version: number
   stackId: number
-  dataSourceId: number
+  dashboardId: number
+  queryId: number
+  type: number
+  label: number
+  description: number
+  config: number
+  layoutX: number
+  layoutY: number
+  layoutW: number
+  layoutH: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -68,10 +101,18 @@ export type ChartCountAggregateOutputType = {
 
 export type ChartAvgAggregateInputType = {
   version?: true
+  layoutX?: true
+  layoutY?: true
+  layoutW?: true
+  layoutH?: true
 }
 
 export type ChartSumAggregateInputType = {
   version?: true
+  layoutX?: true
+  layoutY?: true
+  layoutW?: true
+  layoutH?: true
 }
 
 export type ChartMinAggregateInputType = {
@@ -79,7 +120,15 @@ export type ChartMinAggregateInputType = {
   key?: true
   version?: true
   stackId?: true
-  dataSourceId?: true
+  dashboardId?: true
+  queryId?: true
+  type?: true
+  label?: true
+  description?: true
+  layoutX?: true
+  layoutY?: true
+  layoutW?: true
+  layoutH?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -89,7 +138,15 @@ export type ChartMaxAggregateInputType = {
   key?: true
   version?: true
   stackId?: true
-  dataSourceId?: true
+  dashboardId?: true
+  queryId?: true
+  type?: true
+  label?: true
+  description?: true
+  layoutX?: true
+  layoutY?: true
+  layoutW?: true
+  layoutH?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -99,7 +156,16 @@ export type ChartCountAggregateInputType = {
   key?: true
   version?: true
   stackId?: true
-  dataSourceId?: true
+  dashboardId?: true
+  queryId?: true
+  type?: true
+  label?: true
+  description?: true
+  config?: true
+  layoutX?: true
+  layoutY?: true
+  layoutW?: true
+  layoutH?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -196,7 +262,16 @@ export type ChartGroupByOutputType = {
   key: string
   version: number
   stackId: string
-  dataSourceId: string
+  dashboardId: string
+  queryId: string
+  type: $Enums.ChartType
+  label: string
+  description: string | null
+  config: runtime.JsonValue
+  layoutX: number
+  layoutY: number
+  layoutW: number
+  layoutH: number
   createdAt: Date
   updatedAt: Date
   _count: ChartCountAggregateOutputType | null
@@ -229,11 +304,21 @@ export type ChartWhereInput = {
   key?: Prisma.StringFilter<"Chart"> | string
   version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
-  dataSourceId?: Prisma.StringFilter<"Chart"> | string
+  dashboardId?: Prisma.StringFilter<"Chart"> | string
+  queryId?: Prisma.StringFilter<"Chart"> | string
+  type?: Prisma.EnumChartTypeFilter<"Chart"> | $Enums.ChartType
+  label?: Prisma.StringFilter<"Chart"> | string
+  description?: Prisma.StringNullableFilter<"Chart"> | string | null
+  config?: Prisma.JsonFilter<"Chart">
+  layoutX?: Prisma.IntFilter<"Chart"> | number
+  layoutY?: Prisma.IntFilter<"Chart"> | number
+  layoutW?: Prisma.IntFilter<"Chart"> | number
+  layoutH?: Prisma.IntFilter<"Chart"> | number
   createdAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
-  dataSource?: Prisma.XOR<Prisma.DataSourceScalarRelationFilter, Prisma.DataSourceWhereInput>
+  dashboard?: Prisma.XOR<Prisma.DashboardScalarRelationFilter, Prisma.DashboardWhereInput>
+  query?: Prisma.XOR<Prisma.QueryScalarRelationFilter, Prisma.QueryWhereInput>
 }
 
 export type ChartOrderByWithRelationInput = {
@@ -241,34 +326,64 @@ export type ChartOrderByWithRelationInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  dataSourceId?: Prisma.SortOrder
+  dashboardId?: Prisma.SortOrder
+  queryId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  config?: Prisma.SortOrder
+  layoutX?: Prisma.SortOrder
+  layoutY?: Prisma.SortOrder
+  layoutW?: Prisma.SortOrder
+  layoutH?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   stack?: Prisma.StackOrderByWithRelationInput
-  dataSource?: Prisma.DataSourceOrderByWithRelationInput
+  dashboard?: Prisma.DashboardOrderByWithRelationInput
+  query?: Prisma.QueryOrderByWithRelationInput
 }
 
 export type ChartWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  stackId_key?: Prisma.ChartStackIdKeyCompoundUniqueInput
   AND?: Prisma.ChartWhereInput | Prisma.ChartWhereInput[]
   OR?: Prisma.ChartWhereInput[]
   NOT?: Prisma.ChartWhereInput | Prisma.ChartWhereInput[]
   key?: Prisma.StringFilter<"Chart"> | string
   version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
-  dataSourceId?: Prisma.StringFilter<"Chart"> | string
+  dashboardId?: Prisma.StringFilter<"Chart"> | string
+  queryId?: Prisma.StringFilter<"Chart"> | string
+  type?: Prisma.EnumChartTypeFilter<"Chart"> | $Enums.ChartType
+  label?: Prisma.StringFilter<"Chart"> | string
+  description?: Prisma.StringNullableFilter<"Chart"> | string | null
+  config?: Prisma.JsonFilter<"Chart">
+  layoutX?: Prisma.IntFilter<"Chart"> | number
+  layoutY?: Prisma.IntFilter<"Chart"> | number
+  layoutW?: Prisma.IntFilter<"Chart"> | number
+  layoutH?: Prisma.IntFilter<"Chart"> | number
   createdAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
-  dataSource?: Prisma.XOR<Prisma.DataSourceScalarRelationFilter, Prisma.DataSourceWhereInput>
-}, "id">
+  dashboard?: Prisma.XOR<Prisma.DashboardScalarRelationFilter, Prisma.DashboardWhereInput>
+  query?: Prisma.XOR<Prisma.QueryScalarRelationFilter, Prisma.QueryWhereInput>
+}, "id" | "stackId_key">
 
 export type ChartOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  dataSourceId?: Prisma.SortOrder
+  dashboardId?: Prisma.SortOrder
+  queryId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  config?: Prisma.SortOrder
+  layoutX?: Prisma.SortOrder
+  layoutY?: Prisma.SortOrder
+  layoutW?: Prisma.SortOrder
+  layoutH?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ChartCountOrderByAggregateInput
@@ -286,7 +401,16 @@ export type ChartScalarWhereWithAggregatesInput = {
   key?: Prisma.StringWithAggregatesFilter<"Chart"> | string
   version?: Prisma.IntWithAggregatesFilter<"Chart"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
-  dataSourceId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
+  dashboardId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
+  queryId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
+  type?: Prisma.EnumChartTypeWithAggregatesFilter<"Chart"> | $Enums.ChartType
+  label?: Prisma.StringWithAggregatesFilter<"Chart"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Chart"> | string | null
+  config?: Prisma.JsonWithAggregatesFilter<"Chart">
+  layoutX?: Prisma.IntWithAggregatesFilter<"Chart"> | number
+  layoutY?: Prisma.IntWithAggregatesFilter<"Chart"> | number
+  layoutW?: Prisma.IntWithAggregatesFilter<"Chart"> | number
+  layoutH?: Prisma.IntWithAggregatesFilter<"Chart"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Chart"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Chart"> | Date | string
 }
@@ -295,10 +419,19 @@ export type ChartCreateInput = {
   id?: string
   key: string
   version?: number
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutChartsInput
-  dataSource: Prisma.DataSourceCreateNestedOneWithoutChartsInput
+  dashboard: Prisma.DashboardCreateNestedOneWithoutChartsInput
+  query: Prisma.QueryCreateNestedOneWithoutChartsInput
 }
 
 export type ChartUncheckedCreateInput = {
@@ -306,7 +439,16 @@ export type ChartUncheckedCreateInput = {
   key: string
   version?: number
   stackId: string
-  dataSourceId: string
+  dashboardId: string
+  queryId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -315,10 +457,19 @@ export type ChartUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutChartsNestedInput
-  dataSource?: Prisma.DataSourceUpdateOneRequiredWithoutChartsNestedInput
+  dashboard?: Prisma.DashboardUpdateOneRequiredWithoutChartsNestedInput
+  query?: Prisma.QueryUpdateOneRequiredWithoutChartsNestedInput
 }
 
 export type ChartUncheckedUpdateInput = {
@@ -326,7 +477,16 @@ export type ChartUncheckedUpdateInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,7 +496,16 @@ export type ChartCreateManyInput = {
   key: string
   version?: number
   stackId: string
-  dataSourceId: string
+  dashboardId: string
+  queryId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -345,6 +514,14 @@ export type ChartUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -354,7 +531,16 @@ export type ChartUncheckedUpdateManyInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -369,18 +555,36 @@ export type ChartOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type ChartStackIdKeyCompoundUniqueInput = {
+  stackId: string
+  key: string
+}
+
 export type ChartCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  dataSourceId?: Prisma.SortOrder
+  dashboardId?: Prisma.SortOrder
+  queryId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  config?: Prisma.SortOrder
+  layoutX?: Prisma.SortOrder
+  layoutY?: Prisma.SortOrder
+  layoutW?: Prisma.SortOrder
+  layoutH?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type ChartAvgOrderByAggregateInput = {
   version?: Prisma.SortOrder
+  layoutX?: Prisma.SortOrder
+  layoutY?: Prisma.SortOrder
+  layoutW?: Prisma.SortOrder
+  layoutH?: Prisma.SortOrder
 }
 
 export type ChartMaxOrderByAggregateInput = {
@@ -388,7 +592,15 @@ export type ChartMaxOrderByAggregateInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  dataSourceId?: Prisma.SortOrder
+  dashboardId?: Prisma.SortOrder
+  queryId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  layoutX?: Prisma.SortOrder
+  layoutY?: Prisma.SortOrder
+  layoutW?: Prisma.SortOrder
+  layoutH?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -398,13 +610,25 @@ export type ChartMinOrderByAggregateInput = {
   key?: Prisma.SortOrder
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
-  dataSourceId?: Prisma.SortOrder
+  dashboardId?: Prisma.SortOrder
+  queryId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  layoutX?: Prisma.SortOrder
+  layoutY?: Prisma.SortOrder
+  layoutW?: Prisma.SortOrder
+  layoutH?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type ChartSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
+  layoutX?: Prisma.SortOrder
+  layoutY?: Prisma.SortOrder
+  layoutW?: Prisma.SortOrder
+  layoutH?: Prisma.SortOrder
 }
 
 export type ChartCreateNestedManyWithoutStackInput = {
@@ -449,45 +673,91 @@ export type ChartUncheckedUpdateManyWithoutStackNestedInput = {
   deleteMany?: Prisma.ChartScalarWhereInput | Prisma.ChartScalarWhereInput[]
 }
 
-export type ChartCreateNestedManyWithoutDataSourceInput = {
-  create?: Prisma.XOR<Prisma.ChartCreateWithoutDataSourceInput, Prisma.ChartUncheckedCreateWithoutDataSourceInput> | Prisma.ChartCreateWithoutDataSourceInput[] | Prisma.ChartUncheckedCreateWithoutDataSourceInput[]
-  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDataSourceInput | Prisma.ChartCreateOrConnectWithoutDataSourceInput[]
-  createMany?: Prisma.ChartCreateManyDataSourceInputEnvelope
+export type ChartCreateNestedManyWithoutDashboardInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutDashboardInput, Prisma.ChartUncheckedCreateWithoutDashboardInput> | Prisma.ChartCreateWithoutDashboardInput[] | Prisma.ChartUncheckedCreateWithoutDashboardInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDashboardInput | Prisma.ChartCreateOrConnectWithoutDashboardInput[]
+  createMany?: Prisma.ChartCreateManyDashboardInputEnvelope
   connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
 }
 
-export type ChartUncheckedCreateNestedManyWithoutDataSourceInput = {
-  create?: Prisma.XOR<Prisma.ChartCreateWithoutDataSourceInput, Prisma.ChartUncheckedCreateWithoutDataSourceInput> | Prisma.ChartCreateWithoutDataSourceInput[] | Prisma.ChartUncheckedCreateWithoutDataSourceInput[]
-  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDataSourceInput | Prisma.ChartCreateOrConnectWithoutDataSourceInput[]
-  createMany?: Prisma.ChartCreateManyDataSourceInputEnvelope
+export type ChartUncheckedCreateNestedManyWithoutDashboardInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutDashboardInput, Prisma.ChartUncheckedCreateWithoutDashboardInput> | Prisma.ChartCreateWithoutDashboardInput[] | Prisma.ChartUncheckedCreateWithoutDashboardInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDashboardInput | Prisma.ChartCreateOrConnectWithoutDashboardInput[]
+  createMany?: Prisma.ChartCreateManyDashboardInputEnvelope
   connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
 }
 
-export type ChartUpdateManyWithoutDataSourceNestedInput = {
-  create?: Prisma.XOR<Prisma.ChartCreateWithoutDataSourceInput, Prisma.ChartUncheckedCreateWithoutDataSourceInput> | Prisma.ChartCreateWithoutDataSourceInput[] | Prisma.ChartUncheckedCreateWithoutDataSourceInput[]
-  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDataSourceInput | Prisma.ChartCreateOrConnectWithoutDataSourceInput[]
-  upsert?: Prisma.ChartUpsertWithWhereUniqueWithoutDataSourceInput | Prisma.ChartUpsertWithWhereUniqueWithoutDataSourceInput[]
-  createMany?: Prisma.ChartCreateManyDataSourceInputEnvelope
+export type ChartUpdateManyWithoutDashboardNestedInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutDashboardInput, Prisma.ChartUncheckedCreateWithoutDashboardInput> | Prisma.ChartCreateWithoutDashboardInput[] | Prisma.ChartUncheckedCreateWithoutDashboardInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDashboardInput | Prisma.ChartCreateOrConnectWithoutDashboardInput[]
+  upsert?: Prisma.ChartUpsertWithWhereUniqueWithoutDashboardInput | Prisma.ChartUpsertWithWhereUniqueWithoutDashboardInput[]
+  createMany?: Prisma.ChartCreateManyDashboardInputEnvelope
   set?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
   disconnect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
   delete?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
   connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
-  update?: Prisma.ChartUpdateWithWhereUniqueWithoutDataSourceInput | Prisma.ChartUpdateWithWhereUniqueWithoutDataSourceInput[]
-  updateMany?: Prisma.ChartUpdateManyWithWhereWithoutDataSourceInput | Prisma.ChartUpdateManyWithWhereWithoutDataSourceInput[]
+  update?: Prisma.ChartUpdateWithWhereUniqueWithoutDashboardInput | Prisma.ChartUpdateWithWhereUniqueWithoutDashboardInput[]
+  updateMany?: Prisma.ChartUpdateManyWithWhereWithoutDashboardInput | Prisma.ChartUpdateManyWithWhereWithoutDashboardInput[]
   deleteMany?: Prisma.ChartScalarWhereInput | Prisma.ChartScalarWhereInput[]
 }
 
-export type ChartUncheckedUpdateManyWithoutDataSourceNestedInput = {
-  create?: Prisma.XOR<Prisma.ChartCreateWithoutDataSourceInput, Prisma.ChartUncheckedCreateWithoutDataSourceInput> | Prisma.ChartCreateWithoutDataSourceInput[] | Prisma.ChartUncheckedCreateWithoutDataSourceInput[]
-  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDataSourceInput | Prisma.ChartCreateOrConnectWithoutDataSourceInput[]
-  upsert?: Prisma.ChartUpsertWithWhereUniqueWithoutDataSourceInput | Prisma.ChartUpsertWithWhereUniqueWithoutDataSourceInput[]
-  createMany?: Prisma.ChartCreateManyDataSourceInputEnvelope
+export type ChartUncheckedUpdateManyWithoutDashboardNestedInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutDashboardInput, Prisma.ChartUncheckedCreateWithoutDashboardInput> | Prisma.ChartCreateWithoutDashboardInput[] | Prisma.ChartUncheckedCreateWithoutDashboardInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutDashboardInput | Prisma.ChartCreateOrConnectWithoutDashboardInput[]
+  upsert?: Prisma.ChartUpsertWithWhereUniqueWithoutDashboardInput | Prisma.ChartUpsertWithWhereUniqueWithoutDashboardInput[]
+  createMany?: Prisma.ChartCreateManyDashboardInputEnvelope
   set?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
   disconnect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
   delete?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
   connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
-  update?: Prisma.ChartUpdateWithWhereUniqueWithoutDataSourceInput | Prisma.ChartUpdateWithWhereUniqueWithoutDataSourceInput[]
-  updateMany?: Prisma.ChartUpdateManyWithWhereWithoutDataSourceInput | Prisma.ChartUpdateManyWithWhereWithoutDataSourceInput[]
+  update?: Prisma.ChartUpdateWithWhereUniqueWithoutDashboardInput | Prisma.ChartUpdateWithWhereUniqueWithoutDashboardInput[]
+  updateMany?: Prisma.ChartUpdateManyWithWhereWithoutDashboardInput | Prisma.ChartUpdateManyWithWhereWithoutDashboardInput[]
+  deleteMany?: Prisma.ChartScalarWhereInput | Prisma.ChartScalarWhereInput[]
+}
+
+export type EnumChartTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ChartType
+}
+
+export type ChartCreateNestedManyWithoutQueryInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutQueryInput, Prisma.ChartUncheckedCreateWithoutQueryInput> | Prisma.ChartCreateWithoutQueryInput[] | Prisma.ChartUncheckedCreateWithoutQueryInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutQueryInput | Prisma.ChartCreateOrConnectWithoutQueryInput[]
+  createMany?: Prisma.ChartCreateManyQueryInputEnvelope
+  connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+}
+
+export type ChartUncheckedCreateNestedManyWithoutQueryInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutQueryInput, Prisma.ChartUncheckedCreateWithoutQueryInput> | Prisma.ChartCreateWithoutQueryInput[] | Prisma.ChartUncheckedCreateWithoutQueryInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutQueryInput | Prisma.ChartCreateOrConnectWithoutQueryInput[]
+  createMany?: Prisma.ChartCreateManyQueryInputEnvelope
+  connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+}
+
+export type ChartUpdateManyWithoutQueryNestedInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutQueryInput, Prisma.ChartUncheckedCreateWithoutQueryInput> | Prisma.ChartCreateWithoutQueryInput[] | Prisma.ChartUncheckedCreateWithoutQueryInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutQueryInput | Prisma.ChartCreateOrConnectWithoutQueryInput[]
+  upsert?: Prisma.ChartUpsertWithWhereUniqueWithoutQueryInput | Prisma.ChartUpsertWithWhereUniqueWithoutQueryInput[]
+  createMany?: Prisma.ChartCreateManyQueryInputEnvelope
+  set?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  disconnect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  delete?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  update?: Prisma.ChartUpdateWithWhereUniqueWithoutQueryInput | Prisma.ChartUpdateWithWhereUniqueWithoutQueryInput[]
+  updateMany?: Prisma.ChartUpdateManyWithWhereWithoutQueryInput | Prisma.ChartUpdateManyWithWhereWithoutQueryInput[]
+  deleteMany?: Prisma.ChartScalarWhereInput | Prisma.ChartScalarWhereInput[]
+}
+
+export type ChartUncheckedUpdateManyWithoutQueryNestedInput = {
+  create?: Prisma.XOR<Prisma.ChartCreateWithoutQueryInput, Prisma.ChartUncheckedCreateWithoutQueryInput> | Prisma.ChartCreateWithoutQueryInput[] | Prisma.ChartUncheckedCreateWithoutQueryInput[]
+  connectOrCreate?: Prisma.ChartCreateOrConnectWithoutQueryInput | Prisma.ChartCreateOrConnectWithoutQueryInput[]
+  upsert?: Prisma.ChartUpsertWithWhereUniqueWithoutQueryInput | Prisma.ChartUpsertWithWhereUniqueWithoutQueryInput[]
+  createMany?: Prisma.ChartCreateManyQueryInputEnvelope
+  set?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  disconnect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  delete?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  connect?: Prisma.ChartWhereUniqueInput | Prisma.ChartWhereUniqueInput[]
+  update?: Prisma.ChartUpdateWithWhereUniqueWithoutQueryInput | Prisma.ChartUpdateWithWhereUniqueWithoutQueryInput[]
+  updateMany?: Prisma.ChartUpdateManyWithWhereWithoutQueryInput | Prisma.ChartUpdateManyWithWhereWithoutQueryInput[]
   deleteMany?: Prisma.ChartScalarWhereInput | Prisma.ChartScalarWhereInput[]
 }
 
@@ -495,16 +765,34 @@ export type ChartCreateWithoutStackInput = {
   id?: string
   key: string
   version?: number
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
-  dataSource: Prisma.DataSourceCreateNestedOneWithoutChartsInput
+  dashboard: Prisma.DashboardCreateNestedOneWithoutChartsInput
+  query: Prisma.QueryCreateNestedOneWithoutChartsInput
 }
 
 export type ChartUncheckedCreateWithoutStackInput = {
   id?: string
   key: string
   version?: number
-  dataSourceId: string
+  dashboardId: string
+  queryId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -543,60 +831,158 @@ export type ChartScalarWhereInput = {
   key?: Prisma.StringFilter<"Chart"> | string
   version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
-  dataSourceId?: Prisma.StringFilter<"Chart"> | string
+  dashboardId?: Prisma.StringFilter<"Chart"> | string
+  queryId?: Prisma.StringFilter<"Chart"> | string
+  type?: Prisma.EnumChartTypeFilter<"Chart"> | $Enums.ChartType
+  label?: Prisma.StringFilter<"Chart"> | string
+  description?: Prisma.StringNullableFilter<"Chart"> | string | null
+  config?: Prisma.JsonFilter<"Chart">
+  layoutX?: Prisma.IntFilter<"Chart"> | number
+  layoutY?: Prisma.IntFilter<"Chart"> | number
+  layoutW?: Prisma.IntFilter<"Chart"> | number
+  layoutH?: Prisma.IntFilter<"Chart"> | number
   createdAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
 }
 
-export type ChartCreateWithoutDataSourceInput = {
+export type ChartCreateWithoutDashboardInput = {
   id?: string
   key: string
   version?: number
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutChartsInput
+  query: Prisma.QueryCreateNestedOneWithoutChartsInput
 }
 
-export type ChartUncheckedCreateWithoutDataSourceInput = {
+export type ChartUncheckedCreateWithoutDashboardInput = {
   id?: string
   key: string
   version?: number
   stackId: string
+  queryId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type ChartCreateOrConnectWithoutDataSourceInput = {
+export type ChartCreateOrConnectWithoutDashboardInput = {
   where: Prisma.ChartWhereUniqueInput
-  create: Prisma.XOR<Prisma.ChartCreateWithoutDataSourceInput, Prisma.ChartUncheckedCreateWithoutDataSourceInput>
+  create: Prisma.XOR<Prisma.ChartCreateWithoutDashboardInput, Prisma.ChartUncheckedCreateWithoutDashboardInput>
 }
 
-export type ChartCreateManyDataSourceInputEnvelope = {
-  data: Prisma.ChartCreateManyDataSourceInput | Prisma.ChartCreateManyDataSourceInput[]
+export type ChartCreateManyDashboardInputEnvelope = {
+  data: Prisma.ChartCreateManyDashboardInput | Prisma.ChartCreateManyDashboardInput[]
   skipDuplicates?: boolean
 }
 
-export type ChartUpsertWithWhereUniqueWithoutDataSourceInput = {
+export type ChartUpsertWithWhereUniqueWithoutDashboardInput = {
   where: Prisma.ChartWhereUniqueInput
-  update: Prisma.XOR<Prisma.ChartUpdateWithoutDataSourceInput, Prisma.ChartUncheckedUpdateWithoutDataSourceInput>
-  create: Prisma.XOR<Prisma.ChartCreateWithoutDataSourceInput, Prisma.ChartUncheckedCreateWithoutDataSourceInput>
+  update: Prisma.XOR<Prisma.ChartUpdateWithoutDashboardInput, Prisma.ChartUncheckedUpdateWithoutDashboardInput>
+  create: Prisma.XOR<Prisma.ChartCreateWithoutDashboardInput, Prisma.ChartUncheckedCreateWithoutDashboardInput>
 }
 
-export type ChartUpdateWithWhereUniqueWithoutDataSourceInput = {
+export type ChartUpdateWithWhereUniqueWithoutDashboardInput = {
   where: Prisma.ChartWhereUniqueInput
-  data: Prisma.XOR<Prisma.ChartUpdateWithoutDataSourceInput, Prisma.ChartUncheckedUpdateWithoutDataSourceInput>
+  data: Prisma.XOR<Prisma.ChartUpdateWithoutDashboardInput, Prisma.ChartUncheckedUpdateWithoutDashboardInput>
 }
 
-export type ChartUpdateManyWithWhereWithoutDataSourceInput = {
+export type ChartUpdateManyWithWhereWithoutDashboardInput = {
   where: Prisma.ChartScalarWhereInput
-  data: Prisma.XOR<Prisma.ChartUpdateManyMutationInput, Prisma.ChartUncheckedUpdateManyWithoutDataSourceInput>
+  data: Prisma.XOR<Prisma.ChartUpdateManyMutationInput, Prisma.ChartUncheckedUpdateManyWithoutDashboardInput>
+}
+
+export type ChartCreateWithoutQueryInput = {
+  id?: string
+  key: string
+  version?: number
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  stack: Prisma.StackCreateNestedOneWithoutChartsInput
+  dashboard: Prisma.DashboardCreateNestedOneWithoutChartsInput
+}
+
+export type ChartUncheckedCreateWithoutQueryInput = {
+  id?: string
+  key: string
+  version?: number
+  stackId: string
+  dashboardId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ChartCreateOrConnectWithoutQueryInput = {
+  where: Prisma.ChartWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChartCreateWithoutQueryInput, Prisma.ChartUncheckedCreateWithoutQueryInput>
+}
+
+export type ChartCreateManyQueryInputEnvelope = {
+  data: Prisma.ChartCreateManyQueryInput | Prisma.ChartCreateManyQueryInput[]
+  skipDuplicates?: boolean
+}
+
+export type ChartUpsertWithWhereUniqueWithoutQueryInput = {
+  where: Prisma.ChartWhereUniqueInput
+  update: Prisma.XOR<Prisma.ChartUpdateWithoutQueryInput, Prisma.ChartUncheckedUpdateWithoutQueryInput>
+  create: Prisma.XOR<Prisma.ChartCreateWithoutQueryInput, Prisma.ChartUncheckedCreateWithoutQueryInput>
+}
+
+export type ChartUpdateWithWhereUniqueWithoutQueryInput = {
+  where: Prisma.ChartWhereUniqueInput
+  data: Prisma.XOR<Prisma.ChartUpdateWithoutQueryInput, Prisma.ChartUncheckedUpdateWithoutQueryInput>
+}
+
+export type ChartUpdateManyWithWhereWithoutQueryInput = {
+  where: Prisma.ChartScalarWhereInput
+  data: Prisma.XOR<Prisma.ChartUpdateManyMutationInput, Prisma.ChartUncheckedUpdateManyWithoutQueryInput>
 }
 
 export type ChartCreateManyStackInput = {
   id?: string
   key: string
   version?: number
-  dataSourceId: string
+  dashboardId: string
+  queryId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -605,16 +991,34 @@ export type ChartUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  dataSource?: Prisma.DataSourceUpdateOneRequiredWithoutChartsNestedInput
+  dashboard?: Prisma.DashboardUpdateOneRequiredWithoutChartsNestedInput
+  query?: Prisma.QueryUpdateOneRequiredWithoutChartsNestedInput
 }
 
 export type ChartUncheckedUpdateWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -623,43 +1027,160 @@ export type ChartUncheckedUpdateManyWithoutStackInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  dataSourceId?: Prisma.StringFieldUpdateOperationsInput | string
+  dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ChartCreateManyDataSourceInput = {
+export type ChartCreateManyDashboardInput = {
   id?: string
   key: string
   version?: number
   stackId: string
+  queryId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type ChartUpdateWithoutDataSourceInput = {
+export type ChartUpdateWithoutDashboardInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutChartsNestedInput
+  query?: Prisma.QueryUpdateOneRequiredWithoutChartsNestedInput
 }
 
-export type ChartUncheckedUpdateWithoutDataSourceInput = {
+export type ChartUncheckedUpdateWithoutDashboardInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ChartUncheckedUpdateManyWithoutDataSourceInput = {
+export type ChartUncheckedUpdateManyWithoutDashboardInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ChartCreateManyQueryInput = {
+  id?: string
+  key: string
+  version?: number
+  stackId: string
+  dashboardId: string
+  type: $Enums.ChartType
+  label: string
+  description?: string | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: number
+  layoutY?: number
+  layoutW?: number
+  layoutH?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type ChartUpdateWithoutQueryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stack?: Prisma.StackUpdateOneRequiredWithoutChartsNestedInput
+  dashboard?: Prisma.DashboardUpdateOneRequiredWithoutChartsNestedInput
+}
+
+export type ChartUncheckedUpdateWithoutQueryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  stackId?: Prisma.StringFieldUpdateOperationsInput | string
+  dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ChartUncheckedUpdateManyWithoutQueryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  stackId?: Prisma.StringFieldUpdateOperationsInput | string
+  dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
+  label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  layoutX?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutY?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutW?: Prisma.IntFieldUpdateOperationsInput | number
+  layoutH?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -671,11 +1192,21 @@ export type ChartSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   key?: boolean
   version?: boolean
   stackId?: boolean
-  dataSourceId?: boolean
+  dashboardId?: boolean
+  queryId?: boolean
+  type?: boolean
+  label?: boolean
+  description?: boolean
+  config?: boolean
+  layoutX?: boolean
+  layoutY?: boolean
+  layoutW?: boolean
+  layoutH?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chart"]>
 
 export type ChartSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -683,11 +1214,21 @@ export type ChartSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   key?: boolean
   version?: boolean
   stackId?: boolean
-  dataSourceId?: boolean
+  dashboardId?: boolean
+  queryId?: boolean
+  type?: boolean
+  label?: boolean
+  description?: boolean
+  config?: boolean
+  layoutX?: boolean
+  layoutY?: boolean
+  layoutW?: boolean
+  layoutH?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chart"]>
 
 export type ChartSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -695,11 +1236,21 @@ export type ChartSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   key?: boolean
   version?: boolean
   stackId?: boolean
-  dataSourceId?: boolean
+  dashboardId?: boolean
+  queryId?: boolean
+  type?: boolean
+  label?: boolean
+  description?: boolean
+  config?: boolean
+  layoutX?: boolean
+  layoutY?: boolean
+  layoutW?: boolean
+  layoutH?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["chart"]>
 
 export type ChartSelectScalar = {
@@ -707,37 +1258,59 @@ export type ChartSelectScalar = {
   key?: boolean
   version?: boolean
   stackId?: boolean
-  dataSourceId?: boolean
+  dashboardId?: boolean
+  queryId?: boolean
+  type?: boolean
+  label?: boolean
+  description?: boolean
+  config?: boolean
+  layoutX?: boolean
+  layoutY?: boolean
+  layoutW?: boolean
+  layoutH?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ChartOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "dataSourceId" | "createdAt" | "updatedAt", ExtArgs["result"]["chart"]>
+export type ChartOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "version" | "stackId" | "dashboardId" | "queryId" | "type" | "label" | "description" | "config" | "layoutX" | "layoutY" | "layoutW" | "layoutH" | "createdAt" | "updatedAt", ExtArgs["result"]["chart"]>
 export type ChartInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
 }
 export type ChartIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
 }
 export type ChartIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
-  dataSource?: boolean | Prisma.DataSourceDefaultArgs<ExtArgs>
+  dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
 }
 
 export type $ChartPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Chart"
   objects: {
     stack: Prisma.$StackPayload<ExtArgs>
-    dataSource: Prisma.$DataSourcePayload<ExtArgs>
+    dashboard: Prisma.$DashboardPayload<ExtArgs>
+    query: Prisma.$QueryPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     key: string
     version: number
     stackId: string
-    dataSourceId: string
+    dashboardId: string
+    queryId: string
+    type: $Enums.ChartType
+    label: string
+    description: string | null
+    config: runtime.JsonValue
+    layoutX: number
+    layoutY: number
+    layoutW: number
+    layoutH: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["chart"]>
@@ -1135,7 +1708,8 @@ readonly fields: ChartFieldRefs;
 export interface Prisma__ChartClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stack<T extends Prisma.StackDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StackDefaultArgs<ExtArgs>>): Prisma.Prisma__StackClient<runtime.Types.Result.GetResult<Prisma.$StackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  dataSource<T extends Prisma.DataSourceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DataSourceDefaultArgs<ExtArgs>>): Prisma.Prisma__DataSourceClient<runtime.Types.Result.GetResult<Prisma.$DataSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  dashboard<T extends Prisma.DashboardDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DashboardDefaultArgs<ExtArgs>>): Prisma.Prisma__DashboardClient<runtime.Types.Result.GetResult<Prisma.$DashboardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  query<T extends Prisma.QueryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.QueryDefaultArgs<ExtArgs>>): Prisma.Prisma__QueryClient<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1169,7 +1743,16 @@ export interface ChartFieldRefs {
   readonly key: Prisma.FieldRef<"Chart", 'String'>
   readonly version: Prisma.FieldRef<"Chart", 'Int'>
   readonly stackId: Prisma.FieldRef<"Chart", 'String'>
-  readonly dataSourceId: Prisma.FieldRef<"Chart", 'String'>
+  readonly dashboardId: Prisma.FieldRef<"Chart", 'String'>
+  readonly queryId: Prisma.FieldRef<"Chart", 'String'>
+  readonly type: Prisma.FieldRef<"Chart", 'ChartType'>
+  readonly label: Prisma.FieldRef<"Chart", 'String'>
+  readonly description: Prisma.FieldRef<"Chart", 'String'>
+  readonly config: Prisma.FieldRef<"Chart", 'Json'>
+  readonly layoutX: Prisma.FieldRef<"Chart", 'Int'>
+  readonly layoutY: Prisma.FieldRef<"Chart", 'Int'>
+  readonly layoutW: Prisma.FieldRef<"Chart", 'Int'>
+  readonly layoutH: Prisma.FieldRef<"Chart", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Chart", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Chart", 'DateTime'>
 }

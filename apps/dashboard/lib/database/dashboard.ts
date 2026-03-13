@@ -54,6 +54,12 @@ export const dashboardInterface = {
     return await prisma.dashboard.findUnique({ where: { id } });
   },
 
+  async getByStackId(stackId: string) {
+    return await prisma.dashboard.findMany({
+      where: { stackId },
+    });
+  },
+
   async getMany() {
     return await prisma.dashboard.findMany();
   },

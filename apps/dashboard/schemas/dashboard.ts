@@ -15,9 +15,29 @@ const dataSourceSchema = z.object({
   }),
 });
 
+export const barChartConfigSchema = z.object({
+  categoryField: z.string(),
+  valueField: z.string(),
+});
+
+export type BarChartConfig = z.infer<typeof barChartConfigSchema>;
+
+const chartLayoutSchema = z.object({
+  x: z.number().int().min(0),
+  y: z.number().int().min(0),
+  w: z.number().int().min(1).max(12),
+  h: z.number().int().min(1),
+});
+
 const chartSchema = z.object({
   key: z.string(),
-  dataSource: z.string(),
+  dashboard: z.string(),
+  query: z.string(),
+  label: z.string(),
+  description: z.string().optional(),
+  type: z.literal("bar"),
+  config: barChartConfigSchema,
+  layout: chartLayoutSchema.optional(),
 });
 
 const querySchema = z.object({

@@ -1,10 +1,11 @@
-import { stackInterface } from "@/lib/database/stack";
+import { chartInterface } from "@/lib/database/chart";
 import { dataSourceInterface } from "@/lib/database/dataSource";
+import { dashboardInterface } from "@/lib/database/dashboard";
 import { queryInterface } from "@/lib/database/query";
+import { stackInterface } from "@/lib/database/stack";
 import { Environment, StackId } from "@/types";
 import { stackSchema } from "@/schemas/dashboard";
 import z from "zod";
-import { dashboardInterface } from "../database/dashboard";
 
 type Stack = {
   key: string;
@@ -25,6 +26,8 @@ type QueryInput = {
   dataSource: string;
   jsonPath: string;
 };
+
+type ChartInput = NonNullable<z.infer<typeof stackSchema>["charts"]>[number];
 
 // type TransformInput = {
 //   key: string;
@@ -50,6 +53,10 @@ export const mainWorkflow = async (data: z.infer<typeof stackSchema>) => {
 
   const dataSourceMap = await resolveDataSourceMap(stackId);
   await createQueries(stackId, data.queries, dataSourceMap);
+
+  const dashboardMap = await resolveDashboardMap(stackId);
+  const queryMap = await resolveQueryMap(stackId);
+  await createCharts(stackId, data.charts, dashboardMap, queryMap);
 
   // const queryMap = await resolveQueryMap(stackId);
   // await createTransforms(stackId, data.transforms, queryMap);
@@ -106,6 +113,15 @@ const resolveDataSourceMap = async (
   return Object.fromEntries(dataSources.map((ds) => [ds.key, ds.id]));
 };
 
+const resolveDashboardMap = async (
+  stackId: StackId,
+): Promise<Record<string, string>> => {
+  const dashboards = await dashboardInterface.getByStackId(stackId);
+  return Object.fromEntries(
+    dashboards.map((dashboard) => [dashboard.key, dashboard.id]),
+  );
+};
+
 const createQueries = async (
   stackId: StackId,
   queries: QueryInput[] | undefined,
@@ -133,6 +149,62 @@ const createQueries = async (
   });
 
   await queryInterface.createMany(queriesToCreate);
+};
+
+const resolveQueryMap = async (
+  stackId: StackId,
+): Promise<Record<string, string>> => {
+  const queries = await queryInterface.getByStackId(stackId);
+  return Object.fromEntries(queries.map((query) => [query.key, query.id]));
+};
+
+const createCharts = async (
+  stackId: StackId,
+  charts: ChartInput[] | undefined,
+  dashboardMap: Record<string, string>,
+  queryMap: Record<string, string>,
+) => {
+  if (!charts?.length) {
+    return;
+  }
+
+  const chartsToCreate = charts.map((chart, index) => {
+    const dashboardId = dashboardMap[chart.dashboard];
+
+    if (!dashboardId) {
+      throw new Error(
+        `Dashboard with key '${chart.dashboard}' not found for chart '${chart.key}'`,
+      );
+    }
+
+    const queryId = queryMap[chart.query];
+
+    if (!queryId) {
+      throw new Error(
+        `Query with key '${chart.query}' not found for chart '${chart.key}'`,
+      );
+    }
+
+    const defaultX = (index % 2) * 6;
+    const defaultY = Math.floor(index / 2) * 3;
+
+    return {
+      stackId,
+      key: chart.key,
+      dashboardId,
+      queryId,
+      type: "BAR" as const,
+      label: chart.label,
+      description: chart.description ?? null,
+      config: chart.config,
+      layoutX: chart.layout?.x ?? defaultX,
+      layoutY: chart.layout?.y ?? defaultY,
+      layoutW: chart.layout?.w ?? 6,
+      layoutH: chart.layout?.h ?? 3,
+    };
+  });
+
+  await chartInterface.createMany(chartsToCreate);
 };
 
 // const resolveQueryMap = async (

@@ -1012,7 +1012,16 @@ export const ChartScalarFieldEnum = {
   key: 'key',
   version: 'version',
   stackId: 'stackId',
-  dataSourceId: 'dataSourceId',
+  dashboardId: 'dashboardId',
+  queryId: 'queryId',
+  type: 'type',
+  label: 'label',
+  description: 'description',
+  config: 'config',
+  layoutX: 'layoutX',
+  layoutY: 'layoutY',
+  layoutW: 'layoutW',
+  layoutH: 'layoutH',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1176,6 +1185,20 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'ChartType'
+ */
+export type EnumChartTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChartType'>
+    
+
+
+/**
+ * Reference to a field of type 'ChartType[]'
+ */
+export type ListEnumChartTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChartType[]'>
     
 
 

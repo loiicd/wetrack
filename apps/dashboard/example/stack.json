@@ -23,24 +23,29 @@
   ],
   "charts": [
     {
-      "key": "posts-chart",
-      "dataSource": "jsonplaceholder-posts"
+      "key": "posts-id-bar-chart",
+      "dashboard": "open-emergency-data-dashboard",
+      "query": "posts-top-10-query",
+      "label": "Top 10 Posts (ID)",
+      "description": "ID pro Post-Titel aus der Query.",
+      "type": "bar",
+      "config": {
+        "categoryField": "title",
+        "valueField": "id"
+      },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 3
+      }
     }
   ],
   "queries": [
     {
-      "key": "posts-user-id-query",
+      "key": "posts-top-10-query",
       "dataSource": "jsonplaceholder-posts",
-      "jsonPath": "$[*].userId"
-    }
-  ],
-  "transforms": [
-    {
-      "key": "posts-per-user-transform",
-      "query": "posts-user-id-query",
-      "function": "GROUP_BY",
-      "field": "userId",
-      "groupByField": "userId"
+      "jsonPath": "$[0:10]"
     }
   ]
 }

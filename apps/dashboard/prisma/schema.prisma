@@ -19,6 +19,10 @@ enum TransformFunction {
   GROUP_BY
 }
 
+enum ChartType {
+  BAR
+}
+
 model Stack {
   id          String      @id @default(uuid())
   key         String
@@ -47,7 +51,8 @@ model Dashboard {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  stack Stack @relation(fields: [stackId], references: [id])
+  stack  Stack   @relation(fields: [stackId], references: [id])
+  charts Chart[]
 
   @@unique([stackId, key])
 }
@@ -63,21 +68,34 @@ model DataSource {
   updatedAt DateTime @updatedAt
 
   stack   Stack   @relation(fields: [stackId], references: [id])
-  charts  Chart[]
   queries Query[]
+
+  @@unique([stackId, key])
 }
 
 model Chart {
-  id           String   @id @default(uuid())
-  key          String
-  version      Int      @default(1)
-  stackId      String
-  dataSourceId String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String    @id @default(uuid())
+  key         String
+  version     Int       @default(1)
+  stackId     String
+  dashboardId String
+  queryId     String
+  type        ChartType
+  label       String
+  description String?
+  config      Json
+  layoutX     Int       @default(0)
+  layoutY     Int       @default(0)
+  layoutW     Int       @default(6)
+  layoutH     Int       @default(3)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  stack      Stack      @relation(fields: [stackId], references: [id])
-  dataSource DataSource @relation(fields: [dataSourceId], references: [id])
+  stack     Stack     @relation(fields: [stackId], references: [id])
+  dashboard Dashboard @relation(fields: [dashboardId], references: [id])
+  query     Query     @relation(fields: [queryId], references: [id])
+
+  @@unique([stackId, key])
 }
 
 model Query {
@@ -92,7 +110,10 @@ model Query {
 
   stack      Stack       @relation(fields: [stackId], references: [id])
   dataSource DataSource  @relation(fields: [dataSourceId], references: [id])
+  charts     Chart[]
   transforms Transform[]
+
+  @@unique([stackId, key])
 }
 
 model Transform {

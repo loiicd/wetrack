@@ -205,6 +205,23 @@ export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonFilter<$PrismaModel>
 }
 
+export type EnumChartTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChartType | Prisma.EnumChartTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumChartTypeFilter<$PrismaModel> | $Enums.ChartType
+}
+
+export type EnumChartTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChartType | Prisma.EnumChartTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumChartTypeWithAggregatesFilter<$PrismaModel> | $Enums.ChartType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumChartTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumChartTypeFilter<$PrismaModel>
+}
+
 export type EnumTransformFunctionFilter<$PrismaModel = never> = {
   equals?: $Enums.TransformFunction | Prisma.EnumTransformFunctionFieldRefInput<$PrismaModel>
   in?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
@@ -397,6 +414,23 @@ export type NestedJsonFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumChartTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChartType | Prisma.EnumChartTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumChartTypeFilter<$PrismaModel> | $Enums.ChartType
+}
+
+export type NestedEnumChartTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ChartType | Prisma.EnumChartTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ChartType[] | Prisma.ListEnumChartTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumChartTypeWithAggregatesFilter<$PrismaModel> | $Enums.ChartType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumChartTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumChartTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumTransformFunctionFilter<$PrismaModel = never> = {

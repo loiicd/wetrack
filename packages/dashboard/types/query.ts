@@ -13,3 +13,7 @@ export type SQLQueryConfig = {
 };
 
 export type QueryConfig = JSONPathQueryConfig | SQLQueryConfig;
+
+export type QueryDefinition = QueryConfig & {
+  key: string;
+};

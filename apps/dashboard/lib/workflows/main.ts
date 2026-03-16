@@ -71,8 +71,18 @@ export const mainWorkflow = async (data: z.infer<typeof stackSchema>) => {
   const queryMap = await resolveQueryMap(stackId);
   await createCharts(stackId, data.charts, dashboardMap, queryMap);
 
-  // const queryMap = await resolveQueryMap(stackId);
-  // await createTransforms(stackId, data.transforms, queryMap);
+  // Gelöschte Einträge entfernen (Reihenfolge: Charts → Queries → DataSources → Dashboards)
+  const chartKeys = (data.charts ?? []).map((c) => c.key);
+  await chartInterface.deleteNotInKeys(stackId, chartKeys);
+
+  const queryKeys = (data.queries ?? []).map((q) => q.key);
+  await queryInterface.deleteNotInKeys(stackId, queryKeys);
+
+  const dataSourceKeys = (data.dataSources ?? []).map((ds) => ds.key);
+  await dataSourceInterface.deleteNotInKeys(stackId, dataSourceKeys);
+
+  const dashboardKeys = (data.dashboards ?? []).map((d) => d.key);
+  await dashboardInterface.deleteNotInKeys(stackId, dashboardKeys);
 };
 
 const createStack = async (stack: Stack) => {

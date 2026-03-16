@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ApplicationShell11 } from "@/components/application-shell11";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const nunitoSans = Nunito_Sans({ variable: "--font-sans" });
 
@@ -23,11 +24,22 @@ export const metadata: Metadata = {
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en" className={cn("font-sans", nunitoSans.variable)}>
+    <html
+      lang="en"
+      className={cn("font-sans", nunitoSans.variable)}
+      suppressHydrationWarning
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ApplicationShell11>{children}</ApplicationShell11>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ApplicationShell11>{children}</ApplicationShell11>
+        </ThemeProvider>
       </body>
     </html>
   );

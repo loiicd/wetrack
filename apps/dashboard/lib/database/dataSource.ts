@@ -71,4 +71,13 @@ export const dataSourceInterface = {
   async getMany() {
     return await prisma.dataSource.findMany();
   },
+
+  async deleteNotInKeys(stackId: string, keys: string[]) {
+    await prisma.dataSource.deleteMany({
+      where: {
+        stackId,
+        key: { notIn: keys },
+      },
+    });
+  },
 };

@@ -1,28 +1,32 @@
-import type { QueryConfig } from "../types/query";
+import type { QueryConfig, QueryDefinition } from "../types/query";
 
 export class Query {
-  name: string;
+  key: string;
   stackId?: string;
   config: QueryConfig;
 
-  constructor(name: string, config: QueryConfig) {
-    this.name = name;
+  constructor(key: string, config: QueryConfig) {
+    this.key = key;
     this.config = config;
   }
 
-  synthesize() {
+  synthesize(): QueryDefinition {
     const base = {
-      name: this.name,
-      stackId: this.stackId,
+      key: this.key,
       type: this.config.type,
       dataSource: this.config.dataSource,
       sourceQuery: this.config.sourceQuery,
     };
 
     if (this.config.type === "jsonpath") {
-      return { ...base, jsonPath: this.config.jsonPath };
+      return { ...base, type: "jsonpath", jsonPath: this.config.jsonPath };
     } else {
-      return { ...base, sql: this.config.sql };
+      return { ...base, type: "sql", sql: this.config.sql };
     }
+  }
+
+  static fromJSON(json: QueryDefinition): Query {
+    const { key, ...config } = json;
+    return new Query(key, config as QueryConfig);
   }
 }

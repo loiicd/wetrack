@@ -1,4 +1,8 @@
 export type DashboardConfig = {
-  title: string;
+  label: string;
   description?: string;
+};
+
+export type DashboardDefinition = DashboardConfig & {
+  key: string;
 };

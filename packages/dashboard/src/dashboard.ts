@@ -1,25 +1,24 @@
-import type { DashboardConfig } from "../types/dashboard";
+import type { DashboardConfig, DashboardDefinition } from "../types/dashboard";
 
 export class Dashboard {
-  id: string;
+  key: string;
+  stackId?: string;
   dashboardConfig: DashboardConfig;
 
-  constructor(id: string, dashboardConfig: DashboardConfig) {
-    this.id = id;
+  constructor(key: string, dashboardConfig: DashboardConfig) {
+    this.key = key;
     this.dashboardConfig = dashboardConfig;
   }
 
-  synthesize() {
+  synthesize(): DashboardDefinition {
     return {
-      id: this.id,
+      key: this.key,
       ...this.dashboardConfig,
     };
   }
+
+  static fromJSON(json: DashboardDefinition): Dashboard {
+    const { key, ...dashboardConfig } = json;
+    return new Dashboard(key, dashboardConfig);
+  }
 }
-
-// const dashboard = new Dashboard("1", {
-//   title: "My Dashboard",
-//   creater: "bubu",
-// });
-
-// dashboard.addChart();

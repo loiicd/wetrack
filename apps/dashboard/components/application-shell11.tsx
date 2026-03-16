@@ -14,6 +14,7 @@ import {
   LayoutDashboardIcon,
   EthernetPortIcon,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 import * as React from "react";
 
 import { cn, getInitials } from "@/lib/utils";
@@ -172,6 +173,7 @@ function SiteHeader() {
       </div>
 
       <div className="flex h-(--header-height) items-center gap-1 px-4">
+        <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
@@ -274,6 +276,7 @@ function MobileHeader() {
           <Search className="size-5" />
           <span className="sr-only">Search</span>
         </Button>
+        <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger
             render={<Button variant="ghost" size="icon" className="size-9" />}

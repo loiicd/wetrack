@@ -1,23 +1,27 @@
-import type { TransformConfig } from "../types/transform";
+import type { TransformConfig, TransformDefinition } from "../types/transform";
 
 export class Transform {
-  name: string;
+  key: string;
   stackId?: string;
   config: TransformConfig;
 
-  constructor(name: string, config: TransformConfig) {
-    this.name = name;
+  constructor(key: string, config: TransformConfig) {
+    this.key = key;
     this.config = config;
   }
 
-  synthesize() {
+  synthesize(): TransformDefinition {
     return {
-      name: this.name,
-      stackId: this.stackId,
+      key: this.key,
       query: this.config.query,
       function: this.config.function,
       field: this.config.field,
       groupByField: this.config.groupByField,
     };
+  }
+
+  static fromJSON(json: TransformDefinition): Transform {
+    const { key, ...config } = json;
+    return new Transform(key, config as TransformConfig);
   }
 }

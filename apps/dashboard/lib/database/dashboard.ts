@@ -82,4 +82,13 @@ export const dashboardInterface = {
 
     return Array.from(latestByKey.values());
   },
+
+  async deleteNotInKeys(stackId: string, keys: string[]) {
+    await prisma.dashboard.deleteMany({
+      where: {
+        stackId,
+        key: { notIn: keys },
+      },
+    });
+  },
 };

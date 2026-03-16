@@ -51,4 +51,13 @@ export const chartInterface = {
       orderBy: [{ layoutY: "asc" }, { layoutX: "asc" }],
     });
   },
+
+  async deleteNotInKeys(stackId: string, keys: string[]) {
+    await prisma.chart.deleteMany({
+      where: {
+        stackId,
+        key: { notIn: keys },
+      },
+    });
+  },
 };

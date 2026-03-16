@@ -3,8 +3,12 @@
   "ui": "tui",
   "globalEnv": ["DATABASE_URL"],
   "tasks": {
+    "migrate": {
+      "cache": false,
+      "env": ["DATABASE_URL", "DATABASE_URL_UNPOOLED", "POSTGRES_*"]
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "migrate"],
       "env": [
         "DATABASE_URL",
         "DATABASE_URL_UNPOOLED",

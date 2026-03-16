@@ -1,5 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npx prisma migrate deploy && cd ../.. && turbo run build",
   "fluid": true
 }

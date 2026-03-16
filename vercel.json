@@ -1,3 +1,5 @@
 {
-  "buildCommand": "cd apps/dashboard && npx prisma migrate deploy && cd ../.. && turbo run build"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npx prisma migrate deploy && cd ../.. && turbo run build",
+  "fluid": true
 }

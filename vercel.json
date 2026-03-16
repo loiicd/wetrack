@@ -1,0 +1,3 @@
+{
+  "buildCommand": "cd apps/dashboard && npx prisma migrate deploy && cd ../.. && turbo run build"
+}

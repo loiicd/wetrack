@@ -1,8 +1,10 @@
 import { dashboardInterface } from "@/lib/database/dashboard";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import Link from "next/link";
+import { connection } from "next/server";
 
 const DashboardList = async ({ stackKey }: { stackKey: string }) => {
+  await connection();
   const dashboards = await dashboardInterface.getByStackKey(stackKey);
 
   return (

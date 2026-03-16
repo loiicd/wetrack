@@ -17,8 +17,10 @@ import {
 } from "../ui/empty";
 import { FrownIcon } from "lucide-react";
 import EmptyTableRow from "../emptyTableRow";
+import { connection } from "next/server";
 
 const DatasourceTable = async () => {
+  await connection();
   const dataSources = await dataSourceInterface.getMany();
 
   return (

@@ -10,8 +10,10 @@ import {
 import TestQueryButton from "../testQueryButton";
 import EmptyTableRow from "../emptyTableRow";
 import { FrownIcon } from "lucide-react";
+import { connection } from "next/server";
 
 const QueryTable = async () => {
+  await connection();
   const queries = await queryInterface.getMany();
 
   return (

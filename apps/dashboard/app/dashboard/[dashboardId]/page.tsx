@@ -28,12 +28,14 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { MaximizeIcon } from "lucide-react";
+import { connection } from "next/server";
 
 const DashboardContent = async ({
   props,
 }: {
   props: PageProps<"/dashboard/[dashboardId]">;
 }) => {
+  await connection();
   const { dashboardId } = await props.params;
 
   const dashboard = await dashboardInterface.getById(dashboardId);

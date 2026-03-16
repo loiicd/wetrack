@@ -1,12 +1,13 @@
 import type { QueryConfig, QueryDefinition } from "../types/query";
+import type { QueryKey } from "../types/keys";
 
 export class Query {
-  key: string;
-  stackId?: string;
+  readonly _entity = "query" as const;
+  key: QueryKey;
   config: QueryConfig;
 
   constructor(key: string, config: QueryConfig) {
-    this.key = key;
+    this.key = key as QueryKey;
     this.config = config;
   }
 

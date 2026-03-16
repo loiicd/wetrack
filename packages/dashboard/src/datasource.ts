@@ -1,12 +1,16 @@
-import type { DataSourceConfig, DataSourceDefinition } from "../types/datasource";
+import type {
+  DataSourceConfig,
+  DataSourceDefinition,
+} from "../types/datasource";
+import type { DataSourceKey } from "../types/keys";
 
 export class DataSource {
-  key: string;
-  stackId?: string;
+  readonly _entity = "dataSource" as const;
+  key: DataSourceKey;
   dataSourceConfig: DataSourceConfig;
 
   constructor(key: string, dataSourceConfig: DataSourceConfig) {
-    this.key = key;
+    this.key = key as DataSourceKey;
     this.dataSourceConfig = dataSourceConfig;
   }
 

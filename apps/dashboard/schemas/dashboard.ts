@@ -30,6 +30,8 @@ export const barChartConfigSchema = z.object({
   showTooltip: z.boolean().default(true),
   /** Farben pro Serie (CSS-Farbe oder var(--...)); Defaults: var(--chart-1) usw. */
   colors: z.array(z.string()).optional(),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 export type BarChartConfig = z.infer<typeof barChartConfigSchema>;
@@ -49,6 +51,8 @@ export const lineChartConfigSchema = z.object({
   showLabels: z.boolean().default(false),
   /** Farben pro Serie */
   colors: z.array(z.string()).optional(),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 export type LineChartConfig = z.infer<typeof lineChartConfigSchema>;
@@ -62,6 +66,8 @@ export const statCardConfigSchema = z.object({
   color: z.string().optional(),
   /** Anzahl Dezimalstellen für numerische Werte */
   decimals: z.number().int().min(0).max(10).optional(),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 export type StatCardConfig = z.infer<typeof statCardConfigSchema>;
@@ -81,6 +87,8 @@ export const clockCardConfigSchema = z.object({
   showMinutes: z.boolean().default(true),
   /** Sekunden anzeigen */
   showSeconds: z.boolean().default(true),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 export type ClockCardConfig = z.infer<typeof clockCardConfigSchema>;
@@ -96,7 +104,8 @@ const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string(),
+    query: z.string().optional(),
+    dataSource: z.string().optional(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("bar"),
@@ -106,7 +115,8 @@ const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string(),
+    query: z.string().optional(),
+    dataSource: z.string().optional(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("line"),
@@ -116,7 +126,8 @@ const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string(),
+    query: z.string().optional(),
+    dataSource: z.string().optional(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("stat"),
@@ -155,14 +166,6 @@ const querySchema = z.discriminatedUnion("type", [
   sqlQuerySchema,
 ]);
 
-const transformSchema = z.object({
-  key: z.string(),
-  query: z.string(),
-  function: z.enum(["SUM", "AVG", "GROUP_BY"]),
-  field: z.string(),
-  groupByField: z.string().optional(),
-});
-
 export const stackSchema = z.object({
   key: z.string(),
   environment: z.enum(["PRODUCTION", "STAGING", "DEVELOPMENT"]),
@@ -170,5 +173,4 @@ export const stackSchema = z.object({
   charts: z.array(chartSchema).optional(),
   dashboards: z.array(dashboardSchema).optional(),
   queries: z.array(querySchema).optional(),
-  transforms: z.array(transformSchema).optional(),
 });

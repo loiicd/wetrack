@@ -44,16 +44,6 @@ export const dashboardSchema = z.object({
   description: z.string().optional(),
 });
 
-// ---- Transform ----
-
-export const transformSchema = z.object({
-  key: z.string(),
-  query: z.string(),
-  function: z.enum(["SUM", "AVG", "GROUP_BY"]),
-  field: z.string(),
-  groupByField: z.string().optional(),
-});
-
 // ---- Charts ----
 
 const chartLayoutSchema = z.object({
@@ -71,6 +61,8 @@ const barChartConfigSchema = z.object({
   showLabels: z.boolean().default(false),
   showTooltip: z.boolean().default(true),
   colors: z.array(z.string()).optional(),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 const lineChartConfigSchema = z.object({
@@ -81,6 +73,8 @@ const lineChartConfigSchema = z.object({
   showTooltip: z.boolean().default(true),
   showLabels: z.boolean().default(false),
   colors: z.array(z.string()).optional(),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 const statCardConfigSchema = z.object({
@@ -88,6 +82,8 @@ const statCardConfigSchema = z.object({
   unit: z.string().optional(),
   color: z.string().optional(),
   decimals: z.number().int().min(0).max(10).optional(),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 const clockCardConfigSchema = z.object({
@@ -105,13 +101,16 @@ const clockCardConfigSchema = z.object({
   showMinutes: z.boolean().default(true),
   /** Sekunden anzeigen */
   showSeconds: z.boolean().default(true),
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard: z.boolean().default(true),
 });
 
 export const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string(),
+    query: z.string().optional(),
+    dataSource: z.string().optional(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("bar"),
@@ -121,7 +120,8 @@ export const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string(),
+    query: z.string().optional(),
+    dataSource: z.string().optional(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("line"),
@@ -131,7 +131,8 @@ export const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string(),
+    query: z.string().optional(),
+    dataSource: z.string().optional(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("stat"),
@@ -158,7 +159,6 @@ export const stackSchema = z.object({
   dataSources: z.array(dataSourceSchema).optional(),
   queries: z.array(querySchema).optional(),
   charts: z.array(chartSchema).optional(),
-  transforms: z.array(transformSchema).optional(),
 });
 
 export type StackSchemaInput = z.input<typeof stackSchema>;

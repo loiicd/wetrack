@@ -1,14 +1,16 @@
+import type { DataSourceKey, QueryKey } from "./keys";
+
 export type JSONPathQueryConfig = {
   type: "jsonpath";
-  dataSource?: string;
-  sourceQuery?: string;
+  dataSource?: DataSourceKey;
+  sourceQuery?: QueryKey;
   jsonPath: string;
 };
 
 export type SQLQueryConfig = {
   type: "sql";
-  dataSource?: string;
-  sourceQuery?: string;
+  dataSource?: DataSourceKey;
+  sourceQuery?: QueryKey;
   sql: string;
 };
 

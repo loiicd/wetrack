@@ -28,14 +28,14 @@ const githubApi = new DataSource("github-repos", {
 // Alle Repos aus dem API-Response extrahieren
 const allRepos = new Query("all-repos", {
   type: "jsonpath",
-  dataSource: "github-repos",
+  dataSource: githubApi.key,
   jsonPath: "$[*]",
 });
 
 // Nur die relevanten Felder + nach Stars sortieren
 const reposByStars = new Query("repos-by-stars", {
   type: "sql",
-  sourceQuery: "all-repos",
+  sourceQuery: allRepos.key,
   sql: `
     SELECT name, stargazers_count AS stars, forks_count AS forks, language
     FROM ?
@@ -47,7 +47,7 @@ const reposByStars = new Query("repos-by-stars", {
 // Repos nach Programmiersprache zählen
 const reposByLanguage = new Query("repos-by-language", {
   type: "sql",
-  sourceQuery: "all-repos",
+  sourceQuery: allRepos.key,
   sql: `
     SELECT language, COUNT(*) AS count
     FROM ?
@@ -61,7 +61,7 @@ const reposByLanguage = new Query("repos-by-language", {
 // Gesamt-Statistiken
 const totalStats = new Query("total-stars", {
   type: "sql",
-  sourceQuery: "all-repos",
+  sourceQuery: allRepos.key,
   sql: "SELECT SUM(stargazers_count) AS totalStars FROM ?",
 });
 
@@ -86,8 +86,8 @@ const overviewDashboard = new Dashboard("github-overview", {
 
 // Kennzahl: Gesamte Stars
 const starsStatCard = new Chart("total-stars-card", {
-  dashboard: "github-overview",
-  query: "total-stars",
+  dashboard: overviewDashboard.key,
+  source: totalStats,
   label: "GitHub Stars gesamt",
   type: "stat",
   config: {
@@ -100,8 +100,8 @@ const starsStatCard = new Chart("total-stars-card", {
 
 // Balkendiagramm: Top 10 Repos nach Stars
 const topReposChart = new Chart("top-repos-by-stars", {
-  dashboard: "github-overview",
-  query: "repos-by-stars",
+  dashboard: overviewDashboard.key,
+  source: reposByStars,
   label: "Top 10 Repos nach Stars",
   description: "Die 10 meistgenutzten Repos der Vercel Organisation",
   type: "bar",
@@ -118,8 +118,8 @@ const topReposChart = new Chart("top-repos-by-stars", {
 
 // Balkendiagramm: Repos nach Sprache
 const languageChart = new Chart("repos-by-language", {
-  dashboard: "github-overview",
-  query: "repos-by-language",
+  dashboard: overviewDashboard.key,
+  source: reposByLanguage,
   label: "Repos nach Sprache",
   type: "bar",
   config: {

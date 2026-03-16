@@ -67,6 +67,7 @@ const BarChartCard = ({
     showLabels = false,
     showTooltip = true,
     colors,
+    showCard = true,
   } = config;
 
   const rechartsData = dataFrameToRechartsData(
@@ -94,7 +95,7 @@ const BarChartCard = ({
   const stackId = stacked ? "stack" : undefined;
 
   return (
-    <ChartWrapper title={title} description={description}>
+    <ChartWrapper title={title} description={description} showCard={showCard}>
       {rechartsData.length === 0 ? (
         <p className="text-sm text-muted-foreground">
           Keine Daten für dieses Chart.

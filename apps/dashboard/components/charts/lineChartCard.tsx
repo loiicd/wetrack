@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import ChartWrapper from "@/components/chartWrapper";
 import {
   ChartConfig,
   ChartContainer,
@@ -71,6 +65,7 @@ const LineChartCard = ({
     showTooltip = true,
     showLabels = false,
     colors,
+    showCard = true,
   } = config;
 
   const rechartsData = dataFrameToRechartsData(data, xField, valueFields);
@@ -86,67 +81,63 @@ const LineChartCard = ({
   );
 
   return (
-    <Card className="flex h-full flex-col">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent className="min-h-0 flex-1 overflow-hidden pb-2">
-        {rechartsData.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Keine Daten für dieses Chart.
-          </p>
-        ) : (
-          <ChartContainer config={chartConfig} className="h-full w-full">
-            <LineChart
-              accessibilityLayer
-              data={rechartsData}
-              margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
-            >
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey={xField}
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-              />
-              <YAxis tickLine={false} axisLine={false} hide={!showLabels} />
+    <ChartWrapper
+      title={title}
+      description={description}
+      showCard={showCard}
+      contentClassName="min-h-0 flex-1 overflow-hidden pb-2"
+    >
+      {rechartsData.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Keine Daten für dieses Chart.
+        </p>
+      ) : (
+        <ChartContainer config={chartConfig} className="h-full w-full">
+          <LineChart
+            accessibilityLayer
+            data={rechartsData}
+            margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey={xField}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+            />
+            <YAxis tickLine={false} axisLine={false} hide={!showLabels} />
 
-              {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent />}
-                />
-              )}
+            {showTooltip && (
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            )}
 
-              {valueFields.map((vf, i) => {
-                const color =
-                  colors?.[i] ?? DEFAULT_COLORS[i % DEFAULT_COLORS.length];
-                return (
-                  <Line
-                    key={vf}
-                    type="monotone"
-                    dataKey={vf}
-                    stroke={color}
-                    strokeWidth={2}
-                    dot={showDots ? { r: 3, fill: color } : false}
-                    fill={filled ? color : undefined}
-                  >
-                    {showLabels && (
-                      <LabelList
-                        dataKey={vf}
-                        position="top"
-                        className="fill-foreground text-xs"
-                      />
-                    )}
-                  </Line>
-                );
-              })}
-            </LineChart>
-          </ChartContainer>
-        )}
-      </CardContent>
-    </Card>
+            {valueFields.map((vf, i) => {
+              const color =
+                colors?.[i] ?? DEFAULT_COLORS[i % DEFAULT_COLORS.length];
+              return (
+                <Line
+                  key={vf}
+                  type="monotone"
+                  dataKey={vf}
+                  stroke={color}
+                  strokeWidth={2}
+                  dot={showDots ? { r: 3, fill: color } : false}
+                  fill={filled ? color : undefined}
+                >
+                  {showLabels && (
+                    <LabelList
+                      dataKey={vf}
+                      position="top"
+                      className="fill-foreground text-xs"
+                    />
+                  )}
+                </Line>
+              );
+            })}
+          </LineChart>
+        </ChartContainer>
+      )}
+    </ChartWrapper>
   );
 };
 

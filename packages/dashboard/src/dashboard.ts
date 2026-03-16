@@ -1,12 +1,12 @@
 import type { DashboardConfig, DashboardDefinition } from "../types/dashboard";
+import type { DashboardKey } from "../types/keys";
 
 export class Dashboard {
-  key: string;
-  stackId?: string;
+  key: DashboardKey;
   dashboardConfig: DashboardConfig;
 
   constructor(key: string, dashboardConfig: DashboardConfig) {
-    this.key = key;
+    this.key = key as DashboardKey;
     this.dashboardConfig = dashboardConfig;
   }
 

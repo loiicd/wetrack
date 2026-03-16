@@ -26,6 +26,8 @@ import {
 import type { TimeZone } from "@/types/timezone";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Button } from "@/components/ui/button";
+import { MaximizeIcon } from "lucide-react";
 
 const DashboardContent = async ({
   props,
@@ -130,6 +132,7 @@ const DashboardContent = async ({
                 showHours={config.showHours}
                 showMinutes={config.showMinutes}
                 showSeconds={config.showSeconds}
+                showCard={config.showCard}
               />
             ),
           };
@@ -158,15 +161,22 @@ const DashboardContent = async ({
 
   return (
     <div className="flex flex-col gap-4">
-      <DashboardBreadcrumb />
-      <Card>
-        <CardHeader>
-          <CardTitle>{dashboard.label}</CardTitle>
+      <div className="flex flex-row gap-4 justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">{dashboard.label}</h1>
           {dashboard.description ? (
-            <CardDescription>{dashboard.description}</CardDescription>
+            <p className="text-sm text-muted-foreground">
+              {dashboard.description}
+            </p>
           ) : null}
-        </CardHeader>
-      </Card>
+        </div>
+        <div>
+          <Button>Tets</Button>
+          <Button variant="ghost" size="icon">
+            <MaximizeIcon />
+          </Button>
+        </div>
+      </div>
 
       {widgets.length > 0 ? (
         <ChartGrid widgets={widgets} />

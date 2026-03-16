@@ -2,7 +2,6 @@ import { Chart } from "./chart";
 import { Dashboard } from "./dashboard";
 import { DataSource } from "./datasource";
 import { Query } from "./query";
-import { Transform } from "./transform";
 import type { StackDefinition, StackEnvironment } from "../types/stack";
 
 export class Stack {
@@ -12,7 +11,6 @@ export class Stack {
   dataSources: DataSource[] = [];
   queries: Query[] = [];
   charts: Chart[] = [];
-  transforms: Transform[] = [];
 
   constructor(key: string, environment: StackEnvironment) {
     this.key = key;
@@ -22,27 +20,38 @@ export class Stack {
   // ---- Builder-Methoden (Fluent API) ----
 
   addDashboard(...dashboards: Dashboard[]): this {
-    this.dashboards.push(...dashboards);
+    for (const d of dashboards) {
+      if (this.dashboards.some((x) => x.key === d.key))
+        throw new Error(`Duplicate dashboard key: "${d.key}"`);
+      this.dashboards.push(d);
+    }
     return this;
   }
 
   addDataSource(...dataSources: DataSource[]): this {
-    this.dataSources.push(...dataSources);
+    for (const ds of dataSources) {
+      if (this.dataSources.some((x) => x.key === ds.key))
+        throw new Error(`Duplicate dataSource key: "${ds.key}"`);
+      this.dataSources.push(ds);
+    }
     return this;
   }
 
   addQuery(...queries: Query[]): this {
-    this.queries.push(...queries);
+    for (const q of queries) {
+      if (this.queries.some((x) => x.key === q.key))
+        throw new Error(`Duplicate query key: "${q.key}"`);
+      this.queries.push(q);
+    }
     return this;
   }
 
   addChart(...charts: Chart[]): this {
-    this.charts.push(...charts);
-    return this;
-  }
-
-  addTransform(...transforms: Transform[]): this {
-    this.transforms.push(...transforms);
+    for (const c of charts) {
+      if (this.charts.some((x) => x.key === c.key))
+        throw new Error(`Duplicate chart key: "${c.key}"`);
+      this.charts.push(c);
+    }
     return this;
   }
 
@@ -56,7 +65,6 @@ export class Stack {
       dataSources: this.dataSources.map((ds) => ds.synthesize()),
       queries: this.queries.map((q) => q.synthesize()),
       charts: this.charts.map((c) => c.synthesize()),
-      transforms: this.transforms.map((t) => t.synthesize()),
     };
   }
 
@@ -76,9 +84,6 @@ export class Stack {
     }
     for (const c of json.charts ?? []) {
       stack.addChart(Chart.fromJSON(c));
-    }
-    for (const t of json.transforms ?? []) {
-      stack.addTransform(Transform.fromJSON(t));
     }
 
     return stack;

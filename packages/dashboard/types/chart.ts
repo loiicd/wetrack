@@ -20,6 +20,8 @@ export type BarChartConfig = {
   showTooltip?: boolean;
   /** Farben pro Serie (CSS-Farbe oder var(--...)) */
   colors?: string[];
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard?: boolean;
 };
 
 export type LineChartConfig = {
@@ -37,6 +39,8 @@ export type LineChartConfig = {
   showLabels?: boolean;
   /** Farben pro Serie */
   colors?: string[];
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard?: boolean;
 };
 
 export type StatCardConfig = {
@@ -48,6 +52,8 @@ export type StatCardConfig = {
   color?: string;
   /** Anzahl Dezimalstellen für numerische Werte */
   decimals?: number;
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard?: boolean;
 };
 
 export type ClockCardConfig = {
@@ -63,12 +69,15 @@ export type ClockCardConfig = {
   showMinutes?: boolean;
   /** Sekunden anzeigen */
   showSeconds?: boolean;
+  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
+  showCard?: boolean;
 };
 
 export type BarChartDefinition = {
   key: string;
   dashboard: string;
-  query: string;
+  query?: string;
+  dataSource?: string;
   label: string;
   description?: string;
   type: "bar";
@@ -79,7 +88,8 @@ export type BarChartDefinition = {
 export type LineChartDefinition = {
   key: string;
   dashboard: string;
-  query: string;
+  query?: string;
+  dataSource?: string;
   label: string;
   description?: string;
   type: "line";
@@ -90,7 +100,8 @@ export type LineChartDefinition = {
 export type StatChartDefinition = {
   key: string;
   dashboard: string;
-  query: string;
+  query?: string;
+  dataSource?: string;
   label: string;
   description?: string;
   type: "stat";
@@ -120,9 +131,15 @@ export type ChartTypeConfig =
   | { type: "stat"; config: StatCardConfig }
   | { type: "clock"; config: ClockCardConfig };
 
+import type { ChartSourceRef, DashboardKey } from "./keys";
+
+/**
+ * Datenquelle eines Charts: entweder eine Query ODER eine DataSource direkt.
+ * Clock-Charts benötigen keine Quelle.
+ */
 export type ChartMeta = {
-  dashboard: string;
-  query?: string;
+  dashboard: DashboardKey;
+  source?: ChartSourceRef;
   label: string;
   description?: string;
   layout?: ChartLayout;

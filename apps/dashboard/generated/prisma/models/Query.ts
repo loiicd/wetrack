@@ -469,11 +469,6 @@ export type QueryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type QueryScalarRelationFilter = {
-  is?: Prisma.QueryWhereInput
-  isNot?: Prisma.QueryWhereInput
-}
-
 export type QueryNullableScalarRelationFilter = {
   is?: Prisma.QueryWhereInput | null
   isNot?: Prisma.QueryWhereInput | null
@@ -532,6 +527,11 @@ export type QueryMinOrderByAggregateInput = {
 
 export type QuerySumOrderByAggregateInput = {
   version?: Prisma.SortOrder
+}
+
+export type QueryScalarRelationFilter = {
+  is?: Prisma.QueryWhereInput
+  isNot?: Prisma.QueryWhereInput
 }
 
 export type QueryCreateNestedManyWithoutStackInput = {
@@ -624,10 +624,12 @@ export type QueryCreateNestedOneWithoutChartsInput = {
   connect?: Prisma.QueryWhereUniqueInput
 }
 
-export type QueryUpdateOneRequiredWithoutChartsNestedInput = {
+export type QueryUpdateOneWithoutChartsNestedInput = {
   create?: Prisma.XOR<Prisma.QueryCreateWithoutChartsInput, Prisma.QueryUncheckedCreateWithoutChartsInput>
   connectOrCreate?: Prisma.QueryCreateOrConnectWithoutChartsInput
   upsert?: Prisma.QueryUpsertWithoutChartsInput
+  disconnect?: Prisma.QueryWhereInput | boolean
+  delete?: Prisma.QueryWhereInput | boolean
   connect?: Prisma.QueryWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.QueryUpdateToOneWithWhereWithoutChartsInput, Prisma.QueryUpdateWithoutChartsInput>, Prisma.QueryUncheckedUpdateWithoutChartsInput>
 }

@@ -26,6 +26,11 @@ const productsDashboard = new Dashboard("products-dashboard", {
   label: "Products Dashboard",
 });
 
+const worldClockDashboard = new Dashboard("world-clock-dashboard", {
+  label: "World Clock",
+  description: "Uhren verschiedener Zeitzonen",
+});
+
 // ---- Queries ----
 
 const postsAll = new Query("posts-all", {
@@ -414,10 +419,65 @@ const productsRatingLine = new Chart("products-rating-line", {
   layout: { x: 0, y: 10, w: 12, h: 3 },
 });
 
+// ---- Clock Charts ----
+
+const clockBerlin = new Chart("clock-berlin", {
+  dashboard: "world-clock-dashboard",
+  label: "Berlin",
+  type: "clock",
+  config: { timeZone: "Europe/Berlin", labelFormat: "full" },
+  layout: { x: 0, y: 0, w: 3, h: 1 },
+});
+
+const clockNewYork = new Chart("clock-new-york", {
+  dashboard: "world-clock-dashboard",
+  label: "New York",
+  type: "clock",
+  config: { timeZone: "America/New_York", labelFormat: "full" },
+  layout: { x: 3, y: 0, w: 3, h: 1 },
+});
+
+const clockTokyo = new Chart("clock-tokyo", {
+  dashboard: "world-clock-dashboard",
+  label: "Tokyo",
+  type: "clock",
+  config: { timeZone: "Asia/Tokyo", labelFormat: "full" },
+  layout: { x: 6, y: 0, w: 3, h: 1 },
+});
+
+const clockSydney = new Chart("clock-sydney", {
+  dashboard: "world-clock-dashboard",
+  label: "Sydney",
+  type: "clock",
+  config: { timeZone: "Australia/Sydney", labelFormat: "full" },
+  layout: { x: 9, y: 0, w: 3, h: 1 },
+});
+
+const clockLondon = new Chart("clock-london", {
+  dashboard: "world-clock-dashboard",
+  label: "London",
+  type: "clock",
+  config: { timeZone: "Europe/London", labelFormat: "full" },
+  layout: { x: 0, y: 1, w: 3, h: 1 },
+});
+
+const clockDubai = new Chart("clock-dubai", {
+  dashboard: "world-clock-dashboard",
+  label: "Dubai",
+  type: "clock",
+  config: { timeZone: "Asia/Dubai", labelFormat: "full" },
+  layout: { x: 3, y: 1, w: 3, h: 1 },
+});
+
 // ---- Stack ----
 
 const stack = new Stack("main-stack", "PRODUCTION")
-  .addDashboard(emergencyDashboard, userActivityDashboard, productsDashboard)
+  .addDashboard(
+    emergencyDashboard,
+    userActivityDashboard,
+    productsDashboard,
+    worldClockDashboard,
+  )
   .addDataSource(postsApi, productsApi)
   .addQuery(
     postsAll,
@@ -458,6 +518,12 @@ const stack = new Stack("main-stack", "PRODUCTION")
     productsStockByCategoryChart,
     productsDiscountTop10Chart,
     productsRatingLine,
+    clockBerlin,
+    clockNewYork,
+    clockTokyo,
+    clockSydney,
+    clockLondon,
+    clockDubai,
   );
 
 export default stack;

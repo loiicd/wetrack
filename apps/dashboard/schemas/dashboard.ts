@@ -66,6 +66,25 @@ export const statCardConfigSchema = z.object({
 
 export type StatCardConfig = z.infer<typeof statCardConfigSchema>;
 
+export const clockCardConfigSchema = z.object({
+  /** Zeitzone (IANA), z.B. "Europe/Berlin" – undefined = lokale Zeit */
+  timeZone: z.string().optional(),
+  /** Überschreibt das automatisch generierte Label */
+  label: z.string().optional(),
+  /** Format des automatischen Labels */
+  labelFormat: z
+    .enum(["city", "offset", "abbreviation", "full", "raw"])
+    .default("raw"),
+  /** Stunden anzeigen */
+  showHours: z.boolean().default(true),
+  /** Minuten anzeigen */
+  showMinutes: z.boolean().default(true),
+  /** Sekunden anzeigen */
+  showSeconds: z.boolean().default(true),
+});
+
+export type ClockCardConfig = z.infer<typeof clockCardConfigSchema>;
+
 const chartLayoutSchema = z.object({
   x: z.number().int().min(0),
   y: z.number().int().min(0),
@@ -102,6 +121,15 @@ const chartSchema = z.discriminatedUnion("type", [
     description: z.string().optional(),
     type: z.literal("stat"),
     config: statCardConfigSchema,
+    layout: chartLayoutSchema.optional(),
+  }),
+  z.object({
+    key: z.string(),
+    dashboard: z.string(),
+    label: z.string(),
+    description: z.string().optional(),
+    type: z.literal("clock"),
+    config: clockCardConfigSchema,
     layout: chartLayoutSchema.optional(),
   }),
 ]);

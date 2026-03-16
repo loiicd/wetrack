@@ -50,6 +50,21 @@ export type StatCardConfig = {
   decimals?: number;
 };
 
+export type ClockCardConfig = {
+  /** Zeitzone (IANA), z.B. "Europe/Berlin" – undefined = lokale Zeit */
+  timeZone?: string;
+  /** Überschreibt das automatisch generierte Label */
+  label?: string;
+  /** Format des automatischen Labels */
+  labelFormat?: "city" | "offset" | "abbreviation" | "full" | "raw";
+  /** Stunden anzeigen */
+  showHours?: boolean;
+  /** Minuten anzeigen */
+  showMinutes?: boolean;
+  /** Sekunden anzeigen */
+  showSeconds?: boolean;
+};
+
 export type BarChartDefinition = {
   key: string;
   dashboard: string;
@@ -83,19 +98,31 @@ export type StatChartDefinition = {
   layout?: ChartLayout;
 };
 
+export type ClockChartDefinition = {
+  key: string;
+  dashboard: string;
+  label: string;
+  description?: string;
+  type: "clock";
+  config: ClockCardConfig;
+  layout?: ChartLayout;
+};
+
 export type ChartDefinition =
   | BarChartDefinition
   | LineChartDefinition
-  | StatChartDefinition;
+  | StatChartDefinition
+  | ClockChartDefinition;
 
 export type ChartTypeConfig =
   | { type: "bar"; config: BarChartConfig }
   | { type: "line"; config: LineChartConfig }
-  | { type: "stat"; config: StatCardConfig };
+  | { type: "stat"; config: StatCardConfig }
+  | { type: "clock"; config: ClockCardConfig };
 
 export type ChartMeta = {
   dashboard: string;
-  query: string;
+  query?: string;
   label: string;
   description?: string;
   layout?: ChartLayout;

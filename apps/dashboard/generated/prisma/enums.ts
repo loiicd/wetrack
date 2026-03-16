@@ -30,7 +30,8 @@ export type TransformFunction = (typeof TransformFunction)[keyof typeof Transfor
 export const ChartType = {
   BAR: 'BAR',
   LINE: 'LINE',
-  STAT: 'STAT'
+  STAT: 'STAT',
+  CLOCK: 'CLOCK'
 } as const
 
 export type ChartType = (typeof ChartType)[keyof typeof ChartType]

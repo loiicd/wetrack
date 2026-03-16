@@ -23,6 +23,7 @@ enum ChartType {
   BAR
   LINE
   STAT
+  CLOCK
 }
 
 enum QueryType {
@@ -86,7 +87,7 @@ model Chart {
   version     Int       @default(1)
   stackId     String
   dashboardId String
-  queryId     String
+  queryId     String?
   type        ChartType
   label       String
   description String?
@@ -100,7 +101,7 @@ model Chart {
 
   stack     Stack     @relation(fields: [stackId], references: [id])
   dashboard Dashboard @relation(fields: [dashboardId], references: [id])
-  query     Query     @relation(fields: [queryId], references: [id])
+  query     Query?    @relation(fields: [queryId], references: [id])
 
   @@unique([stackId, key])
 }

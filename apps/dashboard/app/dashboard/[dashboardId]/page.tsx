@@ -1,5 +1,6 @@
 import BarChartCard from "@/components/charts/barChartCard";
 import ChartErrorCard from "@/components/charts/chartErrorCard";
+import ClockCard from "@/components/charts/clockCard";
 import LineChartCard from "@/components/charts/lineChartCard";
 import StatCard from "@/components/charts/statCard";
 import ChartGrid from "@/components/chartGrid";
@@ -18,9 +19,11 @@ import { toDataFrame } from "@/lib/dataframe";
 import { getQueryData } from "@/lib/workflows/getQueryData";
 import {
   barChartConfigSchema,
+  clockCardConfigSchema,
   lineChartConfigSchema,
   statCardConfigSchema,
 } from "@/schemas/dashboard";
+import type { TimeZone } from "@/types/timezone";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -44,7 +47,7 @@ const DashboardContent = async ({
       try {
         if (chart.type === "BAR") {
           const config = barChartConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId);
+          const queryResult = await getQueryData(chart.queryId!);
           const dataFrame = toDataFrame(queryResult, [
             config.categoryField,
             ...config.valueFields,
@@ -68,7 +71,7 @@ const DashboardContent = async ({
 
         if (chart.type === "LINE") {
           const config = lineChartConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId);
+          const queryResult = await getQueryData(chart.queryId!);
           const dataFrame = toDataFrame(queryResult, [
             config.xField,
             ...config.valueFields,
@@ -92,7 +95,7 @@ const DashboardContent = async ({
 
         if (chart.type === "STAT") {
           const config = statCardConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId);
+          const queryResult = await getQueryData(chart.queryId!);
           const dataFrame = toDataFrame(queryResult, [config.valueField]);
           return {
             id: chart.id,
@@ -106,6 +109,27 @@ const DashboardContent = async ({
                 description={chart.description}
                 data={dataFrame}
                 config={config}
+              />
+            ),
+          };
+        }
+
+        if (chart.type === "CLOCK") {
+          const config = clockCardConfigSchema.parse(chart.config);
+          return {
+            id: chart.id,
+            x: chart.layoutX,
+            y: chart.layoutY,
+            w: chart.layoutW,
+            h: chart.layoutH,
+            content: (
+              <ClockCard
+                timeZone={config.timeZone as TimeZone | undefined}
+                label={config.label}
+                labelFormat={config.labelFormat}
+                showHours={config.showHours}
+                showMinutes={config.showMinutes}
+                showSeconds={config.showSeconds}
               />
             ),
           };

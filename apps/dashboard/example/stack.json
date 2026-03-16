@@ -13,6 +13,11 @@
     {
       "key": "products-dashboard",
       "label": "Products Dashboard"
+    },
+    {
+      "key": "world-clock-dashboard",
+      "label": "World Clock",
+      "description": "Uhren verschiedener Zeitzonen"
     }
   ],
   "dataSources": [
@@ -159,12 +164,19 @@
       "type": "bar",
       "config": {
         "categoryField": "userId",
-        "valueFields": ["postCount"],
+        "valueFields": [
+          "postCount"
+        ],
         "orientation": "horizontal",
         "showLabels": true,
         "showTooltip": true
       },
-      "layout": { "x": 0, "y": 0, "w": 12, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 3
+      }
     },
     {
       "key": "posts-top-10-vertical",
@@ -175,13 +187,22 @@
       "type": "bar",
       "config": {
         "categoryField": "id",
-        "valueFields": ["id"],
+        "valueFields": [
+          "id"
+        ],
         "orientation": "vertical",
         "showLabels": false,
         "showTooltip": true,
-        "colors": ["var(--chart-2)"]
+        "colors": [
+          "var(--chart-2)"
+        ]
       },
-      "layout": { "x": 0, "y": 3, "w": 6, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 3,
+        "w": 6,
+        "h": 3
+      }
     },
     {
       "key": "posts-first-5-stacked",
@@ -192,14 +213,25 @@
       "type": "bar",
       "config": {
         "categoryField": "id",
-        "valueFields": ["id", "userId"],
+        "valueFields": [
+          "id",
+          "userId"
+        ],
         "orientation": "vertical",
         "stacked": true,
         "showLabels": false,
         "showTooltip": true,
-        "colors": ["var(--chart-3)", "var(--chart-4)"]
+        "colors": [
+          "var(--chart-3)",
+          "var(--chart-4)"
+        ]
       },
-      "layout": { "x": 6, "y": 3, "w": 6, "h": 3 }
+      "layout": {
+        "x": 6,
+        "y": 3,
+        "w": 6,
+        "h": 3
+      }
     },
     {
       "key": "posts-multi-series-chart",
@@ -210,14 +242,25 @@
       "type": "bar",
       "config": {
         "categoryField": "userId",
-        "valueFields": ["maxId", "minId"],
+        "valueFields": [
+          "maxId",
+          "minId"
+        ],
         "orientation": "horizontal",
         "stacked": false,
         "showLabels": true,
         "showTooltip": true,
-        "colors": ["var(--chart-1)", "var(--chart-5)"]
+        "colors": [
+          "var(--chart-1)",
+          "var(--chart-5)"
+        ]
       },
-      "layout": { "x": 0, "y": 6, "w": 8, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 6,
+        "w": 8,
+        "h": 3
+      }
     },
     {
       "key": "posts-top5-desc-small",
@@ -228,13 +271,22 @@
       "type": "bar",
       "config": {
         "categoryField": "id",
-        "valueFields": ["id"],
+        "valueFields": [
+          "id"
+        ],
         "orientation": "vertical",
         "showLabels": false,
         "showTooltip": false,
-        "colors": ["var(--chart-2)"]
+        "colors": [
+          "var(--chart-2)"
+        ]
       },
-      "layout": { "x": 8, "y": 6, "w": 4, "h": 3 }
+      "layout": {
+        "x": 8,
+        "y": 6,
+        "w": 4,
+        "h": 3
+      }
     },
     {
       "key": "user1-posts-bar-chart",
@@ -245,12 +297,19 @@
       "type": "bar",
       "config": {
         "categoryField": "title",
-        "valueFields": ["id"],
+        "valueFields": [
+          "id"
+        ],
         "orientation": "horizontal",
         "showLabels": true,
         "showTooltip": true
       },
-      "layout": { "x": 0, "y": 0, "w": 12, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 3
+      }
     },
     {
       "key": "posts-count-by-user-chart",
@@ -261,13 +320,20 @@
       "type": "bar",
       "config": {
         "categoryField": "userId",
-        "valueFields": ["postCount"],
+        "valueFields": [
+          "postCount"
+        ],
         "orientation": "vertical",
         "stacked": false,
         "showLabels": false,
         "showTooltip": true
       },
-      "layout": { "x": 0, "y": 3, "w": 12, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 3,
+        "w": 12,
+        "h": 3
+      }
     },
     {
       "key": "posts-line-simple",
@@ -278,13 +344,20 @@
       "type": "line",
       "config": {
         "xField": "id",
-        "valueFields": ["userId"],
+        "valueFields": [
+          "userId"
+        ],
         "showDots": true,
         "filled": false,
         "showTooltip": true,
         "showLabels": false
       },
-      "layout": { "x": 0, "y": 6, "w": 12, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 6,
+        "w": 12,
+        "h": 3
+      }
     },
     {
       "key": "posts-line-multi",
@@ -295,14 +368,25 @@
       "type": "line",
       "config": {
         "xField": "userId",
-        "valueFields": ["totalPosts", "maxId"],
+        "valueFields": [
+          "totalPosts",
+          "maxId"
+        ],
         "showDots": true,
         "filled": true,
         "showTooltip": true,
         "showLabels": false,
-        "colors": ["var(--chart-1)", "var(--chart-3)"]
+        "colors": [
+          "var(--chart-1)",
+          "var(--chart-3)"
+        ]
       },
-      "layout": { "x": 0, "y": 9, "w": 12, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 9,
+        "w": 12,
+        "h": 3
+      }
     },
     {
       "key": "products-stat-total",
@@ -314,7 +398,12 @@
         "valueField": "total",
         "unit": "Stk."
       },
-      "layout": { "x": 0, "y": 0, "w": 3, "h": 2 }
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
     },
     {
       "key": "products-stat-avg-price-card",
@@ -328,7 +417,12 @@
         "decimals": 2,
         "color": "var(--chart-1)"
       },
-      "layout": { "x": 3, "y": 0, "w": 3, "h": 2 }
+      "layout": {
+        "x": 3,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
     },
     {
       "key": "products-stat-stock-card",
@@ -341,7 +435,12 @@
         "unit": "Stk.",
         "color": "var(--chart-4)"
       },
-      "layout": { "x": 6, "y": 0, "w": 3, "h": 2 }
+      "layout": {
+        "x": 6,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
     },
     {
       "key": "products-stat-rating-card",
@@ -355,7 +454,12 @@
         "decimals": 2,
         "color": "var(--chart-3)"
       },
-      "layout": { "x": 9, "y": 0, "w": 3, "h": 2 }
+      "layout": {
+        "x": 9,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
     },
     {
       "key": "products-avg-price-by-category",
@@ -366,14 +470,27 @@
       "type": "bar",
       "config": {
         "categoryField": "category",
-        "valueFields": ["avgPrice", "maxPrice", "minPrice"],
+        "valueFields": [
+          "avgPrice",
+          "maxPrice",
+          "minPrice"
+        ],
         "orientation": "horizontal",
         "stacked": false,
         "showLabels": false,
         "showTooltip": true,
-        "colors": ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)"]
+        "colors": [
+          "var(--chart-1)",
+          "var(--chart-2)",
+          "var(--chart-3)"
+        ]
       },
-      "layout": { "x": 0, "y": 2, "w": 12, "h": 4 }
+      "layout": {
+        "x": 0,
+        "y": 2,
+        "w": 12,
+        "h": 4
+      }
     },
     {
       "key": "products-stock-by-category",
@@ -384,13 +501,22 @@
       "type": "bar",
       "config": {
         "categoryField": "category",
-        "valueFields": ["totalStock"],
+        "valueFields": [
+          "totalStock"
+        ],
         "orientation": "horizontal",
         "showLabels": true,
         "showTooltip": true,
-        "colors": ["var(--chart-4)"]
+        "colors": [
+          "var(--chart-4)"
+        ]
       },
-      "layout": { "x": 0, "y": 6, "w": 6, "h": 4 }
+      "layout": {
+        "x": 0,
+        "y": 6,
+        "w": 6,
+        "h": 4
+      }
     },
     {
       "key": "products-discount-top10",
@@ -401,13 +527,22 @@
       "type": "bar",
       "config": {
         "categoryField": "title",
-        "valueFields": ["discount"],
+        "valueFields": [
+          "discount"
+        ],
         "orientation": "horizontal",
         "showLabels": true,
         "showTooltip": true,
-        "colors": ["var(--chart-5)"]
+        "colors": [
+          "var(--chart-5)"
+        ]
       },
-      "layout": { "x": 6, "y": 6, "w": 6, "h": 4 }
+      "layout": {
+        "x": 6,
+        "y": 6,
+        "w": 6,
+        "h": 4
+      }
     },
     {
       "key": "products-rating-line",
@@ -418,14 +553,122 @@
       "type": "line",
       "config": {
         "xField": "title",
-        "valueFields": ["rating", "price"],
+        "valueFields": [
+          "rating",
+          "price"
+        ],
         "showDots": true,
         "filled": false,
         "showTooltip": true,
         "showLabels": false,
-        "colors": ["var(--chart-1)", "var(--chart-2)"]
+        "colors": [
+          "var(--chart-1)",
+          "var(--chart-2)"
+        ]
       },
-      "layout": { "x": 0, "y": 10, "w": 12, "h": 3 }
+      "layout": {
+        "x": 0,
+        "y": 10,
+        "w": 12,
+        "h": 3
+      }
+    },
+    {
+      "key": "clock-berlin",
+      "dashboard": "world-clock-dashboard",
+      "label": "Berlin",
+      "type": "clock",
+      "config": {
+        "timeZone": "Europe/Berlin",
+        "labelFormat": "full"
+      },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
+    },
+    {
+      "key": "clock-new-york",
+      "dashboard": "world-clock-dashboard",
+      "label": "New York",
+      "type": "clock",
+      "config": {
+        "timeZone": "America/New_York",
+        "labelFormat": "full"
+      },
+      "layout": {
+        "x": 3,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
+    },
+    {
+      "key": "clock-tokyo",
+      "dashboard": "world-clock-dashboard",
+      "label": "Tokyo",
+      "type": "clock",
+      "config": {
+        "timeZone": "Asia/Tokyo",
+        "labelFormat": "full"
+      },
+      "layout": {
+        "x": 6,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
+    },
+    {
+      "key": "clock-sydney",
+      "dashboard": "world-clock-dashboard",
+      "label": "Sydney",
+      "type": "clock",
+      "config": {
+        "timeZone": "Australia/Sydney",
+        "labelFormat": "full"
+      },
+      "layout": {
+        "x": 9,
+        "y": 0,
+        "w": 3,
+        "h": 2
+      }
+    },
+    {
+      "key": "clock-london",
+      "dashboard": "world-clock-dashboard",
+      "label": "London",
+      "type": "clock",
+      "config": {
+        "timeZone": "Europe/London",
+        "labelFormat": "full"
+      },
+      "layout": {
+        "x": 0,
+        "y": 2,
+        "w": 3,
+        "h": 2
+      }
+    },
+    {
+      "key": "clock-dubai",
+      "dashboard": "world-clock-dashboard",
+      "label": "Dubai",
+      "type": "clock",
+      "config": {
+        "timeZone": "Asia/Dubai",
+        "labelFormat": "full"
+      },
+      "layout": {
+        "x": 3,
+        "y": 2,
+        "w": 3,
+        "h": 2
+      }
     }
-  ]
+  ],
+  "transforms": []
 }

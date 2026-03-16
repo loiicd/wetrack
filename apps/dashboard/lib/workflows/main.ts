@@ -258,13 +258,20 @@ const createCharts = async (
       );
     }
 
-    const queryId = queryMap[chart.query];
-
-    if (!queryId) {
-      throw new Error(
-        `Query with key '${chart.query}' not found for chart '${chart.key}'`,
-      );
-    }
+    const queryId: string | null =
+      chart.type === "clock"
+        ? null
+        : (() => {
+            const id = queryMap[(chart as { query: string }).query];
+            if (!id) {
+              throw new Error(
+                `Query with key '${
+                  (chart as { query: string }).query
+                }' not found for chart '${chart.key}'`,
+              );
+            }
+            return id;
+          })();
 
     const defaultX = (index % 2) * 6;
     const defaultY = Math.floor(index / 2) * 3;
@@ -279,7 +286,9 @@ const createCharts = async (
           ? ("LINE" as const)
           : chart.type === "stat"
             ? ("STAT" as const)
-            : ("BAR" as const),
+            : chart.type === "clock"
+              ? ("CLOCK" as const)
+              : ("BAR" as const),
       label: chart.label,
       description: chart.description ?? null,
       config: chart.config,

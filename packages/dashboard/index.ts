@@ -27,6 +27,8 @@ export type {
   ChartLayout,
   ChartMeta,
   ChartTypeConfig,
+  ClockCardConfig,
+  ClockChartDefinition,
   LineChartConfig,
   LineChartDefinition,
   StatCardConfig,

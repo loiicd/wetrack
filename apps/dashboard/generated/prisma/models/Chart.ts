@@ -263,7 +263,7 @@ export type ChartGroupByOutputType = {
   version: number
   stackId: string
   dashboardId: string
-  queryId: string
+  queryId: string | null
   type: $Enums.ChartType
   label: string
   description: string | null
@@ -305,7 +305,7 @@ export type ChartWhereInput = {
   version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
   dashboardId?: Prisma.StringFilter<"Chart"> | string
-  queryId?: Prisma.StringFilter<"Chart"> | string
+  queryId?: Prisma.StringNullableFilter<"Chart"> | string | null
   type?: Prisma.EnumChartTypeFilter<"Chart"> | $Enums.ChartType
   label?: Prisma.StringFilter<"Chart"> | string
   description?: Prisma.StringNullableFilter<"Chart"> | string | null
@@ -318,7 +318,7 @@ export type ChartWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
   dashboard?: Prisma.XOR<Prisma.DashboardScalarRelationFilter, Prisma.DashboardWhereInput>
-  query?: Prisma.XOR<Prisma.QueryScalarRelationFilter, Prisma.QueryWhereInput>
+  query?: Prisma.XOR<Prisma.QueryNullableScalarRelationFilter, Prisma.QueryWhereInput> | null
 }
 
 export type ChartOrderByWithRelationInput = {
@@ -327,7 +327,7 @@ export type ChartOrderByWithRelationInput = {
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dashboardId?: Prisma.SortOrder
-  queryId?: Prisma.SortOrder
+  queryId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   label?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -353,7 +353,7 @@ export type ChartWhereUniqueInput = Prisma.AtLeast<{
   version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
   dashboardId?: Prisma.StringFilter<"Chart"> | string
-  queryId?: Prisma.StringFilter<"Chart"> | string
+  queryId?: Prisma.StringNullableFilter<"Chart"> | string | null
   type?: Prisma.EnumChartTypeFilter<"Chart"> | $Enums.ChartType
   label?: Prisma.StringFilter<"Chart"> | string
   description?: Prisma.StringNullableFilter<"Chart"> | string | null
@@ -366,7 +366,7 @@ export type ChartWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Chart"> | Date | string
   stack?: Prisma.XOR<Prisma.StackScalarRelationFilter, Prisma.StackWhereInput>
   dashboard?: Prisma.XOR<Prisma.DashboardScalarRelationFilter, Prisma.DashboardWhereInput>
-  query?: Prisma.XOR<Prisma.QueryScalarRelationFilter, Prisma.QueryWhereInput>
+  query?: Prisma.XOR<Prisma.QueryNullableScalarRelationFilter, Prisma.QueryWhereInput> | null
 }, "id" | "stackId_key">
 
 export type ChartOrderByWithAggregationInput = {
@@ -375,7 +375,7 @@ export type ChartOrderByWithAggregationInput = {
   version?: Prisma.SortOrder
   stackId?: Prisma.SortOrder
   dashboardId?: Prisma.SortOrder
-  queryId?: Prisma.SortOrder
+  queryId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   label?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -402,7 +402,7 @@ export type ChartScalarWhereWithAggregatesInput = {
   version?: Prisma.IntWithAggregatesFilter<"Chart"> | number
   stackId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
   dashboardId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
-  queryId?: Prisma.StringWithAggregatesFilter<"Chart"> | string
+  queryId?: Prisma.StringNullableWithAggregatesFilter<"Chart"> | string | null
   type?: Prisma.EnumChartTypeWithAggregatesFilter<"Chart"> | $Enums.ChartType
   label?: Prisma.StringWithAggregatesFilter<"Chart"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Chart"> | string | null
@@ -431,7 +431,7 @@ export type ChartCreateInput = {
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutChartsInput
   dashboard: Prisma.DashboardCreateNestedOneWithoutChartsInput
-  query: Prisma.QueryCreateNestedOneWithoutChartsInput
+  query?: Prisma.QueryCreateNestedOneWithoutChartsInput
 }
 
 export type ChartUncheckedCreateInput = {
@@ -440,7 +440,7 @@ export type ChartUncheckedCreateInput = {
   version?: number
   stackId: string
   dashboardId: string
-  queryId: string
+  queryId?: string | null
   type: $Enums.ChartType
   label: string
   description?: string | null
@@ -469,7 +469,7 @@ export type ChartUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutChartsNestedInput
   dashboard?: Prisma.DashboardUpdateOneRequiredWithoutChartsNestedInput
-  query?: Prisma.QueryUpdateOneRequiredWithoutChartsNestedInput
+  query?: Prisma.QueryUpdateOneWithoutChartsNestedInput
 }
 
 export type ChartUncheckedUpdateInput = {
@@ -478,7 +478,7 @@ export type ChartUncheckedUpdateInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
-  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
   label?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -497,7 +497,7 @@ export type ChartCreateManyInput = {
   version?: number
   stackId: string
   dashboardId: string
-  queryId: string
+  queryId?: string | null
   type: $Enums.ChartType
   label: string
   description?: string | null
@@ -532,7 +532,7 @@ export type ChartUncheckedUpdateManyInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
   dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
-  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
   label?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -776,7 +776,7 @@ export type ChartCreateWithoutStackInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   dashboard: Prisma.DashboardCreateNestedOneWithoutChartsInput
-  query: Prisma.QueryCreateNestedOneWithoutChartsInput
+  query?: Prisma.QueryCreateNestedOneWithoutChartsInput
 }
 
 export type ChartUncheckedCreateWithoutStackInput = {
@@ -784,7 +784,7 @@ export type ChartUncheckedCreateWithoutStackInput = {
   key: string
   version?: number
   dashboardId: string
-  queryId: string
+  queryId?: string | null
   type: $Enums.ChartType
   label: string
   description?: string | null
@@ -832,7 +832,7 @@ export type ChartScalarWhereInput = {
   version?: Prisma.IntFilter<"Chart"> | number
   stackId?: Prisma.StringFilter<"Chart"> | string
   dashboardId?: Prisma.StringFilter<"Chart"> | string
-  queryId?: Prisma.StringFilter<"Chart"> | string
+  queryId?: Prisma.StringNullableFilter<"Chart"> | string | null
   type?: Prisma.EnumChartTypeFilter<"Chart"> | $Enums.ChartType
   label?: Prisma.StringFilter<"Chart"> | string
   description?: Prisma.StringNullableFilter<"Chart"> | string | null
@@ -860,7 +860,7 @@ export type ChartCreateWithoutDashboardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   stack: Prisma.StackCreateNestedOneWithoutChartsInput
-  query: Prisma.QueryCreateNestedOneWithoutChartsInput
+  query?: Prisma.QueryCreateNestedOneWithoutChartsInput
 }
 
 export type ChartUncheckedCreateWithoutDashboardInput = {
@@ -868,7 +868,7 @@ export type ChartUncheckedCreateWithoutDashboardInput = {
   key: string
   version?: number
   stackId: string
-  queryId: string
+  queryId?: string | null
   type: $Enums.ChartType
   label: string
   description?: string | null
@@ -974,7 +974,7 @@ export type ChartCreateManyStackInput = {
   key: string
   version?: number
   dashboardId: string
-  queryId: string
+  queryId?: string | null
   type: $Enums.ChartType
   label: string
   description?: string | null
@@ -1002,7 +1002,7 @@ export type ChartUpdateWithoutStackInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dashboard?: Prisma.DashboardUpdateOneRequiredWithoutChartsNestedInput
-  query?: Prisma.QueryUpdateOneRequiredWithoutChartsNestedInput
+  query?: Prisma.QueryUpdateOneWithoutChartsNestedInput
 }
 
 export type ChartUncheckedUpdateWithoutStackInput = {
@@ -1010,7 +1010,7 @@ export type ChartUncheckedUpdateWithoutStackInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
-  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
   label?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1028,7 +1028,7 @@ export type ChartUncheckedUpdateManyWithoutStackInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   dashboardId?: Prisma.StringFieldUpdateOperationsInput | string
-  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
   label?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1046,7 +1046,7 @@ export type ChartCreateManyDashboardInput = {
   key: string
   version?: number
   stackId: string
-  queryId: string
+  queryId?: string | null
   type: $Enums.ChartType
   label: string
   description?: string | null
@@ -1074,7 +1074,7 @@ export type ChartUpdateWithoutDashboardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   stack?: Prisma.StackUpdateOneRequiredWithoutChartsNestedInput
-  query?: Prisma.QueryUpdateOneRequiredWithoutChartsNestedInput
+  query?: Prisma.QueryUpdateOneWithoutChartsNestedInput
 }
 
 export type ChartUncheckedUpdateWithoutDashboardInput = {
@@ -1082,7 +1082,7 @@ export type ChartUncheckedUpdateWithoutDashboardInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
   label?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1100,7 +1100,7 @@ export type ChartUncheckedUpdateManyWithoutDashboardInput = {
   key?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  queryId?: Prisma.StringFieldUpdateOperationsInput | string
+  queryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumChartTypeFieldUpdateOperationsInput | $Enums.ChartType
   label?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1206,7 +1206,7 @@ export type ChartSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
-  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.Chart$queryArgs<ExtArgs>
 }, ExtArgs["result"]["chart"]>
 
 export type ChartSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1228,7 +1228,7 @@ export type ChartSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
-  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.Chart$queryArgs<ExtArgs>
 }, ExtArgs["result"]["chart"]>
 
 export type ChartSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1250,7 +1250,7 @@ export type ChartSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   updatedAt?: boolean
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
-  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.Chart$queryArgs<ExtArgs>
 }, ExtArgs["result"]["chart"]>
 
 export type ChartSelectScalar = {
@@ -1276,17 +1276,17 @@ export type ChartOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type ChartInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
-  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.Chart$queryArgs<ExtArgs>
 }
 export type ChartIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
-  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.Chart$queryArgs<ExtArgs>
 }
 export type ChartIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   stack?: boolean | Prisma.StackDefaultArgs<ExtArgs>
   dashboard?: boolean | Prisma.DashboardDefaultArgs<ExtArgs>
-  query?: boolean | Prisma.QueryDefaultArgs<ExtArgs>
+  query?: boolean | Prisma.Chart$queryArgs<ExtArgs>
 }
 
 export type $ChartPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1294,7 +1294,7 @@ export type $ChartPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     stack: Prisma.$StackPayload<ExtArgs>
     dashboard: Prisma.$DashboardPayload<ExtArgs>
-    query: Prisma.$QueryPayload<ExtArgs>
+    query: Prisma.$QueryPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1302,7 +1302,7 @@ export type $ChartPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     version: number
     stackId: string
     dashboardId: string
-    queryId: string
+    queryId: string | null
     type: $Enums.ChartType
     label: string
     description: string | null
@@ -1709,7 +1709,7 @@ export interface Prisma__ChartClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   stack<T extends Prisma.StackDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StackDefaultArgs<ExtArgs>>): Prisma.Prisma__StackClient<runtime.Types.Result.GetResult<Prisma.$StackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   dashboard<T extends Prisma.DashboardDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DashboardDefaultArgs<ExtArgs>>): Prisma.Prisma__DashboardClient<runtime.Types.Result.GetResult<Prisma.$DashboardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  query<T extends Prisma.QueryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.QueryDefaultArgs<ExtArgs>>): Prisma.Prisma__QueryClient<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  query<T extends Prisma.Chart$queryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Chart$queryArgs<ExtArgs>>): Prisma.Prisma__QueryClient<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2148,6 +2148,25 @@ export type ChartDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Charts to delete.
    */
   limit?: number
+}
+
+/**
+ * Chart.query
+ */
+export type Chart$queryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Query
+   */
+  select?: Prisma.QuerySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Query
+   */
+  omit?: Prisma.QueryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QueryInclude<ExtArgs> | null
+  where?: Prisma.QueryWhereInput
 }
 
 /**

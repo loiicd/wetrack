@@ -1,13 +1,6 @@
 "use client";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
@@ -23,6 +16,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import ChartWrapper from "../chartWrapper";
 
 type BarChartCardProps = {
   title: string;
@@ -100,85 +94,74 @@ const BarChartCard = ({
   const stackId = stacked ? "stack" : undefined;
 
   return (
-    <Card className="flex h-full flex-col">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent className="min-h-0 flex-1 overflow-hidden pb-2">
-        {rechartsData.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Keine Daten für dieses Chart.
-          </p>
-        ) : (
-          <ChartContainer config={chartConfig} className="h-full w-full">
-            <BarChart
-              accessibilityLayer
-              data={rechartsData}
-              layout={rechartsLayout}
-              margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
-            >
-              <CartesianGrid
-                vertical={orientation === "vertical"}
-                horizontal={orientation === "horizontal"}
-              />
+    <ChartWrapper title={title} description={description}>
+      {rechartsData.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Keine Daten für dieses Chart.
+        </p>
+      ) : (
+        <ChartContainer config={chartConfig} className="h-full w-full">
+          <BarChart
+            accessibilityLayer
+            data={rechartsData}
+            layout={rechartsLayout}
+            margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
+          >
+            <CartesianGrid
+              vertical={orientation === "vertical"}
+              horizontal={orientation === "horizontal"}
+            />
 
-              {orientation === "horizontal" ? (
-                <>
-                  <YAxis
-                    type="category"
-                    dataKey={categoryField}
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    width={100}
-                  />
-                  <XAxis type="number" hide={!showLabels} />
-                </>
-              ) : (
-                <>
-                  <XAxis
-                    type="category"
-                    dataKey={categoryField}
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                  />
-                  <YAxis type="number" hide={!showLabels} />
-                </>
-              )}
-
-              {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent />}
+            {orientation === "horizontal" ? (
+              <>
+                <YAxis
+                  type="category"
+                  dataKey={categoryField}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  width={100}
                 />
-              )}
+                <XAxis type="number" hide={!showLabels} />
+              </>
+            ) : (
+              <>
+                <XAxis
+                  type="category"
+                  dataKey={categoryField}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
+                <YAxis type="number" hide={!showLabels} />
+              </>
+            )}
 
-              {valueFields.map((vf, i) => (
-                <Bar
-                  key={vf}
-                  dataKey={vf}
-                  fill={
-                    colors?.[i] ?? DEFAULT_COLORS[i % DEFAULT_COLORS.length]
-                  }
-                  radius={stacked ? 0 : 4}
-                  stackId={stackId}
-                >
-                  {showLabels && (
-                    <LabelList
-                      dataKey={vf}
-                      position={orientation === "horizontal" ? "right" : "top"}
-                      className="fill-foreground text-xs"
-                    />
-                  )}
-                </Bar>
-              ))}
-            </BarChart>
-          </ChartContainer>
-        )}
-      </CardContent>
-    </Card>
+            {showTooltip && (
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            )}
+
+            {valueFields.map((vf, i) => (
+              <Bar
+                key={vf}
+                dataKey={vf}
+                fill={colors?.[i] ?? DEFAULT_COLORS[i % DEFAULT_COLORS.length]}
+                radius={stacked ? 0 : 4}
+                stackId={stackId}
+              >
+                {showLabels && (
+                  <LabelList
+                    dataKey={vf}
+                    position={orientation === "horizontal" ? "right" : "top"}
+                    className="fill-foreground text-xs"
+                  />
+                )}
+              </Bar>
+            ))}
+          </BarChart>
+        </ChartContainer>
+      )}
+    </ChartWrapper>
   );
 };
 

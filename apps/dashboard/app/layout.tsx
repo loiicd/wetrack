@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ApplicationShell11 } from "@/components/application-shell11";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const nunitoSans = Nunito_Sans({ variable: "--font-sans" });
 
@@ -32,14 +33,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ApplicationShell11>{children}</ApplicationShell11>
-        </ThemeProvider>
+        <ClerkProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ApplicationShell11>{children}</ApplicationShell11>
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

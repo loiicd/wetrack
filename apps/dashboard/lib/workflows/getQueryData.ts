@@ -27,7 +27,10 @@ export const getQueryData = async (queryId: string): Promise<unknown> => {
     if (!query.jsonPath) {
       throw new Error(`JSONPath-Query '${query.key}' hat keinen jsonPath.`);
     }
-    const result = JSONPath({ path: query.jsonPath, json: sourceData as object });
+    const result = JSONPath({
+      path: query.jsonPath,
+      json: sourceData as object,
+    });
     console.log("JSONPath-Query Ergebnis:", result);
     return result;
   }

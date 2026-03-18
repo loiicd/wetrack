@@ -89,7 +89,9 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="min-h-0 flex-1">
-          <OrganizationSwitch />
+          <React.Suspense fallback={null}>
+            <OrganizationSwitch />
+          </React.Suspense>
           <NavPrimary items={data.navPrimary} />
         </ScrollArea>
       </SidebarContent>

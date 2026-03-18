@@ -49,6 +49,7 @@ import {
   SidebarProvider,
   useSidebar,
 } from "@/components/ui/sidebar";
+import OrganizationSwitch from "./organizationSwitch";
 
 const data = {
   user: {
@@ -87,48 +88,6 @@ function NavPrimary({
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  );
-}
-
-function FooterLinks() {
-  return (
-    <div className="px-4 py-4 text-xs text-muted-foreground">
-      <div className="flex flex-wrap gap-x-2 gap-y-1">
-        <a href="#" className="hover:underline">
-          About
-        </a>
-        <a href="#" className="hover:underline">
-          Press
-        </a>
-        <a href="#" className="hover:underline">
-          Copyright
-        </a>
-        <a href="#" className="hover:underline">
-          Contact us
-        </a>
-        <a href="#" className="hover:underline">
-          Creators
-        </a>
-        <a href="#" className="hover:underline">
-          Advertise
-        </a>
-        <a href="#" className="hover:underline">
-          Developers
-        </a>
-      </div>
-      <div className="mt-2 flex flex-wrap gap-x-2 gap-y-1">
-        <a href="#" className="hover:underline">
-          Terms
-        </a>
-        <a href="#" className="hover:underline">
-          Privacy
-        </a>
-        <a href="#" className="hover:underline">
-          Policy & Safety
-        </a>
-      </div>
-      <p className="mt-3">© 2025 Zerotube</p>
-    </div>
   );
 }
 
@@ -244,12 +203,10 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="min-h-0 flex-1">
+          <OrganizationSwitch />
           <NavPrimary items={data.navPrimary} />
         </ScrollArea>
       </SidebarContent>
-      <SidebarFooter className="group-data-[collapsible=icon]:hidden">
-        <FooterLinks />
-      </SidebarFooter>
     </Sidebar>
   );
 }

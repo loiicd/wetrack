@@ -14,7 +14,8 @@
         "DATABASE_URL_UNPOOLED",
         "POSTGRES_*",
         "PG*",
-        "NEON_PROJECT_ID"
+        "NEON_PROJECT_ID",
+        "CLERK_SECRET_KEY"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]

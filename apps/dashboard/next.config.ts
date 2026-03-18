@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       alasql: "../../node_modules/alasql/dist/alasql.js",
     },
   },
+  images: {
+    remotePatterns: [new URL("https://img.clerk.com/*")],
+  },
 };
 
 export default nextConfig;

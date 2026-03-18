@@ -1,31 +1,31 @@
 import { membership } from "@/lib/clerk/membership";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { auth } from "@clerk/nextjs/server";
+import OrganizationSwitchDropdown from "./organizationSwitchDropdown";
+import { testAuth } from "@/lib/auth/testAuth";
+import organizationInterface from "@/lib/clerk/organization";
 
 const OrganizationSwitch = async () => {
-  const { userId, orgId } = await auth();
-  if (!userId) return null;
+  const { userId, orgId } = await testAuth();
+
+  const activeOrganization = await organizationInterface.get(orgId);
+
+  const activeOrganizationData = {
+    id: activeOrganization.id,
+    name: activeOrganization.name,
+    imageUrl: activeOrganization.imageUrl,
+  };
 
   const memberships = await membership.get(userId);
+  const organizations = memberships.map((m) => ({
+    id: m.organization.id,
+    name: m.organization.name,
+    imageUrl: m.organization.imageUrl,
+  }));
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Organizations</DropdownMenuLabel>
-        {memberships.map((membership) => (
-          <DropdownMenuItem key={membership.id}>
-            {membership.organization.name}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <OrganizationSwitchDropdown
+      organizations={organizations}
+      activeOrganization={activeOrganizationData}
+    />
   );
 };
 

@@ -39,6 +39,8 @@ import {
 } from "@/components/ui/sidebar";
 import OrganizationSwitch from "./organizationSwitch";
 import { SiteHeader } from "./site-header";
+import { Suspense } from "react";
+import OrganizationSwitchSkeleton from "./organizationSwitchSkeleton";
 
 const data = {
   user: {
@@ -89,9 +91,9 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="min-h-0 flex-1">
-          <React.Suspense fallback={null}>
+          <Suspense fallback={<OrganizationSwitchSkeleton />}>
             <OrganizationSwitch />
-          </React.Suspense>
+          </Suspense>
           <NavPrimary items={data.navPrimary} />
         </ScrollArea>
       </SidebarContent>

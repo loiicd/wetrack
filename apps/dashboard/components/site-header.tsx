@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  Menu,
-  Search,
-} from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 

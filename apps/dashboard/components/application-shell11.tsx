@@ -230,7 +230,7 @@ export async function ApplicationShell11({
         className="flex flex-col"
         style={{ "--sidebar-width-icon": "3rem" } as React.CSSProperties}
       >
-        <SiteHeader userSlot={<UserDropdown />} />
+        <SiteHeader userSlot={<Suspense fallback={null}><UserDropdown /></Suspense>} />
         <div className="hidden flex-1 pt-(--header-height) md:flex">
           <AppSidebar />
           <SidebarInset>{children}</SidebarInset>

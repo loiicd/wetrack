@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ApplicationShell11 } from "@/components/application-shell11";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const nunitoSans = Nunito_Sans({ variable: "--font-sans" });
 
@@ -40,7 +41,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             enableSystem
             disableTransitionOnChange
           >
-            <ApplicationShell11>{children}</ApplicationShell11>
+            <ApplicationShell11>
+              {children}
+              <Toaster />
+            </ApplicationShell11>
           </ThemeProvider>
         </ClerkProvider>
       </body>

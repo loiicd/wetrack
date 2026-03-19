@@ -1,7 +1,10 @@
+import { Permission } from "@/types/permission";
 import { auth } from "@clerk/nextjs/server";
+import { authorization } from "./authorization";
 
 export const withAuth = async <T>(
-  action: (userId: string) => Promise<T>,
+  role: "org:admin" | "org:member",
+  action: (userId: string, orgId: string) => Promise<T>,
 ): Promise<T> => {
   const { userId, isAuthenticated, orgId } = await auth();
 
@@ -13,5 +16,10 @@ export const withAuth = async <T>(
     throw new Error("Organization ID is required");
   }
 
-  return await action(userId);
+  const isAuthorized = await authorization(role);
+  if (!isAuthorized) {
+    throw new Error("Forbidden");
+  }
+
+  return await action(userId, orgId);
 };

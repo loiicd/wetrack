@@ -37,6 +37,9 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
+import type { Route } from "next";
+import UserDropdown from "./userDropdown";
 import OrganizationSwitch from "./organizationSwitch";
 import { SiteHeader } from "./site-header";
 import { Suspense } from "react";
@@ -50,17 +53,25 @@ const data = {
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar1.jpg",
   },
   navPrimary: [
-    { title: "Home", url: "/", icon: Home, isActive: true },
-    { title: "Dashboards", url: "/dashboard", icon: LayoutDashboardIcon },
-    { title: "Data Sources", url: "/datasource", icon: EthernetPortIcon },
-    { title: "Queries", url: "/query", icon: Search },
+    { title: "Home", url: "/" as Route, icon: Home, isActive: true },
+    {
+      title: "Dashboards",
+      url: "/dashboard" as Route,
+      icon: LayoutDashboardIcon,
+    },
+    {
+      title: "Data Sources",
+      url: "/datasource" as Route,
+      icon: EthernetPortIcon,
+    },
+    { title: "Queries", url: "/query" as Route, icon: Search },
   ],
 };
 
 function NavPrimary({
   items,
 }: {
-  items: { title: string; url: string; icon: LucideIcon; isActive?: boolean }[];
+  items: { title: string; url: Route; icon: LucideIcon; isActive?: boolean }[];
 }) {
   return (
     <SidebarGroup>
@@ -70,7 +81,7 @@ function NavPrimary({
             <SidebarMenuButton
               isActive={item.isActive}
               tooltip={item.title}
-              render={<a href={item.url} />}
+              render={<Link href={item.url} />}
             >
               <item.icon />
               <span>{item.title}</span>
@@ -91,9 +102,13 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="min-h-0 flex-1">
-          <Suspense fallback={<OrganizationSwitchSkeleton />}>
-            <OrganizationSwitch />
-          </Suspense>
+          <SidebarGroup>
+            <SidebarMenu>
+              <Suspense fallback={<OrganizationSwitchSkeleton />}>
+                <OrganizationSwitch />
+              </Suspense>
+            </SidebarMenu>
+          </SidebarGroup>
           <NavPrimary items={data.navPrimary} />
         </ScrollArea>
       </SidebarContent>
@@ -183,9 +198,9 @@ function MobileBottomNav() {
         {data.navPrimary.map((item) => {
           const Icon = item.icon;
           return (
-            <button
+            <Link
               key={item.title}
-              type="button"
+              href={item.url}
               className={cn(
                 "flex flex-col items-center gap-1 py-2 text-xs transition-colors",
                 item.isActive
@@ -196,7 +211,7 @@ function MobileBottomNav() {
               <Icon className="size-5" />
               <span className="sr-only">{item.title}</span>
               <span aria-hidden="true">{item.title}</span>
-            </button>
+            </Link>
           );
         })}
       </div>
@@ -215,7 +230,7 @@ export async function ApplicationShell11({
         className="flex flex-col"
         style={{ "--sidebar-width-icon": "3rem" } as React.CSSProperties}
       >
-        <SiteHeader />
+        <SiteHeader userSlot={<UserDropdown />} />
         <div className="hidden flex-1 pt-(--header-height) md:flex">
           <AppSidebar />
           <SidebarInset>{children}</SidebarInset>

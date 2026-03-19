@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import ClockCard from "@/components/charts/clockCard";
 import Container from "@/components/layout/container";
-import OrganizationSwitch from "@/components/organizationSwitch";
 
 const Page = async () => {
   return (

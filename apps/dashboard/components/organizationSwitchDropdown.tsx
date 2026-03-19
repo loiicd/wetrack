@@ -53,7 +53,7 @@ const OrganizationSwitchDropdown = ({
       <DropdownMenuTrigger
         render={
           <SidebarMenuButton
-            variant="outline"
+            variant="default"
             size="lg"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
@@ -104,7 +104,7 @@ const OrganizationSwitchDropdown = ({
         <DropdownMenuGroup>
           <DropdownMenuItem className="gap-2 p-2">
             <PlusIcon />
-            Create new organization
+            Create organization
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

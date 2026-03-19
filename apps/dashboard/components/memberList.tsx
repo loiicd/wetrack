@@ -1,6 +1,7 @@
 import { testAuth } from "@/lib/auth/testAuth";
 import { membership } from "@/lib/clerk/membership";
 import UserSettingCard from "./userSettingCard";
+import InviteUserDialog from "./inviteUserDialog";
 
 const MemberList = async () => {
   const { orgId } = await testAuth();
@@ -13,6 +14,7 @@ const MemberList = async () => {
         <h3 className="text-2xl font-semibold tracking-tight">
           Workspace Members
         </h3>
+        <InviteUserDialog />
       </div>
       <div className="space-y-4">
         <p className="text-xs font-semibold text-muted-foreground">

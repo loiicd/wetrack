@@ -4,7 +4,14 @@ import { testAuth } from "@/lib/auth/testAuth";
 import organizationInterface from "@/lib/clerk/organization";
 
 const OrganizationSwitch = async () => {
-  const { userId, orgId } = await testAuth();
+  let userId: string;
+  let orgId: string;
+
+  try {
+    ({ userId, orgId } = await testAuth());
+  } catch {
+    return null;
+  }
 
   const activeOrganization = await organizationInterface.get(orgId);
 

@@ -1,11 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
-import { notFound } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 export const testAuth = async () => {
+  // await connection();
   const { userId, isAuthenticated, orgId } = await auth();
 
   if (!isAuthenticated || !userId || !orgId) {
-    return notFound();
+    // return redirect("/");
+    throw new Error("Unauthorized");
   }
 
   return { userId, orgId };

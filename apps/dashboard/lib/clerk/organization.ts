@@ -2,7 +2,8 @@ import client from "./clerkClient";
 
 const organizationInterface = {
   async get(id: string) {
-    return await client.organizations.getOrganization({
+    const cl = await client();
+    return await cl.organizations.getOrganization({
       organizationId: id,
     });
   },

@@ -19,6 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { inviteMembership } from "@/actions/membership/invite";
+import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
+import { Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.email(),
@@ -26,6 +31,8 @@ const formSchema = z.object({
 });
 
 const InviteUserForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,8 +40,19 @@ const InviteUserForm = () => {
     },
   });
 
+  const selectItems = [
+    { value: "org:admin", label: "Admin" },
+    { value: "org:member", label: "Member" },
+  ];
+
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log("Invite user with data:", data);
+    const result = await inviteMembership(data.email, data.role);
+    if (result.success) {
+      form.reset();
+      router.refresh();
+    } else {
+      toast.error(result.error || "Failed to invite user");
+    }
   };
 
   return (
@@ -58,14 +76,21 @@ const InviteUserForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Role</FieldLabel>
-                <Select value={field.value}>
+                <Select
+                  value={field.value}
+                  items={selectItems}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger className="w-45">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="org:admin">Admin</SelectItem>
-                      <SelectItem value="org:member">Member</SelectItem>
+                      {selectItems.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -73,6 +98,13 @@ const InviteUserForm = () => {
               </Field>
             )}
           />
+          <Button type="submit">
+            {form.formState.isSubmitting ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              "Invite"
+            )}
+          </Button>
         </FieldSet>
       </FieldGroup>
     </form>

@@ -2,18 +2,14 @@ import {
   BadgeCheck,
   Bell,
   CreditCard,
-  Home,
   LogOut,
-  type LucideIcon,
   Search,
   Sparkles,
-  LayoutDashboardIcon,
-  EthernetPortIcon,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import * as React from "react";
 
-import { cn, getInitials } from "@/lib/utils";
+import { getInitials } from "@/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -33,17 +29,17 @@ import {
   SidebarGroup,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
-import type { Route } from "next";
 import UserDropdown from "./userDropdown";
 import OrganizationSwitch from "./organizationSwitch";
 import { SiteHeader } from "./site-header";
 import { Suspense } from "react";
 import OrganizationSwitchSkeleton from "./organizationSwitchSkeleton";
+import {
+  PrimaryNavigationMobile,
+  PrimaryNavigationSidebar,
+} from "./layout/primaryNavigation";
 
 const data = {
   user: {
@@ -52,46 +48,7 @@ const data = {
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar/avatar1.jpg",
   },
-  navPrimary: [
-    { title: "Home", url: "/" as Route, icon: Home, isActive: true },
-    {
-      title: "Dashboards",
-      url: "/dashboard" as Route,
-      icon: LayoutDashboardIcon,
-    },
-    {
-      title: "Data Sources",
-      url: "/datasource" as Route,
-      icon: EthernetPortIcon,
-    },
-    { title: "Queries", url: "/query" as Route, icon: Search },
-  ],
 };
-
-function NavPrimary({
-  items,
-}: {
-  items: { title: string; url: Route; icon: LucideIcon; isActive?: boolean }[];
-}) {
-  return (
-    <SidebarGroup>
-      <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton
-              isActive={item.isActive}
-              tooltip={item.title}
-              render={<Link href={item.url} />}
-            >
-              <item.icon />
-              <span>{item.title}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
-  );
-}
 
 async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -109,7 +66,7 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </Suspense>
             </SidebarMenu>
           </SidebarGroup>
-          <NavPrimary items={data.navPrimary} />
+          <PrimaryNavigationSidebar />
         </ScrollArea>
       </SidebarContent>
     </Sidebar>
@@ -191,34 +148,6 @@ function MobileHeader() {
   );
 }
 
-function MobileBottomNav() {
-  return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 backdrop-blur md:hidden">
-      <div className="grid grid-cols-4">
-        {data.navPrimary.map((item) => {
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.title}
-              href={item.url}
-              className={cn(
-                "flex flex-col items-center gap-1 py-2 text-xs transition-colors",
-                item.isActive
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
-            >
-              <Icon className="size-5" />
-              <span className="sr-only">{item.title}</span>
-              <span aria-hidden="true">{item.title}</span>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
-  );
-}
-
 export async function ApplicationShell11({
   children,
 }: {
@@ -244,7 +173,7 @@ export async function ApplicationShell11({
         <div className="flex flex-col md:hidden">
           <MobileHeader />
           <div className="pb-16">{children}</div>
-          <MobileBottomNav />
+          <PrimaryNavigationMobile />
         </div>
       </SidebarProvider>
     </div>

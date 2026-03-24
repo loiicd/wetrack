@@ -13,4 +13,8 @@ export const stackInterface = {
     });
     return stackRecord.id as StackId;
   },
+
+  async getMany() {
+    return await prisma.stack.findMany();
+  },
 };

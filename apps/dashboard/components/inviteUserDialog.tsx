@@ -1,6 +1,8 @@
 "use client";
 
+import { UserRoundPlusIcon } from "lucide-react";
 import InviteUserForm from "./inviteUserForm";
+import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +15,14 @@ import {
 const InviteUserDialog = () => {
   return (
     <Dialog>
-      <DialogTrigger>Invite</DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button>
+            <UserRoundPlusIcon />
+            <span>Invite User</span>
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>

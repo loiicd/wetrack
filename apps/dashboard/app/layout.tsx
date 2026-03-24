@@ -41,10 +41,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             enableSystem
             disableTransitionOnChange
           >
-            <ApplicationShell11>
-              {children}
-              <Toaster />
-            </ApplicationShell11>
+            {children}
+            <Toaster />
           </ThemeProvider>
         </ClerkProvider>
       </body>

@@ -12,9 +12,10 @@ import {
 } from "./ui/dropdown-menu";
 import { ChevronsUpDownIcon, PlusIcon } from "lucide-react";
 import { SidebarMenuButton } from "./ui/sidebar";
-import { useOrganizationList } from "@clerk/nextjs";
+import { CreateOrganization, useOrganizationList } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useOptimistic, useTransition } from "react";
+import { Suspense, useOptimistic, useState, useTransition } from "react";
+import { Dialog, DialogContent } from "./ui/dialog";
 
 type Organization = {
   id: string;
@@ -35,6 +36,7 @@ const OrganizationSwitchDropdown = ({
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [displayed, setOptimisticOrg] = useOptimistic(activeOrganization);
+  const [createOrganizationOpen, setCreateOrganizationOpen] = useState(false);
 
   if (!setActive) {
     return null;
@@ -102,12 +104,26 @@ const OrganizationSwitchDropdown = ({
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="gap-2 p-2">
+          <DropdownMenuItem
+            className="gap-2 p-2"
+            onClick={() => setCreateOrganizationOpen(true)}
+          >
             <PlusIcon />
             Create organization
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
+
+      <Dialog
+        open={createOrganizationOpen}
+        onOpenChange={setCreateOrganizationOpen}
+      >
+        <DialogContent className="w-fit max-w-[calc(100%-2rem)] border-none bg-transparent p-0 shadow-none ring-0 sm:max-w-175">
+          <Suspense>
+            <CreateOrganization />
+          </Suspense>
+        </DialogContent>
+      </Dialog>
     </DropdownMenu>
   );
 };

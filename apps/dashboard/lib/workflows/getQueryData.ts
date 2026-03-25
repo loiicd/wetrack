@@ -3,15 +3,15 @@ import alasql from "alasql";
 import { queryInterface } from "../database/query";
 import { getChartData } from "./getChartData";
 import { validateSql } from "../sql/validateSql";
+import { unstable_cache } from "next/cache";
 
-export const getQueryData = async (queryId: string): Promise<unknown> => {
+const executeQuery = async (queryId: string): Promise<unknown> => {
   const query = await queryInterface.getById(queryId);
 
   if (!query) {
     throw new Error("Query not found");
   }
 
-  // Quelldaten laden – entweder von DataSource oder von einer anderen Query
   let sourceData: unknown;
   if (query.dataSourceId) {
     sourceData = await getChartData(query.dataSourceId);
@@ -27,12 +27,7 @@ export const getQueryData = async (queryId: string): Promise<unknown> => {
     if (!query.jsonPath) {
       throw new Error(`JSONPath-Query '${query.key}' hat keinen jsonPath.`);
     }
-    const result = JSONPath({
-      path: query.jsonPath,
-      json: sourceData as object,
-    });
-    console.log("JSONPath-Query Ergebnis:", result);
-    return result;
+    return JSONPath({ path: query.jsonPath, json: sourceData as object });
   }
 
   if (query.type === "SQL") {
@@ -41,10 +36,20 @@ export const getQueryData = async (queryId: string): Promise<unknown> => {
     }
     validateSql(query.sql);
     const data = Array.isArray(sourceData) ? sourceData : [sourceData];
-    const result = alasql(query.sql, [data]);
-    console.log("SQL-Query Ergebnis:", result);
-    return result;
+    return alasql(query.sql, [data]);
   }
 
   throw new Error(`Unbekannter Query-Typ: ${query.type}`);
+};
+
+export const getQueryData = async (queryId: string): Promise<unknown> => {
+  const cachedExecute = unstable_cache(
+    () => executeQuery(queryId),
+    [`query:${queryId}`],
+    {
+      revalidate: 60,
+      tags: [`query:${queryId}`],
+    },
+  );
+  return cachedExecute();
 };

@@ -13,12 +13,6 @@ enum Environment {
   DEVELOPMENT
 }
 
-enum TransformFunction {
-  SUM
-  AVG
-  GROUP_BY
-}
-
 enum ChartType {
   BAR
   LINE
@@ -34,6 +28,7 @@ enum QueryType {
 model Stack {
   id          String      @id @default(uuid())
   key         String
+  orgId       String      @default("system")
   version     Int         @default(1)
   environment Environment
   createdAt   DateTime    @default(now())
@@ -43,10 +38,8 @@ model Stack {
   dataSources DataSource[]
   charts      Chart[]
   queries     Query[]
-  transforms  Transform[]
-  credentials Credential[]
 
-  @@unique([key, environment])
+  @@unique([key, environment, orgId])
 }
 
 model Dashboard {
@@ -124,35 +117,20 @@ model Query {
   sourceQuery    Query?      @relation("QuerySource", fields: [sourceQueryId], references: [id])
   derivedQueries Query[]     @relation("QuerySource")
   charts         Chart[]
-  transforms     Transform[]
 
   @@unique([stackId, key])
 }
 
-model Transform {
-  id           String            @id @default(uuid())
-  key          String
-  version      Int               @default(1)
-  stackId      String
-  queryId      String
-  function     TransformFunction
-  field        String
-  groupByField String?
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-
-  stack Stack @relation(fields: [stackId], references: [id])
-  query Query @relation(fields: [queryId], references: [id])
-}
-
+// Vault for storing encrypted external API credentials (not stack-scoped)
 model Credential {
-  id        String   @id @default(uuid())
-  key       String
-  version   Int      @default(1)
-  stackId   String
-  secret    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  orgId          String
+  label          String
+  type           String   // "api-key" | "bearer" | "basic" | "header"
+  encryptedValue String
+  headerName     String?  // for "header" type: the HTTP header name
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  stack Stack @relation(fields: [stackId], references: [id])
+  @@unique([orgId, label])
 }

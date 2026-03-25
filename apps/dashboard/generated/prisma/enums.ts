@@ -18,15 +18,6 @@ export const Environment = {
 export type Environment = (typeof Environment)[keyof typeof Environment]
 
 
-export const TransformFunction = {
-  SUM: 'SUM',
-  AVG: 'AVG',
-  GROUP_BY: 'GROUP_BY'
-} as const
-
-export type TransformFunction = (typeof TransformFunction)[keyof typeof TransformFunction]
-
-
 export const ChartType = {
   BAR: 'BAR',
   LINE: 'LINE',

@@ -1,141 +1,92 @@
-# Dashboard-as-Code Plattform
+# WeTrack – Dashboard-as-Code Platform
 
-## Projektübersicht
-
-Dieses Projekt ist eine Plattform, die es ermöglicht, datengetriebene Anwendungen – insbesondere Dashboards und Entscheidungsunterstützungssysteme – schnell, flexibel und skalierbar zu erstellen. Im Kern verfolgt das Projekt einen „Configuration-as-Code“-Ansatz: Anstatt Anwendungen manuell zu entwickeln, werden sie über strukturierte Definitionen beschrieben und automatisch generiert.
-
-Ziel ist es, sowohl technischen als auch weniger technischen Nutzern eine Möglichkeit zu geben, komplexe Datenquellen zu verbinden, auszuwerten und visuell darzustellen, ohne jedes Mal eine individuelle Softwarelösung entwickeln zu müssen.
+WeTrack ist eine **Dashboard-as-Code** Plattform. Dashboards, Datenquellen, Queries und Charts werden als TypeScript-Code definiert und via CLI deployed.
 
 ---
 
-## Grundidee
+## Setup (lokal)
 
-Traditionell ist die Erstellung von Dashboards oder datenbasierten Tools oft aufwendig:
+### Voraussetzungen
+- [Bun](https://bun.sh) ≥ 1.2 · Node.js ≥ 18 · PostgreSQL · [Clerk](https://clerk.com) Account
 
-- Daten müssen aus verschiedenen Quellen integriert werden
-- Logik wird individuell programmiert
-- Visualisierungen werden manuell gebaut
-- Anpassungen sind teuer und langsam
+```bash
+git clone https://github.com/your-org/wetrack
+cd wetrack
+bun install
+cp apps/dashboard/.env.example apps/dashboard/.env
+# .env befüllen (DATABASE_URL, CLERK_*, VAULT_SECRET)
+```
 
-Dieses Projekt dreht diesen Ansatz um:
-
-Statt **Code für jedes Dashboard zu schreiben**, definieren Nutzer:
-
-- **Datenquellen** (z. B. APIs, Datenbanken)
-- **Transformationen** (z. B. SQL-ähnliche Queries oder JSONPath)
-- **Struktur und Layout**
-- **Visualisierungen (Charts, Widgets)**
-
-Diese Definitionen werden automatisch in eine funktionierende Anwendung übersetzt.
-
----
-
-## Kernkomponenten
-
-### 1. Datenquellen (Data Sources)
-
-Nutzer können verschiedene Datenquellen anbinden, z. B.:
-
-- REST APIs
-- externe Services
-- statische Daten
-- zukünftige Integration von Datenbanken oder SaaS-Systemen
-
-Die Daten werden in ein einheitliches Format überführt, sodass sie konsistent weiterverarbeitet werden können.
+```bash
+cd apps/dashboard
+npx prisma migrate deploy
+npx prisma generate
+bun run dev   # http://localhost:3000
+```
 
 ---
 
-### 2. Datenverarbeitung & Transformation
+## Deployment (Vercel)
 
-- Filterung, Aggregation und Mapping
-- Nutzung bekannter Paradigmen wie SQL-ähnliche Abfragen oder JSONPath
-- Automatische Typenerkennung (Datum, Geo-Daten, IDs)
+1. Repo auf Vercel importieren · Root Directory: `apps/dashboard`
+2. Build Command: `cd ../.. && bun run build --filter=dashboard`
+3. Environment Variables setzen:
 
-So können Nutzer aus Rohdaten genau die Informationen extrahieren, die sie benötigen.
+| Variable | Beschreibung |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL Connection String (Neon/Supabase empfohlen) |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk Publishable Key |
+| `CLERK_SECRET_KEY` | Clerk Secret Key |
+| `VAULT_SECRET` | AES-Key für Credential Vault (`openssl rand -base64 32`) |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | `/signIn` |
+| `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | `/signUp` |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL` | `/` |
+| `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL` | `/` |
 
----
-
-### 3. Visualisierung (Charts & Widgets)
-
-- Standard-Charts: Line, Bar, kombinierte Charts
-- Widgets / Cards als Container
-- Flexible Layouts und Kombination verschiedener Visualisierungstypen
-
----
-
-### 4. Dashboard-Definition (Dashboard as Code)
-
-- Struktur (Layout, Widgets)
-- Datenfluss (Quelle → Transformation → Chart)
-- Konfiguration der einzelnen Komponenten
-
-**Vorteile:**
-
-- Reproduzierbar
-- Versionierbar (z. B. via Git)
-- Leicht teilbar
+4. Nach erstem Deploy: `DATABASE_URL=<url> npx prisma migrate deploy`
 
 ---
 
-### 5. Erweiterbarkeit & Ökosystem
+## Clerk konfigurieren
 
-- Templates für wiederverwendbare Setups
-- Community-Contributions (z. B. npm-Packages)
-- Integrationen für verschiedene Anbieter
-
----
-
-### 6. Deployment & Ausführung
-
-- Einfache Bereitstellung der generierten Dashboards
-- Automatische Generierung von Funktionen / API-Endpunkten
-- Integration in bestehende Cloud-Anbieter
+1. [Clerk Dashboard](https://dashboard.clerk.com) → Neues Projekt → Keys kopieren
+2. User & Authentication → **Organizations** aktivieren
+3. API Keys → **Enable** (für CLI-Authentifizierung via Bearer Token)
 
 ---
 
-## Beispiel Use Case: SaaS-Finder
+## CLI
 
-Ein konkreter Anwendungsfall ist ein intelligenter SaaS-Finder:
+```bash
+bun add -g @wetrack/cli
+export WETRACK_API_KEY=<clerk-api-key>
+wetrack deploy mystack.ts --url https://your-app.vercel.app/api/dashboard
+```
 
-- Nutzer geben ihre Anforderungen ein
-- Das System analysiert passende Softwarelösungen
-- Anbieter-Daten werden aggregiert und bewertet
-- Ergebnisse werden strukturiert angezeigt
-
-Dieser Use Case zeigt, dass die Plattform nicht nur Dashboards bauen kann, sondern auch als Grundlage für **intelligente Entscheidungsanwendungen** dient.
-
----
-
-## Zielgruppe
-
-- Entwickler, die schnell datengetriebene Tools bauen wollen
-- Unternehmen, die individuelle Dashboards benötigen
-- Consultants, die Lösungen für Kunden evaluieren
-- Produktteams, die datenbasierte Features integrieren möchten
+Docs: [wetrack-cli/README.md](../wetrack-cli/README.md)
 
 ---
 
-## Mehrwert
+## Monorepo-Struktur
 
-- **Geschwindigkeit:** Anwendungen können deutlich schneller erstellt werden
-- **Flexibilität:** Anpassungen erfolgen über Konfiguration statt Code
-- **Wiederverwendbarkeit:** Templates und Module reduzieren Aufwand
-- **Skalierbarkeit:** Geeignet für einfache Dashboards bis komplexe Systeme
-- **Standardisierung:** Einheitlicher Ansatz für Datenverarbeitung und Visualisierung
+```
+wetrack/
+├── apps/dashboard/     # Next.js App
+├── apps/landing/       # Marketing Landing Page
+├── apps/documentation/ # Docs-Site (Fumadocs)
+├── packages/dashboard/ # SDK: dashboard_as_code
+└── packages/cli/       # CLI: @wetrack/cli
+```
 
----
+## Kernkonzepte
 
-## Vision
+| Konzept | Beschreibung |
+|---------|-------------|
+| **Stack** | Container (key + environment + orgId) |
+| **Dashboard** | Gruppe von Charts |
+| **DataSource** | REST API Connector |
+| **Query** | JSONPath/SQL Transformation (chainbar) |
+| **Chart** | BAR · LINE · STAT · CLOCK |
+| **Credential** | Verschlüsselter Vault für externe API-Keys |
 
-Langfristig soll das Projekt eine Plattform werden, die:
-
-- die Erstellung datengetriebener Anwendungen demokratisiert
-- als „Vercel für Data Apps“ fungiert
-- ein Ökosystem aus Templates, Integrationen und Community-Beiträgen bietet
-- sowohl Low-Code als auch Pro-Code Ansätze vereint
-
----
-
-## Kurzfassung
-
-Dieses Projekt ist eine Plattform zur Erstellung datengetriebener Anwendungen, bei der Dashboards, Datenlogik und Visualisierungen nicht programmiert, sondern deklarativ definiert werden. Dadurch können komplexe Anwendungen schneller, flexibler und skalierbarer umgesetzt werden.
+Für AI-Agent-Dokumentation: [AGENTS.md](./AGENTS.md)

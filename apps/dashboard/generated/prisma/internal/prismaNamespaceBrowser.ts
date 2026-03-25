@@ -56,7 +56,6 @@ export const ModelName = {
   DataSource: 'DataSource',
   Chart: 'Chart',
   Query: 'Query',
-  Transform: 'Transform',
   Credential: 'Credential'
 } as const
 
@@ -79,6 +78,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const StackScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  orgId: 'orgId',
   version: 'version',
   environment: 'environment',
   createdAt: 'createdAt',
@@ -155,28 +155,13 @@ export const QueryScalarFieldEnum = {
 export type QueryScalarFieldEnum = (typeof QueryScalarFieldEnum)[keyof typeof QueryScalarFieldEnum]
 
 
-export const TransformScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  version: 'version',
-  stackId: 'stackId',
-  queryId: 'queryId',
-  function: 'function',
-  field: 'field',
-  groupByField: 'groupByField',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type TransformScalarFieldEnum = (typeof TransformScalarFieldEnum)[keyof typeof TransformScalarFieldEnum]
-
-
 export const CredentialScalarFieldEnum = {
   id: 'id',
-  key: 'key',
-  version: 'version',
-  stackId: 'stackId',
-  secret: 'secret',
+  orgId: 'orgId',
+  label: 'label',
+  type: 'type',
+  encryptedValue: 'encryptedValue',
+  headerName: 'headerName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

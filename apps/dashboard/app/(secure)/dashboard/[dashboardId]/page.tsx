@@ -5,14 +5,13 @@ import LineChartCard from "@/components/charts/lineChartCard";
 import StatCard from "@/components/charts/statCard";
 import ChartGrid from "@/components/chartGrid";
 import DashboardBreadcrumb from "@/components/dashbordBreadcrumb";
+import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
 import Container from "@/components/layout/container";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
 import { toDataFrame } from "@/lib/dataframe";
@@ -26,7 +25,6 @@ import {
 import type { TimeZone } from "@/types/timezone";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
 import { MaximizeIcon } from "lucide-react";
 import { connection } from "next/server";
 
@@ -172,8 +170,8 @@ const DashboardContent = async ({
             </p>
           ) : null}
         </div>
-        <div>
-          <Button>Tets</Button>
+        <div className="flex items-center gap-2">
+          <RefreshDashboardButton dashboardId={dashboardId} />
           <Button variant="ghost" size="icon">
             <MaximizeIcon />
           </Button>

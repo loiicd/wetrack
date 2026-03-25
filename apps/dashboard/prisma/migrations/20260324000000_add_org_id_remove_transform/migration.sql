@@ -5,7 +5,7 @@ ALTER TABLE "Stack" ADD COLUMN "orgId" TEXT NOT NULL DEFAULT 'system';
 DROP INDEX "Stack_key_environment_key";
 
 -- Add new unique constraint including orgId
-ALTER TABLE "Stack" ADD CONSTRAINT "Stack_key_environment_orgId_key" UNIQUE ("key", "environment", "orgId");
+CREATE UNIQUE INDEX "Stack_key_environment_orgId_key" ON "Stack"("key", "environment", "orgId");
 
 -- Drop Transform table and its dependencies
 DROP TABLE IF EXISTS "Transform";

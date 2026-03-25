@@ -6,6 +6,25 @@ WeTrack ist eine **Dashboard-as-Code** Plattform. Dashboards werden als TypeScri
 
 Lies `AGENTS.md` im Repo-Root für die vollständige Referenz.
 
+## Vor jedem Commit: Pflicht-Checks
+
+**Niemals committen ohne diese Checks erfolgreich durchgeführt zu haben:**
+
+```bash
+# 1. TypeScript – Typfehler prüfen
+cd apps/dashboard && npx tsc --noEmit
+
+# 2. Build – Production Build prüfen (deckt Prerender-Fehler auf)
+cd apps/dashboard && bun run build
+
+# 3. Lint
+cd apps/dashboard && bun run lint
+```
+
+Alle drei müssen **ohne Fehler** durchlaufen. Warnungen sind ok, Fehler nicht.
+
+> Warum Build? Next.js 16 wirft beim statischen Prerendering Fehler (z.B. `usePathname()` außerhalb `<Suspense>`), die TypeScript nicht erkennt — nur `next build` deckt diese auf.
+
 ## Wichtigste Regeln
 
 1. **SDK-Imports** immer aus `"dashboard_as_code"`:

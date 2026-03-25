@@ -1,8 +1,8 @@
 -- Add orgId to Stack with a default for existing rows
 ALTER TABLE "Stack" ADD COLUMN "orgId" TEXT NOT NULL DEFAULT 'system';
 
--- Drop the old unique constraint
-ALTER TABLE "Stack" DROP CONSTRAINT "Stack_key_environment_key";
+-- Drop the old unique index
+DROP INDEX "Stack_key_environment_key";
 
 -- Add new unique constraint including orgId
 ALTER TABLE "Stack" ADD CONSTRAINT "Stack_key_environment_orgId_key" UNIQUE ("key", "environment", "orgId");

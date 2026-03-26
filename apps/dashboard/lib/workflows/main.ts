@@ -130,7 +130,9 @@ const createDataSources = async (
     stackId,
     key: dataSource.key,
     type: dataSource.type,
-    config: dataSource.config,
+    // Cast to satisfy Prisma's JsonValue requirement; config is always a valid JSON object
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    config: dataSource.config as any,
   }));
 
   await dataSourceInterface.createMany(dataSourcesToCreate);

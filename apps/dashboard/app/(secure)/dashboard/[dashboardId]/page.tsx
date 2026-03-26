@@ -27,10 +27,15 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { connection } from "next/server";
 
+type DashboardPageProps = {
+  params: Promise<{ dashboardId: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
 const DashboardContent = async ({
   props,
 }: {
-  props: PageProps<"/dashboard/[dashboardId]">;
+  props: DashboardPageProps;
 }) => {
   await connection();
   const { dashboardId } = await props.params;
@@ -206,7 +211,7 @@ const DashboardContent = async ({
   );
 };
 
-const Page = (props: PageProps<"/dashboard/[dashboardId]">) => {
+const Page = (props: DashboardPageProps) => {
   return (
     <Container>
       <Suspense fallback={<div>Loading dashboard…</div>}>

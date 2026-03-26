@@ -8,11 +8,11 @@ export async function refreshDashboard(dashboardId: string): Promise<void> {
 
   for (const chart of charts) {
     if (chart.queryId) {
-      revalidateTag(`query:${chart.queryId}`);
+      revalidateTag(`query:${chart.queryId}`, "max");
     }
     // Also invalidate the datasource cache so the actual HTTP call is re-made
     if (chart.query?.dataSourceId) {
-      revalidateTag(`datasource:${chart.query.dataSourceId}`);
+      revalidateTag(`datasource:${chart.query.dataSourceId}`, "max");
     }
   }
 

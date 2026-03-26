@@ -2,12 +2,14 @@ import DashboardCard from "@/components/cards/dashboardCard";
 import Container from "@/components/layout/container";
 import DashboardsEmptyState from "@/components/home/dashboardsEmptyState";
 import { dashboardInterface } from "@/lib/database/dashboard";
+import { auth } from "@clerk/nextjs/server";
 import { connection } from "next/server";
 import { Suspense } from "react";
 
 const DashboardGrid = async () => {
   await connection();
-  const dashboards = await dashboardInterface.getMany();
+  const { orgId } = await auth();
+  const dashboards = await dashboardInterface.getMany(orgId ?? undefined);
 
   if (dashboards.length === 0) {
     return <DashboardsEmptyState />;
@@ -33,4 +35,3 @@ const Page = () => {
 };
 
 export default Page;
-

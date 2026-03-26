@@ -6,56 +6,72 @@ description: WeTrack CLI commands and options
 ## Installation
 
 ```bash
-bun add -g @wetrack/cli   # with Bun
-npm install -g @wetrack/cli  # with npm
+npm install -g wetrack-cli   # global install with npm
+bun add -g wetrack-cli       # global install with Bun
+npx wetrack-cli              # run without installing
 ```
 
 ## Commands
 
 ### `wetrack synth <file>`
 
-Synthesizes a TypeScript stack file to JSON.
+Synthesizes a TypeScript stack file to JSON without deploying.
 
 ```bash
-wetrack synth mystack.ts
-wetrack synth mystack.ts -o output.json
+wetrack synth mystack.ts              # JSON → stdout
+wetrack synth mystack.ts -o out.json  # JSON → file
+wetrack synth mystack.ts --verbose    # show summary
 ```
 
 | Flag | Description |
 |------|-------------|
-| `-o, --output <path>` | Save to file instead of stdout |
-| `-v, --verbose` | Show summary |
+| `-o, --output <path>` | Write JSON to file instead of stdout |
+| `-v, --verbose` | Show stack summary (counts of entities) |
+
+---
 
 ### `wetrack deploy <file>`
 
-Synthesizes and deploys to WeTrack.
+Synthesizes and deploys a stack to the WeTrack API.
 
 ```bash
 wetrack deploy mystack.ts
-wetrack deploy mystack.ts --url https://app.wetrack.io/api/dashboard
 wetrack deploy mystack.ts --dry-run
+wetrack deploy mystack.ts --url https://app.wetrack.dev/api/dashboard
 ```
 
-| Flag | Description |
-|------|-------------|
-| `-u, --url <url>` | API URL (default: `http://localhost:3000/api/dashboard`) |
-| `-k, --api-key <key>` | Clerk API Key (or use `WETRACK_API_KEY` env var) |
-| `--dry-run` | Synthesize only, no deploy |
-| `-v, --verbose` | Verbose output |
+| Flag | Env Var | Default | Description |
+|------|---------|---------|-------------|
+| `-u, --url <url>` | `WETRACK_URL` | `https://app.wetrack.dev/api/dashboard` | API URL |
+| `-k, --api-key <key>` | `WETRACK_API_KEY` | — | Clerk API key |
+| `--dry-run` | — | `false` | Synthesize only — do not POST |
+| `-v, --verbose` | — | `false` | Show response body on success |
 
-### `wetrack validate <file>`
+---
 
-Validates a synthesized JSON file against the schema.
+### `wetrack validate <file.json>`
+
+Validates a synthesized JSON file against the WeTrack schema.
 
 ```bash
-wetrack validate output.json
+wetrack synth mystack.ts -o out.json
+wetrack validate out.json
 ```
 
-## Authentication
+---
 
-```bash
-export WETRACK_API_KEY=sk_live_xxx
-wetrack deploy mystack.ts --url https://app.wetrack.io/api/dashboard
-```
+## Exit codes
 
-Get your API key at **Settings → API Keys** in your WeTrack dashboard.
+| Code | Meaning |
+|------|---------|
+| `0` | Success |
+| `1` | Error (invalid file, validation failure, API error) |
+
+This makes the CLI fully compatible with CI/CD pipelines.
+
+## Environment variables
+
+| Variable | Description |
+|----------|-------------|
+| `WETRACK_API_KEY` | Clerk API key for authentication |
+| `WETRACK_URL` | Override the default API URL |

@@ -48,7 +48,10 @@ export const dataSourceInterface = {
   },
 
   async getById(id: string) {
-    return await prisma.dataSource.findUnique({ where: { id } });
+    return await prisma.dataSource.findUnique({
+      where: { id },
+      include: { stack: { select: { orgId: true } } },
+    });
   },
 
   async getByLatestStackKey(stackKey: string) {

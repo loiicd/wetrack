@@ -1,0 +1,102 @@
+---
+title: CI/CD Guide
+description: Automate dashboard deployments with GitHub Actions
+---
+
+## Overview
+
+Because WeTrack stacks are TypeScript files in your repository, you can deploy them automatically on every push — just like your application code.
+
+## GitHub Actions
+
+### Basic setup
+
+Create `.github/workflows/deploy-dashboards.yml`:
+
+```yaml
+name: Deploy WeTrack Dashboards
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dashboards/**"  # only run when dashboard files change
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy dashboards
+        run: npx wetrack-cli deploy dashboards/mystack.ts
+        env:
+          WETRACK_API_KEY: ${{ secrets.WETRACK_API_KEY }}
+```
+
+### Multiple stacks
+
+```yaml
+- name: Deploy production stack
+  run: npx wetrack-cli deploy dashboards/production.ts
+  env:
+    WETRACK_API_KEY: ${{ secrets.WETRACK_API_KEY }}
+
+- name: Deploy staging stack
+  run: npx wetrack-cli deploy dashboards/staging.ts
+  env:
+    WETRACK_API_KEY: ${{ secrets.WETRACK_API_KEY }}
+```
+
+### Dry run on pull requests
+
+Validate stacks on PRs without deploying:
+
+```yaml
+on:
+  pull_request:
+    paths: ["dashboards/**"]
+  push:
+    branches: [main]
+    paths: ["dashboards/**"]
+
+jobs:
+  validate-or-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate (PR) or Deploy (main)
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            npx wetrack-cli deploy dashboards/mystack.ts --dry-run
+          else
+            npx wetrack-cli deploy dashboards/mystack.ts
+          fi
+        env:
+          WETRACK_API_KEY: ${{ secrets.WETRACK_API_KEY }}
+```
+
+## Setting up the API key
+
+1. Log in to [app.wetrack.dev](https://app.wetrack.dev)
+2. Go to **Settings → API Keys**
+3. Create a new API key
+4. Add it to your GitHub repository as a secret named `WETRACK_API_KEY`
+   - Settings → Secrets and variables → Actions → New repository secret
+
+## Recommended repository structure
+
+```
+your-project/
+├── src/                    # your application code
+├── dashboards/             # WeTrack stacks
+│   ├── production.ts       # production environment
+│   ├── staging.ts          # staging environment
+│   └── shared/
+│       ├── datasources.ts  # reusable data sources
+│       └── queries.ts      # reusable queries
+└── .github/
+    └── workflows/
+        └── deploy-dashboards.yml
+```

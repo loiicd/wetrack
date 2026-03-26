@@ -1,59 +1,83 @@
 ---
 title: Getting Started
-description: Deploy your first dashboard in minutes
+description: Deploy your first dashboard in 5 minutes
 ---
 
 ## What is WeTrack?
 
-WeTrack is a **Dashboard-as-Code** platform. You define dashboards, data sources, queries and charts as TypeScript code, then deploy them with a single CLI command.
+WeTrack is a **Dashboard-as-Code** platform. You define dashboards, data sources, queries, and charts as TypeScript — then deploy with one CLI command.
+
+**Your dashboards live in your repo.** Version controlled, code reviewed, CI/CD deployed.
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) ≥ 1.2 or Node.js ≥ 18
-- A WeTrack account → [Sign up](https://app.wetrack.io/signUp)
-- An API Key (Settings → API Keys)
+- Node.js ≥ 18 or [Bun](https://bun.sh) ≥ 1.2
+- A WeTrack account → [Sign up](https://app.wetrack.dev/signUp)
+- An API Key → Settings → API Keys
 
-## Installation
+## Quickstart
+
+### 1. Install the SDK
 
 ```bash
-bun add -g @wetrack/cli
+npm install wetrack-dashboard
 ```
 
-## Your first stack
+### 2. Create your first stack
 
 Create `mystack.ts`:
 
 ```typescript
-import { Stack, Dashboard, DataSource, Query, Chart } from "dashboard_as_code";
+import { Stack, Dashboard, DataSource, Query, Chart } from "wetrack-dashboard";
 
-const stack = new Stack("my-first-stack", "PRODUCTION")
-  .addDashboard(new Dashboard("main", { label: "My Dashboard" }))
-  .addDataSource(new DataSource("api", {
-    type: "rest",
-    config: { url: "https://jsonplaceholder.typicode.com/todos", method: "get" }
-  }))
-  .addQuery(new Query("todos", {
-    type: "jsonpath",
-    dataSource: "api",
-    jsonPath: "$[*]"
-  }))
-  .addChart(new Chart("status-chart", {
-    dashboard: "main",
-    query: "todos",
-    label: "Todos by User",
-    type: "bar",
-    config: { categoryField: "userId", valueFields: ["id"] }
-  }));
-
-export default stack;
+export default new Stack("my-first-stack", "PRODUCTION")
+  .addDashboard(
+    new Dashboard("main", { label: "My Dashboard" })
+  )
+  .addDataSource(
+    new DataSource("api", {
+      type: "rest",
+      config: {
+        url: "https://jsonplaceholder.typicode.com/todos",
+        method: "get",
+      },
+    })
+  )
+  .addQuery(
+    new Query("todos", {
+      type: "jsonpath",
+      dataSource: "api",
+      jsonPath: "$[*]",
+    })
+  )
+  .addChart(
+    new Chart("status-chart", {
+      dashboard: "main",
+      source: { _entity: "query", key: "todos" },
+      label: "Todos by User",
+      type: "bar",
+      config: {
+        categoryField: "userId",
+        valueFields: ["id"],
+        orientation: "vertical",
+      },
+      layout: { x: 0, y: 0, w: 12, h: 3 },
+    })
+  );
 ```
 
-## Deploy
+### 3. Deploy
 
 ```bash
 export WETRACK_API_KEY=<your-api-key>
-wetrack deploy mystack.ts \
-  --url https://app.wetrack.io/api/dashboard
+npx wetrack-cli deploy mystack.ts
 ```
 
-Open your dashboard at `https://app.wetrack.io` 🎉
+Your dashboard is now live at [app.wetrack.dev](https://app.wetrack.dev) 🎉
+
+## Next steps
+
+- [SDK Reference](/docs/sdk-reference) — all classes and configuration options
+- [CLI Reference](/docs/cli-reference) — all commands and flags
+- [Credential Vault](/docs/credential-vault) — securely use API keys
+- [CI/CD Guide](/docs/ci-cd) — automate deploys with GitHub Actions

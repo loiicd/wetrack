@@ -51,7 +51,10 @@ export const dashboardInterface = {
   },
 
   async getById(id: string) {
-    return await prisma.dashboard.findUnique({ where: { id } });
+    return await prisma.dashboard.findUnique({
+      where: { id },
+      include: { stack: { select: { environment: true, key: true } } },
+    });
   },
 
   async getByStackId(stackId: string) {
@@ -60,8 +63,18 @@ export const dashboardInterface = {
     });
   },
 
-  async getMany() {
-    return await prisma.dashboard.findMany();
+  async getMany(orgId?: string) {
+    return await prisma.dashboard.findMany({
+      where: orgId
+        ? { stack: { orgId } }
+        : undefined,
+      include: {
+        stack: {
+          select: { environment: true, key: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
   },
 
   async getByStackKey(stackKey: string) {

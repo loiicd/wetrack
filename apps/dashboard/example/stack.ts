@@ -1,4 +1,4 @@
-import { Chart, Dashboard, DataSource, Query, Stack } from "dashboard_as_code";
+import { Chart, Dashboard, DataSource, Query, Stack } from "wetrack-dashboard";
 
 // ---- DataSources ----
 

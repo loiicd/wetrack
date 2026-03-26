@@ -1,0 +1,10 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "sdk-reference",
+    "cli-reference",
+    "credential-vault",
+    "ci-cd"
+  ]
+}

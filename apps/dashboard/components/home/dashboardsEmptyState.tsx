@@ -37,7 +37,7 @@ const DashboardsEmptyState = () => {
           <p className="mb-2 text-xs font-medium text-muted-foreground">Beispiel Stack deployen:</p>
           <pre className="text-xs">
             <code>{`wetrack deploy mystack.ts \\
-  --url ${typeof window !== "undefined" ? window.location.origin : "https://app.wetrack.io"}/api/dashboard`}</code>
+  --url ${typeof window !== "undefined" ? window.location.origin : "https://app.wetrack.dev"}/api/dashboard`}</code>
           </pre>
         </div>
       </div>

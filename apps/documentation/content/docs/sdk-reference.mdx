@@ -1,140 +1,234 @@
 ---
 title: SDK Reference
-description: dashboard_as_code TypeScript SDK
+description: Complete reference for the wetrack-dashboard SDK
 ---
 
 ## Installation
 
 ```bash
-bun add dashboard_as_code
+npm install wetrack-dashboard
 ```
 
 ## Stack
 
-Root container for all resources.
+The root container. Every `.ts` file must export a `Stack` as its default export.
 
 ```typescript
-const stack = new Stack("my-stack", "PRODUCTION");
-stack
-  .addDashboard(...)
-  .addDataSource(...)
-  .addQuery(...)
-  .addChart(...);
+import { Stack } from "wetrack-dashboard";
 
-const json = stack.synthesize(); // → StackDefinition
+export default new Stack("my-stack", "PRODUCTION");
 ```
 
-**Environments:** `"PRODUCTION"` | `"STAGING"` | `"DEVELOPMENT"`
+**Constructor**
+
+```typescript
+new Stack(key: string, environment: "PRODUCTION" | "STAGING" | "DEVELOPMENT")
+```
+
+**Methods**
+
+| Method | Description |
+|--------|-------------|
+| `.addDashboard(...dashboards)` | Add one or more dashboards |
+| `.addDataSource(...sources)` | Add one or more data sources |
+| `.addQuery(...queries)` | Add one or more queries |
+| `.addChart(...charts)` | Add one or more charts |
+| `.synthesize()` | Returns the stack as a JSON-serializable object |
+
+All methods return `this` for chaining.
+
+---
 
 ## Dashboard
 
+A container for charts. Each dashboard has an independent 12-column grid.
+
 ```typescript
-new Dashboard("key", { label: "My Dashboard", description?: "..." })
+import { Dashboard } from "wetrack-dashboard";
+
+const myDashboard = new Dashboard("sales", {
+  label: "Sales Dashboard",
+  description: "Monthly sales overview", // optional
+});
 ```
+
+**Constructor**
+
+```typescript
+new Dashboard(key: string, options: {
+  label: string;
+  description?: string;
+})
+```
+
+---
 
 ## DataSource
 
-REST API connector.
+An external data source. Currently supports REST APIs.
 
 ```typescript
-new DataSource("key", {
+import { DataSource } from "wetrack-dashboard";
+
+const api = new DataSource("my-api", {
   type: "rest",
   config: {
     url: "https://api.example.com/data",
-    method: "get",         // "get" | "post" | "put"
-    headers?: { "Authorization": "Bearer token" },
-  }
-})
+    method: "get",
+    headers: { "Accept": "application/json" }, // optional
+    credential: "my-api-key",                  // Vault label — optional
+  },
+});
 ```
+
+**Config options**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `url` | `string` | ✅ | Full URL of the REST endpoint |
+| `method` | `"get" \| "post" \| "put"` | ✅ | HTTP method |
+| `headers` | `Record<string, string>` | — | Custom HTTP headers |
+| `body` | `unknown` | — | Request body (for POST/PUT) |
+| `credential` | `string` | — | Credential Vault label (see [Credential Vault](/docs/credential-vault)) |
+
+---
 
 ## Query
 
-Data transformation. Can chain `dataSource → query → query`.
+Transforms data from a DataSource or another Query.
+
+### JSONPath Query
+
+Extracts data using a JSONPath expression.
 
 ```typescript
-// JSONPath query
-new Query("key", {
-  type: "jsonpath",
-  dataSource: "api-key",   // or sourceQuery: "other-query-key"
-  jsonPath: "$.items[*]",
-})
+import { Query } from "wetrack-dashboard";
 
-// SQL query
-new Query("key", {
-  type: "sql",
-  sourceQuery: "jsonpath-query-key",
-  sql: "SELECT category, SUM(value) AS total FROM ? GROUP BY category",
-})
+const items = new Query("all-items", {
+  type: "jsonpath",
+  dataSource: "my-api",  // DataSource key
+  jsonPath: "$[*]",
+});
 ```
 
+### SQL Query
+
+Runs in-memory SQL on an array of objects. The table is always `?`.
+
+```typescript
+const top10 = new Query("top-10", {
+  type: "sql",
+  sourceQuery: "all-items",  // another Query key
+  sql: "SELECT product, SUM(revenue) AS total FROM ? GROUP BY product ORDER BY total DESC LIMIT 10",
+});
+```
+
+**Options**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | `"jsonpath" \| "sql"` | Query type |
+| `dataSource` | `string` | DataSource key (mutually exclusive with `sourceQuery`) |
+| `sourceQuery` | `string` | Another Query's key — enables chaining |
+| `jsonPath` | `string` | JSONPath expression (required for `jsonpath` type) |
+| `sql` | `string` | SQL statement (required for `sql` type) |
+
+**Query chaining** is supported: a SQL query can use a JSONPath query as its `sourceQuery`, and so on, to arbitrary depth.
+
+---
+
 ## Chart
+
+A visual element inside a dashboard.
+
+```typescript
+import { Chart } from "wetrack-dashboard";
+
+new Chart("my-chart", {
+  dashboard: "overview",                    // Dashboard key
+  source: { _entity: "query", key: "top-10" }, // Query or DataSource
+  label: "Top Products",
+  type: "bar",                              // "bar" | "line" | "stat" | "clock"
+  config: { ... },
+  layout: { x: 0, y: 0, w: 6, h: 3 },     // optional — auto-placed if omitted
+})
+```
 
 ### Bar Chart
 
 ```typescript
-new Chart("key", {
-  dashboard: "dashboard-key",
-  query: "query-key",
-  label: "Revenue by Region",
-  type: "bar",
-  config: {
-    categoryField: "region",
-    valueFields: ["revenue", "cost"],
-    orientation: "vertical",   // "vertical" | "horizontal"
-    stacked: false,
-    showLabels: false,
-    colors: ["#3b82f6", "#ef4444"],
-  },
-  layout: { x: 0, y: 0, w: 6, h: 3 },  // 12-column grid
-})
+config: {
+  categoryField: "product",       // x-axis / category
+  valueFields: ["revenue"],       // one or more value fields
+  orientation: "vertical",        // "vertical" | "horizontal"
+  stacked: false,                 // stack bars
+  showLabels: true,               // show value labels on bars
+  showTooltip: true,
+  colors: ["var(--chart-1)"],     // CSS color or CSS variable
+  showCard: true,
+}
 ```
 
 ### Line Chart
 
 ```typescript
-new Chart("key", {
-  type: "line",
-  config: {
-    xField: "date",
-    valueFields: ["mrr", "arr"],
-    showDots: true,
-    filled: false,
-  }
-})
+config: {
+  xField: "month",                // x-axis field
+  valueFields: ["revenue", "profit"], // one line per field
+  showDots: true,
+  filled: false,                  // fill area under lines
+  showTooltip: true,
+  showLabels: false,
+  colors: ["var(--chart-1)", "var(--chart-2)"],
+  showCard: true,
+}
 ```
 
 ### Stat Card
 
 ```typescript
-new Chart("key", {
-  type: "stat",
-  config: {
-    valueField: "total_revenue",
-    unit: "€",
-    decimals: 2,
-    color: "#22c55e",
-  }
-})
+config: {
+  valueField: "total",            // field name for the main number
+  unit: "€",                      // optional unit suffix
+  decimals: 2,                    // decimal places
+  color: "var(--chart-1)",
+  showCard: true,
+}
 ```
 
-### Clock
+### Clock Card
+
+No `source` required — clocks display the current time.
 
 ```typescript
-new Chart("key", {
-  type: "clock",
-  config: {
-    timeZone: "Europe/Berlin",  // IANA timezone
-    labelFormat: "city",        // "city" | "offset" | "abbreviation" | "full" | "raw"
-  }
-})
+config: {
+  timeZone: "Europe/Berlin",      // IANA timezone (undefined = local)
+  labelFormat: "city",            // "city" | "offset" | "abbreviation" | "full" | "raw"
+  showHours: true,
+  showMinutes: true,
+  showSeconds: false,
+  showCard: true,
+}
 ```
+
+---
 
 ## Layout
 
-Dashboards use a **12-column grid**. Each chart has `{ x, y, w, h }`.
+Charts use a 12-column grid. Specify `layout` explicitly or omit it for auto-placement.
 
-```typescript
-layout: { x: 0, y: 0, w: 6, h: 3 }   // left half, 3 rows tall
-layout: { x: 6, y: 0, w: 6, h: 3 }   // right half, 3 rows tall
-layout: { x: 0, y: 0, w: 12, h: 4 }  // full width
-```
+| Field | Type | Description |
+|-------|------|-------------|
+| `x` | `number` | Column (0–11) |
+| `y` | `number` | Row (0 = top) |
+| `w` | `number` | Width in columns (1–12) |
+| `h` | `number` | Height in grid units |
+
+**Typical sizes**
+
+| Use case | Layout |
+|----------|--------|
+| Full-width chart | `w: 12, h: 3` |
+| Half-width chart | `w: 6, h: 3` |
+| Stat widget | `w: 3, h: 1` |
+| Wide stat | `w: 4, h: 1` |

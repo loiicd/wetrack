@@ -4,14 +4,13 @@ import ClockCard from "@/components/charts/clockCard";
 import LineChartCard from "@/components/charts/lineChartCard";
 import StatCard from "@/components/charts/statCard";
 import ChartGrid from "@/components/chartGrid";
-import DashboardBreadcrumb from "@/components/dashbordBreadcrumb";
+import { Badge } from "@/components/ui/badge";
 import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
 import Container from "@/components/layout/container";
 import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
 import { toDataFrame } from "@/lib/dataframe";
@@ -25,7 +24,6 @@ import {
 import type { TimeZone } from "@/types/timezone";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { MaximizeIcon } from "lucide-react";
 import { connection } from "next/server";
 
 const DashboardContent = async ({
@@ -159,22 +157,30 @@ const DashboardContent = async ({
     }),
   );
 
+  const env = dashboard.stack?.environment;
+  const envBadge = env === "PRODUCTION" ? "default" : env === "STAGING" ? "secondary" : "outline";
+  const envLabel = env === "PRODUCTION" ? "Production" : env === "STAGING" ? "Staging" : env === "DEVELOPMENT" ? "Development" : null;
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row gap-4 justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">{dashboard.label}</h1>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-2xl font-bold">{dashboard.label}</h1>
+            {envLabel && (
+              <Badge variant={envBadge} className="text-xs">
+                {envLabel}
+              </Badge>
+            )}
+          </div>
           {dashboard.description ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mt-0.5">
               {dashboard.description}
             </p>
           ) : null}
         </div>
         <div className="flex items-center gap-2">
           <RefreshDashboardButton dashboardId={dashboardId} />
-          <Button variant="ghost" size="icon">
-            <MaximizeIcon />
-          </Button>
         </div>
       </div>
 

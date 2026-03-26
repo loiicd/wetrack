@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description:
       "Define dashboards, data sources, queries and charts as TypeScript code. Deploy instantly.",
     type: "website",
-    url: "https://wetrack.io",
+    url: "https://wetrack.dev",
   },
   twitter: {
     card: "summary_large_image",

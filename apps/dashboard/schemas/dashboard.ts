@@ -11,7 +11,10 @@ const dataSourceSchema = z.object({
   type: z.enum(["rest"]),
   config: z.object({
     url: z.string(),
-    method: z.enum(["get"]),
+    method: z.enum(["get", "post", "put"]),
+    headers: z.record(z.string(), z.string()).optional(),
+    body: z.unknown().optional(),
+    credential: z.string().optional(),
   }),
 });
 

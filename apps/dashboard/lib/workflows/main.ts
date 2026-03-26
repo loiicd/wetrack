@@ -18,7 +18,10 @@ type DataSource = {
   type: "rest";
   config: {
     url: string;
-    method: "get";
+    method: "get" | "post" | "put";
+    headers?: Record<string, string>;
+    body?: unknown;
+    credential?: string;
   };
 };
 

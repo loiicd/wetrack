@@ -22,6 +22,7 @@ import {
   statCardConfigSchema,
 } from "@/schemas/dashboard";
 import type { TimeZone } from "@/types/timezone";
+import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { connection } from "next/server";
@@ -34,9 +35,15 @@ const DashboardContent = async ({
   await connection();
   const { dashboardId } = await props.params;
 
+  const { orgId } = await auth();
   const dashboard = await dashboardInterface.getById(dashboardId);
 
   if (!dashboard) {
+    return notFound();
+  }
+
+  // Ensure user can only access dashboards belonging to their org
+  if (orgId && dashboard.stack?.orgId && orgId !== dashboard.stack.orgId) {
     return notFound();
   }
 

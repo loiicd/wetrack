@@ -22,7 +22,7 @@ const STEPS = [
     icon: Terminal,
     title: "CLI installieren",
     description: "Installiere die WeTrack CLI mit Bun oder npm:",
-    code: "bun add -g @wetrack/cli",
+    code: "bun add -g wetrack-cli",
   },
   {
     icon: Rocket,

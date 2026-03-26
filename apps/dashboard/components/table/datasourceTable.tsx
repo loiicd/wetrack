@@ -1,4 +1,5 @@
 import { dataSourceInterface } from "@/lib/database/dataSource";
+import { auth } from "@clerk/nextjs/server";
 import {
   Table,
   TableBody,
@@ -21,7 +22,8 @@ import { connection } from "next/server";
 
 const DatasourceTable = async () => {
   await connection();
-  const dataSources = await dataSourceInterface.getMany();
+  const { orgId } = await auth();
+  const dataSources = await dataSourceInterface.getMany(orgId ?? undefined);
 
   return (
     <Table>

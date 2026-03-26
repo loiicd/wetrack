@@ -85,8 +85,12 @@ export const queryInterface = {
     });
   },
 
-  async getMany() {
-    return await prisma.query.findMany();
+  async getMany(orgId?: string) {
+    return await prisma.query.findMany({
+      where: orgId ? { stack: { orgId } } : undefined,
+      include: { stack: { select: { environment: true, key: true } } },
+      orderBy: { createdAt: "desc" },
+    });
   },
 
   async deleteNotInKeys(stackId: string, keys: string[]) {

@@ -1,4 +1,5 @@
 import { queryInterface } from "@/lib/database/query";
+import { auth } from "@clerk/nextjs/server";
 import {
   Table,
   TableBody,
@@ -14,7 +15,8 @@ import { connection } from "next/server";
 
 const QueryTable = async () => {
   await connection();
-  const queries = await queryInterface.getMany();
+  const { orgId } = await auth();
+  const queries = await queryInterface.getMany(orgId ?? undefined);
 
   return (
     <Table>

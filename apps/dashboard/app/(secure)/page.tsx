@@ -4,18 +4,19 @@ import { HeroSection } from "@/components/home/heroSection";
 import { RecentDashboards } from "@/components/home/recentDashboards";
 import { StatsSection } from "@/components/home/statsSection";
 import { WorkflowTimeline } from "@/components/home/workflowTimeline";
+import { auth } from "@clerk/nextjs/server";
 import { dashboardInterface } from "@/lib/database/dashboard";
 import { stackInterface } from "@/lib/database/stack";
 import { dataSourceInterface } from "@/lib/database/dataSource";
 import { queryInterface } from "@/lib/database/query";
 
-async function getStatsData() {
+async function getStatsData(orgId?: string) {
   try {
     const [dashboards, stacks, dataSources, queries] = await Promise.all([
-      dashboardInterface.getMany(),
-      stackInterface.getMany(),
-      dataSourceInterface.getMany(),
-      queryInterface.getMany(),
+      dashboardInterface.getMany(orgId),
+      stackInterface.getMany(orgId),
+      dataSourceInterface.getMany(orgId),
+      queryInterface.getMany(orgId),
     ]);
 
     return {
@@ -35,9 +36,9 @@ async function getStatsData() {
   }
 }
 
-async function getRecentDashboards() {
+async function getRecentDashboards(orgId?: string) {
   try {
-    const dashboards = await dashboardInterface.getMany();
+    const dashboards = await dashboardInterface.getMany(orgId);
     // Sort by updatedAt descending and take first 6
     const recent = dashboards
       .sort(
@@ -53,9 +54,10 @@ async function getRecentDashboards() {
 }
 
 const Page = async () => {
+  const { orgId } = await auth();
   const [stats, dashboards] = await Promise.all([
-    getStatsData(),
-    getRecentDashboards(),
+    getStatsData(orgId ?? undefined),
+    getRecentDashboards(orgId ?? undefined),
   ]);
 
   return (

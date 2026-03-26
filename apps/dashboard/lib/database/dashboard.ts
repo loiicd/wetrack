@@ -53,7 +53,7 @@ export const dashboardInterface = {
   async getById(id: string) {
     return await prisma.dashboard.findUnique({
       where: { id },
-      include: { stack: { select: { environment: true, key: true } } },
+      include: { stack: { select: { environment: true, key: true, orgId: true } } },
     });
   },
 

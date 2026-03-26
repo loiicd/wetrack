@@ -3,10 +3,14 @@ import prisma from "./prisma";
 import { StackId } from "@/types/ids";
 
 export const stackInterface = {
-  async create(data: StackCreateInput): Promise<StackId> {
+  async create(data: StackCreateInput & { orgId: string }): Promise<StackId> {
     const stackRecord = await prisma.stack.upsert({
       where: {
-        key_environment: { key: data.key, environment: data.environment },
+        key_environment_orgId: {
+          key: data.key,
+          environment: data.environment,
+          orgId: data.orgId,
+        },
       },
       update: {},
       create: data,
@@ -14,7 +18,9 @@ export const stackInterface = {
     return stackRecord.id as StackId;
   },
 
-  async getMany() {
-    return await prisma.stack.findMany();
+  async getMany(orgId?: string) {
+    return await prisma.stack.findMany({
+      where: orgId ? { orgId } : undefined,
+    });
   },
 };

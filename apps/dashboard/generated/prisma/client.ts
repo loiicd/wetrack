@@ -67,11 +67,6 @@ export type Chart = Prisma.ChartModel
  */
 export type Query = Prisma.QueryModel
 /**
- * Model Transform
- * 
- */
-export type Transform = Prisma.TransformModel
-/**
  * Model Credential
  * 
  */

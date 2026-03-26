@@ -6,6 +6,25 @@ WeTrack ist eine **Dashboard-as-Code** Plattform. Dashboards werden als TypeScri
 
 Lies `AGENTS.md` im Repo-Root für die vollständige Referenz.
 
+## Vor jedem Commit: Pflicht-Checks
+
+**Niemals committen ohne diese Checks erfolgreich durchgeführt zu haben:**
+
+```bash
+# 1. TypeScript – Typfehler prüfen
+cd apps/dashboard && npx tsc --noEmit
+
+# 2. Build – Production Build prüfen (deckt Prerender-Fehler auf)
+cd apps/dashboard && bun run build
+
+# 3. Lint
+cd apps/dashboard && bun run lint
+```
+
+Alle drei müssen **ohne Fehler** durchlaufen. Warnungen sind ok, Fehler nicht.
+
+> Warum Build? Next.js 16 wirft beim statischen Prerendering Fehler (z.B. `usePathname()` außerhalb `<Suspense>`), die TypeScript nicht erkennt — nur `next build` deckt diese auf.
+
 ## Wichtigste Regeln
 
 1. **SDK-Imports** immer aus `"dashboard_as_code"`:
@@ -64,7 +83,40 @@ Lies `AGENTS.md` im Repo-Root für die vollständige Referenz.
 - `jsonpath` → benötigt `jsonPath: string` + (`dataSource` oder `sourceQuery`)
 - `sql` → benötigt `sql: string` (Tabelle immer `?`) + (`dataSource` oder `sourceQuery`)
 
-## Monorepo-Befehle
+## Datenbank-Regeln (Prisma)
+
+**Alle Datenbankoperationen ausschließlich über Prisma-Befehle — kein manuelles SQL, kein direktes `ALTER TABLE`, kein `DROP CONSTRAINT` per Hand.**
+
+### Pflicht-Befehle
+
+| Zweck | Befehl |
+|-------|--------|
+| Migration erstellen | `cd apps/dashboard && bunx prisma migrate dev --name <name>` |
+| Migration deployen (Prod) | `cd apps/dashboard && bunx prisma migrate deploy` |
+| Client neu generieren | `cd apps/dashboard && bunx prisma generate` |
+| DB-Status prüfen | `cd apps/dashboard && bunx prisma migrate status` |
+| Schema pushen (kein History) | `cd apps/dashboard && bunx prisma db push` |
+
+### Wichtige Hinweise
+
+- **Niemals** Migrations-SQL manuell schreiben oder bearbeiten — immer `prisma migrate dev` nutzen, das generiert korrektes SQL basierend auf dem tatsächlichen DB-Schema.
+- **Niemals** Constraint-Namen erraten — Prisma kennt die exakten Namen aus dem echten Schema.
+- Unique Indexes in Prisma werden als `CREATE UNIQUE INDEX` (nicht als `CONSTRAINT`) angelegt → `DROP INDEX`, nicht `DROP CONSTRAINT`.
+- `prisma generate` funktioniert ohne DB-Verbindung; `prisma migrate dev/deploy` benötigt `DATABASE_URL`.
+- Nach Schema-Änderungen in `schema.prisma` immer `prisma generate` ausführen damit der generierte Client aktuell ist.
+
+### package.json Scripts (apps/dashboard)
+
+```json
+"migrate": "prisma migrate deploy",      // Prod: deploy pending migrations
+"prisma:migrate": "prisma migrate dev",  // Dev: create + apply new migration
+"prisma:generate": "prisma generate",    // Client neu generieren
+"prisma:studio": "prisma studio",        // DB GUI
+"prisma:dbpush": "prisma db push",       // Schema push ohne History
+"postinstall": "prisma generate"
+```
+
+
 
 ```bash
 bun install              # Dependencies

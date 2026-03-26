@@ -1,0 +1,140 @@
+---
+title: SDK Reference
+description: dashboard_as_code TypeScript SDK
+---
+
+## Installation
+
+```bash
+bun add dashboard_as_code
+```
+
+## Stack
+
+Root container for all resources.
+
+```typescript
+const stack = new Stack("my-stack", "PRODUCTION");
+stack
+  .addDashboard(...)
+  .addDataSource(...)
+  .addQuery(...)
+  .addChart(...);
+
+const json = stack.synthesize(); // → StackDefinition
+```
+
+**Environments:** `"PRODUCTION"` | `"STAGING"` | `"DEVELOPMENT"`
+
+## Dashboard
+
+```typescript
+new Dashboard("key", { label: "My Dashboard", description?: "..." })
+```
+
+## DataSource
+
+REST API connector.
+
+```typescript
+new DataSource("key", {
+  type: "rest",
+  config: {
+    url: "https://api.example.com/data",
+    method: "get",         // "get" | "post" | "put"
+    headers?: { "Authorization": "Bearer token" },
+  }
+})
+```
+
+## Query
+
+Data transformation. Can chain `dataSource → query → query`.
+
+```typescript
+// JSONPath query
+new Query("key", {
+  type: "jsonpath",
+  dataSource: "api-key",   // or sourceQuery: "other-query-key"
+  jsonPath: "$.items[*]",
+})
+
+// SQL query
+new Query("key", {
+  type: "sql",
+  sourceQuery: "jsonpath-query-key",
+  sql: "SELECT category, SUM(value) AS total FROM ? GROUP BY category",
+})
+```
+
+## Chart
+
+### Bar Chart
+
+```typescript
+new Chart("key", {
+  dashboard: "dashboard-key",
+  query: "query-key",
+  label: "Revenue by Region",
+  type: "bar",
+  config: {
+    categoryField: "region",
+    valueFields: ["revenue", "cost"],
+    orientation: "vertical",   // "vertical" | "horizontal"
+    stacked: false,
+    showLabels: false,
+    colors: ["#3b82f6", "#ef4444"],
+  },
+  layout: { x: 0, y: 0, w: 6, h: 3 },  // 12-column grid
+})
+```
+
+### Line Chart
+
+```typescript
+new Chart("key", {
+  type: "line",
+  config: {
+    xField: "date",
+    valueFields: ["mrr", "arr"],
+    showDots: true,
+    filled: false,
+  }
+})
+```
+
+### Stat Card
+
+```typescript
+new Chart("key", {
+  type: "stat",
+  config: {
+    valueField: "total_revenue",
+    unit: "€",
+    decimals: 2,
+    color: "#22c55e",
+  }
+})
+```
+
+### Clock
+
+```typescript
+new Chart("key", {
+  type: "clock",
+  config: {
+    timeZone: "Europe/Berlin",  // IANA timezone
+    labelFormat: "city",        // "city" | "offset" | "abbreviation" | "full" | "raw"
+  }
+})
+```
+
+## Layout
+
+Dashboards use a **12-column grid**. Each chart has `{ x, y, w, h }`.
+
+```typescript
+layout: { x: 0, y: 0, w: 6, h: 3 }   // left half, 3 rows tall
+layout: { x: 6, y: 0, w: 6, h: 3 }   // right half, 3 rows tall
+layout: { x: 0, y: 0, w: 12, h: 4 }  // full width
+```

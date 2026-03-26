@@ -389,7 +389,6 @@ export const ModelName = {
   DataSource: 'DataSource',
   Chart: 'Chart',
   Query: 'Query',
-  Transform: 'Transform',
   Credential: 'Credential'
 } as const
 
@@ -406,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "stack" | "dashboard" | "dataSource" | "chart" | "query" | "transform" | "credential"
+    modelProps: "stack" | "dashboard" | "dataSource" | "chart" | "query" | "credential"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -780,80 +779,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Transform: {
-      payload: Prisma.$TransformPayload<ExtArgs>
-      fields: Prisma.TransformFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.TransformFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.TransformFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>
-        }
-        findFirst: {
-          args: Prisma.TransformFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.TransformFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>
-        }
-        findMany: {
-          args: Prisma.TransformFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>[]
-        }
-        create: {
-          args: Prisma.TransformCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>
-        }
-        createMany: {
-          args: Prisma.TransformCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.TransformCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>[]
-        }
-        delete: {
-          args: Prisma.TransformDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>
-        }
-        update: {
-          args: Prisma.TransformUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>
-        }
-        deleteMany: {
-          args: Prisma.TransformDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.TransformUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.TransformUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>[]
-        }
-        upsert: {
-          args: Prisma.TransformUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransformPayload>
-        }
-        aggregate: {
-          args: Prisma.TransformAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTransform>
-        }
-        groupBy: {
-          args: Prisma.TransformGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TransformGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.TransformCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TransformCountAggregateOutputType> | number
-        }
-      }
-    }
     Credential: {
       payload: Prisma.$CredentialPayload<ExtArgs>
       fields: Prisma.CredentialFieldRefs
@@ -970,6 +895,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const StackScalarFieldEnum = {
   id: 'id',
   key: 'key',
+  orgId: 'orgId',
   version: 'version',
   environment: 'environment',
   createdAt: 'createdAt',
@@ -1046,28 +972,13 @@ export const QueryScalarFieldEnum = {
 export type QueryScalarFieldEnum = (typeof QueryScalarFieldEnum)[keyof typeof QueryScalarFieldEnum]
 
 
-export const TransformScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  version: 'version',
-  stackId: 'stackId',
-  queryId: 'queryId',
-  function: 'function',
-  field: 'field',
-  groupByField: 'groupByField',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type TransformScalarFieldEnum = (typeof TransformScalarFieldEnum)[keyof typeof TransformScalarFieldEnum]
-
-
 export const CredentialScalarFieldEnum = {
   id: 'id',
-  key: 'key',
-  version: 'version',
-  stackId: 'stackId',
-  secret: 'secret',
+  orgId: 'orgId',
+  label: 'label',
+  type: 'type',
+  encryptedValue: 'encryptedValue',
+  headerName: 'headerName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1220,20 +1131,6 @@ export type ListEnumQueryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
- * Reference to a field of type 'TransformFunction'
- */
-export type EnumTransformFunctionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransformFunction'>
-    
-
-
-/**
- * Reference to a field of type 'TransformFunction[]'
- */
-export type ListEnumTransformFunctionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransformFunction[]'>
-    
-
-
-/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1346,7 +1243,6 @@ export type GlobalOmitConfig = {
   dataSource?: Prisma.DataSourceOmit
   chart?: Prisma.ChartOmit
   query?: Prisma.QueryOmit
-  transform?: Prisma.TransformOmit
   credential?: Prisma.CredentialOmit
 }
 

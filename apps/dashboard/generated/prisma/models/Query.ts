@@ -269,7 +269,6 @@ export type QueryWhereInput = {
   sourceQuery?: Prisma.XOR<Prisma.QueryNullableScalarRelationFilter, Prisma.QueryWhereInput> | null
   derivedQueries?: Prisma.QueryListRelationFilter
   charts?: Prisma.ChartListRelationFilter
-  transforms?: Prisma.TransformListRelationFilter
 }
 
 export type QueryOrderByWithRelationInput = {
@@ -289,7 +288,6 @@ export type QueryOrderByWithRelationInput = {
   sourceQuery?: Prisma.QueryOrderByWithRelationInput
   derivedQueries?: Prisma.QueryOrderByRelationAggregateInput
   charts?: Prisma.ChartOrderByRelationAggregateInput
-  transforms?: Prisma.TransformOrderByRelationAggregateInput
 }
 
 export type QueryWhereUniqueInput = Prisma.AtLeast<{
@@ -313,7 +311,6 @@ export type QueryWhereUniqueInput = Prisma.AtLeast<{
   sourceQuery?: Prisma.XOR<Prisma.QueryNullableScalarRelationFilter, Prisma.QueryWhereInput> | null
   derivedQueries?: Prisma.QueryListRelationFilter
   charts?: Prisma.ChartListRelationFilter
-  transforms?: Prisma.TransformListRelationFilter
 }, "id" | "stackId_key">
 
 export type QueryOrderByWithAggregationInput = {
@@ -366,7 +363,6 @@ export type QueryCreateInput = {
   sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
   derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
 
 export type QueryUncheckedCreateInput = {
@@ -383,7 +379,6 @@ export type QueryUncheckedCreateInput = {
   updatedAt?: Date | string
   derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
 
 export type QueryUpdateInput = {
@@ -400,7 +395,6 @@ export type QueryUpdateInput = {
   sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
   derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateInput = {
@@ -417,7 +411,6 @@ export type QueryUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryCreateManyInput = {
@@ -527,11 +520,6 @@ export type QueryMinOrderByAggregateInput = {
 
 export type QuerySumOrderByAggregateInput = {
   version?: Prisma.SortOrder
-}
-
-export type QueryScalarRelationFilter = {
-  is?: Prisma.QueryWhereInput
-  isNot?: Prisma.QueryWhereInput
 }
 
 export type QueryCreateNestedManyWithoutStackInput = {
@@ -696,20 +684,6 @@ export type QueryUncheckedUpdateManyWithoutSourceQueryNestedInput = {
   deleteMany?: Prisma.QueryScalarWhereInput | Prisma.QueryScalarWhereInput[]
 }
 
-export type QueryCreateNestedOneWithoutTransformsInput = {
-  create?: Prisma.XOR<Prisma.QueryCreateWithoutTransformsInput, Prisma.QueryUncheckedCreateWithoutTransformsInput>
-  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutTransformsInput
-  connect?: Prisma.QueryWhereUniqueInput
-}
-
-export type QueryUpdateOneRequiredWithoutTransformsNestedInput = {
-  create?: Prisma.XOR<Prisma.QueryCreateWithoutTransformsInput, Prisma.QueryUncheckedCreateWithoutTransformsInput>
-  connectOrCreate?: Prisma.QueryCreateOrConnectWithoutTransformsInput
-  upsert?: Prisma.QueryUpsertWithoutTransformsInput
-  connect?: Prisma.QueryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.QueryUpdateToOneWithWhereWithoutTransformsInput, Prisma.QueryUpdateWithoutTransformsInput>, Prisma.QueryUncheckedUpdateWithoutTransformsInput>
-}
-
 export type QueryCreateWithoutStackInput = {
   id?: string
   key: string
@@ -723,7 +697,6 @@ export type QueryCreateWithoutStackInput = {
   sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
   derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
 
 export type QueryUncheckedCreateWithoutStackInput = {
@@ -739,7 +712,6 @@ export type QueryUncheckedCreateWithoutStackInput = {
   updatedAt?: Date | string
   derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
 
 export type QueryCreateOrConnectWithoutStackInput = {
@@ -798,7 +770,6 @@ export type QueryCreateWithoutDataSourceInput = {
   sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
   derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
 
 export type QueryUncheckedCreateWithoutDataSourceInput = {
@@ -814,7 +785,6 @@ export type QueryUncheckedCreateWithoutDataSourceInput = {
   updatedAt?: Date | string
   derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
 
 export type QueryCreateOrConnectWithoutDataSourceInput = {
@@ -856,7 +826,6 @@ export type QueryCreateWithoutChartsInput = {
   dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
   sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
   derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
-  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
 
 export type QueryUncheckedCreateWithoutChartsInput = {
@@ -872,7 +841,6 @@ export type QueryUncheckedCreateWithoutChartsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
-  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
 
 export type QueryCreateOrConnectWithoutChartsInput = {
@@ -904,7 +872,6 @@ export type QueryUpdateWithoutChartsInput = {
   dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
   sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
   derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
-  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateWithoutChartsInput = {
@@ -920,7 +887,6 @@ export type QueryUncheckedUpdateWithoutChartsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
-  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryCreateWithoutDerivedQueriesInput = {
@@ -936,7 +902,6 @@ export type QueryCreateWithoutDerivedQueriesInput = {
   dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
   sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
 
 export type QueryUncheckedCreateWithoutDerivedQueriesInput = {
@@ -952,7 +917,6 @@ export type QueryUncheckedCreateWithoutDerivedQueriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
 
 export type QueryCreateOrConnectWithoutDerivedQueriesInput = {
@@ -973,7 +937,6 @@ export type QueryCreateWithoutSourceQueryInput = {
   dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
   derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformCreateNestedManyWithoutQueryInput
 }
 
 export type QueryUncheckedCreateWithoutSourceQueryInput = {
@@ -989,7 +952,6 @@ export type QueryUncheckedCreateWithoutSourceQueryInput = {
   updatedAt?: Date | string
   derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
-  transforms?: Prisma.TransformUncheckedCreateNestedManyWithoutQueryInput
 }
 
 export type QueryCreateOrConnectWithoutSourceQueryInput = {
@@ -1026,7 +988,6 @@ export type QueryUpdateWithoutDerivedQueriesInput = {
   dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
   sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateWithoutDerivedQueriesInput = {
@@ -1042,7 +1003,6 @@ export type QueryUncheckedUpdateWithoutDerivedQueriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUpsertWithWhereUniqueWithoutSourceQueryInput = {
@@ -1059,86 +1019,6 @@ export type QueryUpdateWithWhereUniqueWithoutSourceQueryInput = {
 export type QueryUpdateManyWithWhereWithoutSourceQueryInput = {
   where: Prisma.QueryScalarWhereInput
   data: Prisma.XOR<Prisma.QueryUpdateManyMutationInput, Prisma.QueryUncheckedUpdateManyWithoutSourceQueryInput>
-}
-
-export type QueryCreateWithoutTransformsInput = {
-  id?: string
-  key: string
-  version?: number
-  type?: $Enums.QueryType
-  jsonPath?: string | null
-  sql?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  stack: Prisma.StackCreateNestedOneWithoutQueriesInput
-  dataSource?: Prisma.DataSourceCreateNestedOneWithoutQueriesInput
-  sourceQuery?: Prisma.QueryCreateNestedOneWithoutDerivedQueriesInput
-  derivedQueries?: Prisma.QueryCreateNestedManyWithoutSourceQueryInput
-  charts?: Prisma.ChartCreateNestedManyWithoutQueryInput
-}
-
-export type QueryUncheckedCreateWithoutTransformsInput = {
-  id?: string
-  key: string
-  version?: number
-  stackId: string
-  type?: $Enums.QueryType
-  dataSourceId?: string | null
-  sourceQueryId?: string | null
-  jsonPath?: string | null
-  sql?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  derivedQueries?: Prisma.QueryUncheckedCreateNestedManyWithoutSourceQueryInput
-  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutQueryInput
-}
-
-export type QueryCreateOrConnectWithoutTransformsInput = {
-  where: Prisma.QueryWhereUniqueInput
-  create: Prisma.XOR<Prisma.QueryCreateWithoutTransformsInput, Prisma.QueryUncheckedCreateWithoutTransformsInput>
-}
-
-export type QueryUpsertWithoutTransformsInput = {
-  update: Prisma.XOR<Prisma.QueryUpdateWithoutTransformsInput, Prisma.QueryUncheckedUpdateWithoutTransformsInput>
-  create: Prisma.XOR<Prisma.QueryCreateWithoutTransformsInput, Prisma.QueryUncheckedCreateWithoutTransformsInput>
-  where?: Prisma.QueryWhereInput
-}
-
-export type QueryUpdateToOneWithWhereWithoutTransformsInput = {
-  where?: Prisma.QueryWhereInput
-  data: Prisma.XOR<Prisma.QueryUpdateWithoutTransformsInput, Prisma.QueryUncheckedUpdateWithoutTransformsInput>
-}
-
-export type QueryUpdateWithoutTransformsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  key?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
-  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  stack?: Prisma.StackUpdateOneRequiredWithoutQueriesNestedInput
-  dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
-  sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
-  derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
-  charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
-}
-
-export type QueryUncheckedUpdateWithoutTransformsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  key?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  stackId?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumQueryTypeFieldUpdateOperationsInput | $Enums.QueryType
-  dataSourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sourceQueryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  jsonPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sql?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
-  charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryCreateManyStackInput = {
@@ -1167,7 +1047,6 @@ export type QueryUpdateWithoutStackInput = {
   sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
   derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateWithoutStackInput = {
@@ -1183,7 +1062,6 @@ export type QueryUncheckedUpdateWithoutStackInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateManyWithoutStackInput = {
@@ -1225,7 +1103,6 @@ export type QueryUpdateWithoutDataSourceInput = {
   sourceQuery?: Prisma.QueryUpdateOneWithoutDerivedQueriesNestedInput
   derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateWithoutDataSourceInput = {
@@ -1241,7 +1118,6 @@ export type QueryUncheckedUpdateWithoutDataSourceInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateManyWithoutDataSourceInput = {
@@ -1283,7 +1159,6 @@ export type QueryUpdateWithoutSourceQueryInput = {
   dataSource?: Prisma.DataSourceUpdateOneWithoutQueriesNestedInput
   derivedQueries?: Prisma.QueryUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateWithoutSourceQueryInput = {
@@ -1299,7 +1174,6 @@ export type QueryUncheckedUpdateWithoutSourceQueryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   derivedQueries?: Prisma.QueryUncheckedUpdateManyWithoutSourceQueryNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutQueryNestedInput
-  transforms?: Prisma.TransformUncheckedUpdateManyWithoutQueryNestedInput
 }
 
 export type QueryUncheckedUpdateManyWithoutSourceQueryInput = {
@@ -1323,13 +1197,11 @@ export type QueryUncheckedUpdateManyWithoutSourceQueryInput = {
 export type QueryCountOutputType = {
   derivedQueries: number
   charts: number
-  transforms: number
 }
 
 export type QueryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   derivedQueries?: boolean | QueryCountOutputTypeCountDerivedQueriesArgs
   charts?: boolean | QueryCountOutputTypeCountChartsArgs
-  transforms?: boolean | QueryCountOutputTypeCountTransformsArgs
 }
 
 /**
@@ -1356,13 +1228,6 @@ export type QueryCountOutputTypeCountChartsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.ChartWhereInput
 }
 
-/**
- * QueryCountOutputType without action
- */
-export type QueryCountOutputTypeCountTransformsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TransformWhereInput
-}
-
 
 export type QuerySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1381,7 +1246,6 @@ export type QuerySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
   derivedQueries?: boolean | Prisma.Query$derivedQueriesArgs<ExtArgs>
   charts?: boolean | Prisma.Query$chartsArgs<ExtArgs>
-  transforms?: boolean | Prisma.Query$transformsArgs<ExtArgs>
   _count?: boolean | Prisma.QueryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["query"]>
 
@@ -1440,7 +1304,6 @@ export type QueryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   sourceQuery?: boolean | Prisma.Query$sourceQueryArgs<ExtArgs>
   derivedQueries?: boolean | Prisma.Query$derivedQueriesArgs<ExtArgs>
   charts?: boolean | Prisma.Query$chartsArgs<ExtArgs>
-  transforms?: boolean | Prisma.Query$transformsArgs<ExtArgs>
   _count?: boolean | Prisma.QueryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type QueryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1462,7 +1325,6 @@ export type $QueryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     sourceQuery: Prisma.$QueryPayload<ExtArgs> | null
     derivedQueries: Prisma.$QueryPayload<ExtArgs>[]
     charts: Prisma.$ChartPayload<ExtArgs>[]
-    transforms: Prisma.$TransformPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1875,7 +1737,6 @@ export interface Prisma__QueryClient<T, Null = never, ExtArgs extends runtime.Ty
   sourceQuery<T extends Prisma.Query$sourceQueryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$sourceQueryArgs<ExtArgs>>): Prisma.Prisma__QueryClient<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   derivedQueries<T extends Prisma.Query$derivedQueriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$derivedQueriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   charts<T extends Prisma.Query$chartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$chartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  transforms<T extends Prisma.Query$transformsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Query$transformsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransformPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2395,30 +2256,6 @@ export type Query$chartsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.ChartScalarFieldEnum | Prisma.ChartScalarFieldEnum[]
-}
-
-/**
- * Query.transforms
- */
-export type Query$transformsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Transform
-   */
-  select?: Prisma.TransformSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Transform
-   */
-  omit?: Prisma.TransformOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TransformInclude<ExtArgs> | null
-  where?: Prisma.TransformWhereInput
-  orderBy?: Prisma.TransformOrderByWithRelationInput | Prisma.TransformOrderByWithRelationInput[]
-  cursor?: Prisma.TransformWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TransformScalarFieldEnum | Prisma.TransformScalarFieldEnum[]
 }
 
 /**

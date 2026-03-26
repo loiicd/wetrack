@@ -66,7 +66,9 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </Suspense>
             </SidebarMenu>
           </SidebarGroup>
-          <PrimaryNavigationSidebar />
+          <Suspense fallback={null}>
+            <PrimaryNavigationSidebar />
+          </Suspense>
         </ScrollArea>
       </SidebarContent>
     </Sidebar>
@@ -173,7 +175,9 @@ export async function ApplicationShell11({
         <div className="flex flex-col md:hidden">
           <MobileHeader />
           <div className="pb-16">{children}</div>
-          <PrimaryNavigationMobile />
+          <Suspense fallback={null}>
+            <PrimaryNavigationMobile />
+          </Suspense>
         </div>
       </SidebarProvider>
     </div>

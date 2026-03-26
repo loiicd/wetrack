@@ -239,23 +239,6 @@ export type EnumQueryTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel>
 }
 
-export type EnumTransformFunctionFilter<$PrismaModel = never> = {
-  equals?: $Enums.TransformFunction | Prisma.EnumTransformFunctionFieldRefInput<$PrismaModel>
-  in?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTransformFunctionFilter<$PrismaModel> | $Enums.TransformFunction
-}
-
-export type EnumTransformFunctionWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.TransformFunction | Prisma.EnumTransformFunctionFieldRefInput<$PrismaModel>
-  in?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTransformFunctionWithAggregatesFilter<$PrismaModel> | $Enums.TransformFunction
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumTransformFunctionFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumTransformFunctionFilter<$PrismaModel>
-}
-
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -465,23 +448,6 @@ export type NestedEnumQueryTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumQueryTypeFilter<$PrismaModel>
-}
-
-export type NestedEnumTransformFunctionFilter<$PrismaModel = never> = {
-  equals?: $Enums.TransformFunction | Prisma.EnumTransformFunctionFieldRefInput<$PrismaModel>
-  in?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTransformFunctionFilter<$PrismaModel> | $Enums.TransformFunction
-}
-
-export type NestedEnumTransformFunctionWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.TransformFunction | Prisma.EnumTransformFunctionFieldRefInput<$PrismaModel>
-  in?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TransformFunction[] | Prisma.ListEnumTransformFunctionFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTransformFunctionWithAggregatesFilter<$PrismaModel> | $Enums.TransformFunction
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumTransformFunctionFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumTransformFunctionFilter<$PrismaModel>
 }
 
 

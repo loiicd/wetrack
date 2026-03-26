@@ -6,6 +6,9 @@ const SettingsNavigation = () => {
     { label: "Allgemein", href: "/settings" },
     { label: "Team", href: "/settings/team" },
     { label: "Security", href: "/settings/security" },
+    { label: "API Keys", href: "/settings/api-keys" as Route },
+    { label: "Credentials", href: "/settings/credentials" as Route },
+    { label: "Billing", href: "/settings/billing" as Route },
   ];
 
   return (

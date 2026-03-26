@@ -1,0 +1,61 @@
+---
+title: CLI Reference
+description: WeTrack CLI commands and options
+---
+
+## Installation
+
+```bash
+bun add -g @wetrack/cli   # with Bun
+npm install -g @wetrack/cli  # with npm
+```
+
+## Commands
+
+### `wetrack synth <file>`
+
+Synthesizes a TypeScript stack file to JSON.
+
+```bash
+wetrack synth mystack.ts
+wetrack synth mystack.ts -o output.json
+```
+
+| Flag | Description |
+|------|-------------|
+| `-o, --output <path>` | Save to file instead of stdout |
+| `-v, --verbose` | Show summary |
+
+### `wetrack deploy <file>`
+
+Synthesizes and deploys to WeTrack.
+
+```bash
+wetrack deploy mystack.ts
+wetrack deploy mystack.ts --url https://app.wetrack.io/api/dashboard
+wetrack deploy mystack.ts --dry-run
+```
+
+| Flag | Description |
+|------|-------------|
+| `-u, --url <url>` | API URL (default: `http://localhost:3000/api/dashboard`) |
+| `-k, --api-key <key>` | Clerk API Key (or use `WETRACK_API_KEY` env var) |
+| `--dry-run` | Synthesize only, no deploy |
+| `-v, --verbose` | Verbose output |
+
+### `wetrack validate <file>`
+
+Validates a synthesized JSON file against the schema.
+
+```bash
+wetrack validate output.json
+```
+
+## Authentication
+
+```bash
+export WETRACK_API_KEY=sk_live_xxx
+wetrack deploy mystack.ts --url https://app.wetrack.io/api/dashboard
+```
+
+Get your API key at **Settings → API Keys** in your WeTrack dashboard.

@@ -57,9 +57,12 @@ type ChartInput = NonNullable<z.infer<typeof stackSchema>["charts"]>[number];
 //   dataSource: string;
 // };
 
-export const mainWorkflow = async (data: z.infer<typeof stackSchema>) => {
+export const mainWorkflow = async (
+  data: z.infer<typeof stackSchema>,
+  orgId: string,
+) => {
   const stack = { key: data.key, environment: data.environment };
-  const stackId = await createStack(stack);
+  const stackId = await createStack(stack, orgId);
 
   await createDashboards(data.dashboards, stackId);
   await createDataSources(stackId, data.dataSources);
@@ -85,10 +88,11 @@ export const mainWorkflow = async (data: z.infer<typeof stackSchema>) => {
   await dashboardInterface.deleteNotInKeys(stackId, dashboardKeys);
 };
 
-const createStack = async (stack: Stack) => {
+const createStack = async (stack: Stack, orgId: string) => {
   return await stackInterface.create({
     key: stack.key,
     environment: stack.environment,
+    orgId,
     version: 1,
   });
 };
@@ -206,29 +210,22 @@ const createQueries = async (
 
   await queryInterface.createMany(queriesToCreate);
 
-  // sourceQuery-Verknüpfungen nachträglich setzen (nach Erstellung aller Keys)
+  // sourceQuery-Verknüpfungen nachträglich via Update setzen (kein zweiter Create)
   const queryMap = await resolveQueryMap(stackId);
-  for (const query of ordered) {
-    if (query.sourceQuery) {
-      const ownId = queryMap[query.key];
-      const sourceId = queryMap[query.sourceQuery];
-      if (!ownId || !sourceId) {
-        throw new Error(
-          `sourceQuery '${query.sourceQuery}' nicht gefunden für Query '${query.key}'.`,
-        );
-      }
-      await queryInterface.create({
-        stackId,
-        key: query.key,
-        type: query.type === "jsonpath" ? QueryType.JSONPATH : QueryType.SQL,
-        dataSourceId: query.dataSource
-          ? (dataSourceMap[query.dataSource] ?? null)
-          : null,
-        sourceQueryId: sourceId,
-        jsonPath: query.type === "jsonpath" ? query.jsonPath : null,
-        sql: query.type === "sql" ? query.sql : null,
-      });
-    }
+  const sourceQueryUpdates = ordered.filter((q) => q.sourceQuery);
+  if (sourceQueryUpdates.length > 0) {
+    await Promise.all(
+      sourceQueryUpdates.map((query) => {
+        const ownId = queryMap[query.key];
+        const sourceId = queryMap[query.sourceQuery!];
+        if (!ownId || !sourceId) {
+          throw new Error(
+            `sourceQuery '${query.sourceQuery}' nicht gefunden für Query '${query.key}'.`,
+          );
+        }
+        return queryInterface.updateSourceQueryId(ownId, sourceId);
+      }),
+    );
   }
 };
 
@@ -301,26 +298,3 @@ const createCharts = async (
 
   await chartInterface.createMany(chartsToCreate);
 };
-
-// const resolveQueryMap = async (
-//   stackId: StackId,
-// ): Promise<Record<string, string>> => {
-//   const queries = await queryInterface.getByStackId(stackId);
-//   return Object.fromEntries(queries.map((q) => [q.key, q.id]));
-// };
-
-// const createTransforms = async (
-//   stackId: StackId,
-//   transforms: TransformInput[],
-//   queryMap: Record<string, string>,
-// ) => {
-//   const transformsToCreate = transforms.map((transform) => ({
-//     stackId,
-//     key: transform.key,
-//     queryId: queryMap[transform.query]!,
-//     function: transform.function,
-//     field: transform.field,
-//     groupByField: transform.groupByField,
-//   }));
-//   await transformInterface.createMany(transformsToCreate);
-// };

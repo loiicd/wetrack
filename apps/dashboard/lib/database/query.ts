@@ -13,6 +13,13 @@ type QueryUpsertInput = {
 };
 
 export const queryInterface = {
+  async updateSourceQueryId(id: string, sourceQueryId: string) {
+    return await prisma.query.update({
+      where: { id },
+      data: { sourceQueryId },
+    });
+  },
+
   async create(data: QueryUpsertInput) {
     return await prisma.query.upsert({
       where: {

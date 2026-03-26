@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 
 const CODE_EXAMPLE = `import { Stack, Dashboard, DataSource, Query, Chart } from "dashboard_as_code";
 
@@ -110,7 +111,7 @@ export default function Home() {
             Get started free
           </Link>
           <Link
-            href="/docs"
+            href={"/docs" as Route}
             className="inline-flex h-10 items-center rounded-lg border px-6 text-sm font-medium hover:bg-muted"
           >
             Read the docs

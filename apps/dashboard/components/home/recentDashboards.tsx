@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
+type Environment = "PRODUCTION" | "STAGING" | "DEVELOPMENT";
+
 interface RecentDashboard {
   id: string;
   key: string;
@@ -13,7 +15,14 @@ interface RecentDashboard {
   description?: string | null;
   createdAt: Date;
   updatedAt: Date;
+  stack?: { environment: Environment; key: string } | null;
 }
+
+const ENV_BADGE: Record<Environment, { label: string; color: string }> = {
+  PRODUCTION: { label: "Production", color: "bg-primary text-primary-foreground" },
+  STAGING: { label: "Staging", color: "bg-muted text-muted-foreground" },
+  DEVELOPMENT: { label: "Dev", color: "bg-transparent text-muted-foreground border border-border" },
+};
 
 function formatTimeAgo(date: Date | string): string {
   const now = new Date();
@@ -84,6 +93,11 @@ export function RecentDashboards({
                   <Badge variant="outline" className="text-xs">
                     {dashboard.key}
                   </Badge>
+                  {dashboard.stack?.environment && (
+                    <span className={`inline-flex items-center rounded-full px-1.5 py-0 text-[10px] font-medium ${ENV_BADGE[dashboard.stack.environment].color}`}>
+                      {ENV_BADGE[dashboard.stack.environment].label}
+                    </span>
+                  )}
                 </div>
                 {mounted && (
                   <span className="text-xs text-muted-foreground whitespace-nowrap">

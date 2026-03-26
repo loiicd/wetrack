@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
+
 const Page = () => {
-  return <div></div>;
+  redirect("/settings/api-keys");
 };
 
 export default Page;

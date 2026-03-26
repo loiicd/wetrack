@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { refreshDashboard } from "@/actions/dashboard/refresh";
 import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -33,7 +34,8 @@ const RefreshDashboardButton = ({ dashboardId }: Props) => {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const doRefresh = () => {
-    startTransition(() => {
+    startTransition(async () => {
+      await refreshDashboard(dashboardId);
       router.refresh();
     });
   };

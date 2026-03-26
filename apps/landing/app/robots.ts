@@ -3,6 +3,6 @@ import { MetadataRoute } from "next";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://wetrack.io/sitemap.xml",
+    sitemap: "https://wetrack.dev/sitemap.xml",
   };
 }

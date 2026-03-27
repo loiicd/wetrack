@@ -1,10 +1,11 @@
 import { auth } from "@clerk/nextjs/server";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import BillingClient from "./billing-client";
 
 const BillingPage = async () => {
   const { orgId } = await auth();
-  if (!orgId) return notFound();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!orgId) redirect("/settings/team" as any);
 
   return (
     <div className="flex flex-col gap-6">

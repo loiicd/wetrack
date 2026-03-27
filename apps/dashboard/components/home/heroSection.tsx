@@ -23,7 +23,7 @@ export function HeroSection() {
               Neues Dashboard
             </Button>
           </Link>
-          <Link href="https://github.com" target="_blank">
+          <Link href="https://github.com/loiicd/wetrack-dashboard" target="_blank">
             <Button variant="outline" size="lg" className="gap-2">
               <Code className="w-4 h-4" />
               Templates ansehen

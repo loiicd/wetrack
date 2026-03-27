@@ -1,11 +1,12 @@
 import { credentialInterface } from "@/lib/database/credential";
 import { auth } from "@clerk/nextjs/server";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import CredentialsClient from "./credentials-client";
 
 const CredentialsPage = async () => {
   const { orgId } = await auth();
-  if (!orgId) return notFound();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!orgId) redirect("/settings/team" as any);
 
   const credentials = await credentialInterface.getByOrgId(orgId);
 

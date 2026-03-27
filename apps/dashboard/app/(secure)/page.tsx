@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import Container from "@/components/layout/container";
 import { HeroSection } from "@/components/home/heroSection";
 import { RecentDashboards } from "@/components/home/recentDashboards";
@@ -54,7 +55,14 @@ async function getRecentDashboards(orgId?: string) {
 }
 
 const Page = async () => {
-  const { orgId } = await auth();
+  const { orgId, userId } = await auth();
+  
+  // Fallback: redirect unauthenticated users if middleware didn't catch it
+  if (!userId) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    redirect("/signIn" as any);
+  }
+  
   const [stats, dashboards] = await Promise.all([
     getStatsData(orgId ?? undefined),
     getRecentDashboards(orgId ?? undefined),

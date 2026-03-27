@@ -53,8 +53,8 @@ const DatasourceTable = async () => {
           <EmptyTableRow
             colSpan={5}
             icon={<FrownIcon />}
-            title="No data"
-            description="No data found"
+            title="Keine Data Sources"
+            description="Deploye einen Stack mit der CLI um Data Sources zu registrieren."
           />
         )}
       </TableBody>

@@ -5,6 +5,9 @@ import { dashboardInterface } from "@/lib/database/dashboard";
 import { auth } from "@clerk/nextjs/server";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const DashboardGrid = async () => {
   await connection();
@@ -27,9 +30,25 @@ const DashboardGrid = async () => {
 const Page = () => {
   return (
     <Container>
-      <Suspense>
-        <DashboardGrid />
-      </Suspense>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Dashboards</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Alle Dashboards deiner Organisation.
+            </p>
+          </div>
+          <Link href="/dashboard/create">
+            <Button className="gap-2">
+              <Plus className="h-4 w-4" />
+              Neues Dashboard
+            </Button>
+          </Link>
+        </div>
+        <Suspense>
+          <DashboardGrid />
+        </Suspense>
+      </div>
     </Container>
   );
 };

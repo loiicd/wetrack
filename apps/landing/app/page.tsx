@@ -188,7 +188,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="border-t bg-muted/20 py-20">
+      <section id="features" className="border-t bg-muted/20 py-20">
         <div className="mx-auto max-w-5xl px-4">
           <h2 className="mb-3 text-center text-3xl font-bold">Everything you need</h2>
           <p className="mb-12 text-center text-muted-foreground">
@@ -236,7 +236,7 @@ export default function Home() {
       </section>
 
       {/* Pricing */}
-      <section className="border-t bg-muted/20 py-20">
+      <section id="pricing" className="border-t bg-muted/20 py-20">
         <div className="mx-auto max-w-5xl px-4">
           <h2 className="mb-3 text-center text-3xl font-bold">Simple, transparent pricing</h2>
           <p className="mb-12 text-center text-muted-foreground">

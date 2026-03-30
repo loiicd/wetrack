@@ -288,7 +288,7 @@ Basis-Content existiert bereits in `content/docs/`. Muss geupdated werden:
 
 ---
 
-### PHASE 8 — Infrastructure (MENSCHLICHE AKTION NÖTIG)
+### PHASE 8 — Infrastructure (BEREITS EINGERICHTET ✅)
 
 Diese Schritte kann ich nicht autonom ausführen:
 

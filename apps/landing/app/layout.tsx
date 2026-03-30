@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { ReactNode } from "react";
+import { ThemeProvider } from "@/components/theme-provider";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+const jetBrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "WeTrack – Dashboard-as-Code",
@@ -29,10 +36,21 @@ export const metadata: Metadata = {
 type Props = { children: ReactNode };
 
 const Layout = ({ children }: Props) => (
-  <html lang="en">
-    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <Navbar />
-      {children}
+  <html
+    lang="en"
+    suppressHydrationWarning
+    className={`${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
+  >
+    <body className="antialiased">
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <Navbar />
+        {children}
+      </ThemeProvider>
     </body>
   </html>
 );

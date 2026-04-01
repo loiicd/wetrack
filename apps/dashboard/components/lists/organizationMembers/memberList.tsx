@@ -44,7 +44,7 @@ const MemberList = async () => {
   );
 };
 
-MemberList.Skeleton = () => {
+MemberList.Skeleton = function MemberListSkeleton() {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-xs font-semibold text-muted-foreground">

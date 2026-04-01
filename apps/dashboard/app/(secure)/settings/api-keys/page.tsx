@@ -4,8 +4,7 @@ import ApiKeysClient from "./api-keys-client";
 
 const ApiKeysPage = async () => {
   const { orgId } = await auth();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!orgId) redirect("/settings/team" as any);
+  if (!orgId) redirect("/settings/team");
 
   return (
     <div className="flex flex-col gap-6">

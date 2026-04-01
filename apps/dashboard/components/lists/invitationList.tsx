@@ -48,7 +48,7 @@ const InvitationList = async () => {
   );
 };
 
-InvitationList.Skeleton = () => {
+InvitationList.Skeleton = function InvitationListSkeleton() {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-xs font-semibold text-muted-foreground">

@@ -5,8 +5,7 @@ import CredentialsClient from "./credentials-client";
 
 const CredentialsPage = async () => {
   const { orgId } = await auth();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!orgId) redirect("/settings/team" as any);
+  if (!orgId) redirect("/settings/team");
 
   const credentials = await credentialInterface.getByOrgId(orgId);
 

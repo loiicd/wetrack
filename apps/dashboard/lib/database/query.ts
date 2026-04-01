@@ -49,29 +49,35 @@ export const queryInterface = {
   async createMany(data: QueryUpsertInput[]) {
     // Sequentiell um Reihenfolge (sourceQuery-Abhängigkeiten) zu respektieren
     for (const d of data) {
-      await prisma.query.upsert({
-        where: {
-          stackId_key: { stackId: d.stackId, key: d.key },
-        },
-        update: {
-          type: d.type,
-          dataSourceId: d.dataSourceId,
-          sourceQueryId: d.sourceQueryId,
-          jsonPath: d.jsonPath,
-          sql: d.sql,
-          version: d.version ?? 1,
-        },
-        create: {
-          stackId: d.stackId,
-          key: d.key,
-          type: d.type,
-          dataSourceId: d.dataSourceId,
-          sourceQueryId: d.sourceQueryId,
-          jsonPath: d.jsonPath,
-          sql: d.sql,
-          version: d.version ?? 1,
-        },
-      });
+      try {
+        await prisma.query.upsert({
+          where: {
+            stackId_key: { stackId: d.stackId, key: d.key },
+          },
+          update: {
+            type: d.type,
+            dataSourceId: d.dataSourceId,
+            sourceQueryId: d.sourceQueryId,
+            jsonPath: d.jsonPath,
+            sql: d.sql,
+            version: d.version ?? 1,
+          },
+          create: {
+            stackId: d.stackId,
+            key: d.key,
+            type: d.type,
+            dataSourceId: d.dataSourceId,
+            sourceQueryId: d.sourceQueryId,
+            jsonPath: d.jsonPath,
+            sql: d.sql,
+            version: d.version ?? 1,
+          },
+        });
+      } catch (error) {
+        throw new Error(
+          `Failed to upsert query '${d.key}': ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
     }
   },
 

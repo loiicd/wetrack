@@ -22,7 +22,11 @@ export async function checkFeature(feature: WeTrackFeature): Promise<boolean> {
     const { has } = await auth();
     return has({ feature });
   } catch {
-    // If Clerk Billing is not configured, default to allowing (dev mode)
+    if (process.env.NODE_ENV === "production") {
+      // In production, fail safe: deny access if billing check fails
+      return false;
+    }
+    // In development/staging, allow access if Clerk Billing is not configured
     return true;
   }
 }

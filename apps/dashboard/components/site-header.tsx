@@ -2,6 +2,7 @@
 
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 import { Button } from "@/components/ui/button";
@@ -25,9 +26,11 @@ export function SiteHeader({ userSlot }: { userSlot?: React.ReactNode }) {
       <div className="flex flex-1 h-(--header-height) items-center pr-4">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex size-8 items-center justify-center rounded-sm bg-primary">
-            <img
+            <Image
               src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblocks-logo.svg"
               alt="Shadcnblocks"
+              width={20}
+              height={20}
               className="size-5 invert dark:invert-0"
             />
           </div>

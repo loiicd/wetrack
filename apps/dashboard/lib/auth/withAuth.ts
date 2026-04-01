@@ -1,4 +1,3 @@
-import { Permission } from "@/types/permission";
 import { auth } from "@clerk/nextjs/server";
 import { authorization } from "./authorization";
 

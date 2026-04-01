@@ -17,10 +17,6 @@ const formatRole = (role: string) => {
   return role.replace("org:", "");
 };
 
-const formatStatus = (status: string) => {
-  return status.replaceAll("_", " ");
-};
-
 const InvitationListItem = ({ invitation }: Props) => {
   const initials = getInitials(invitation.emailAddress);
 
@@ -49,7 +45,7 @@ const InvitationListItem = ({ invitation }: Props) => {
   );
 };
 
-InvitationListItem.Skeleton = () => {
+InvitationListItem.Skeleton = function InvitationListItemSkeleton() {
   return (
     <div className="flex w-full items-center justify-between gap-4">
       <div className="flex items-center gap-2 sm:flex-2/3">

@@ -1,13 +1,7 @@
 import { UserProfile } from "@clerk/nextjs";
 import Container from "@/components/layout/container";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 
 export default async function SecurityPage() {
-  const { userId } = await auth();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!userId) redirect("/signIn" as any);
-
   return (
     <Container>
       <div className="max-w-2xl">

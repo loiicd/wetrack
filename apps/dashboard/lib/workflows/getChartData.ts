@@ -19,7 +19,7 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
   const config = RestApiConfigSchema.parse(dataSource.config);
 
   // Resolve credential from vault if referenced
-  let credentialHeaders: Record<string, string> = {};
+  const credentialHeaders: Record<string, string> = {};
   if (config.credential) {
     const orgId = dataSource.stack.orgId;
     const credential = await credentialInterface.getByLabel(orgId, config.credential);

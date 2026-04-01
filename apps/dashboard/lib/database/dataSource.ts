@@ -26,23 +26,29 @@ export const dataSourceInterface = {
   async createMany(data: DataSourceCreateManyInput[]) {
     await Promise.all(
       data.map((d) =>
-        prisma.dataSource.upsert({
-          where: {
-            stackId_key: { stackId: d.stackId, key: d.key },
-          },
-          update: {
-            type: d.type,
-            config: d.config,
-            version: d.version ?? 1,
-          },
-          create: {
-            stackId: d.stackId,
-            key: d.key,
-            type: d.type,
-            config: d.config,
-            version: d.version ?? 1,
-          },
-        }),
+        prisma.dataSource
+          .upsert({
+            where: {
+              stackId_key: { stackId: d.stackId, key: d.key },
+            },
+            update: {
+              type: d.type,
+              config: d.config,
+              version: d.version ?? 1,
+            },
+            create: {
+              stackId: d.stackId,
+              key: d.key,
+              type: d.type,
+              config: d.config,
+              version: d.version ?? 1,
+            },
+          })
+          .catch((error) => {
+            throw new Error(
+              `Failed to upsert dataSource '${d.key}': ${error instanceof Error ? error.message : String(error)}`,
+            );
+          }),
       ),
     );
   },

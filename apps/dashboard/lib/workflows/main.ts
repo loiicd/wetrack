@@ -6,6 +6,7 @@ import { stackInterface } from "@/lib/database/stack";
 import { Environment, StackId } from "@/types";
 import { stackSchema } from "@/schemas/dashboard";
 import { QueryType } from "@/generated/prisma/enums";
+import { Prisma } from "@/generated/prisma/client";
 import z from "zod";
 
 type Stack = {
@@ -130,9 +131,7 @@ const createDataSources = async (
     stackId,
     key: dataSource.key,
     type: dataSource.type,
-    // Cast to satisfy Prisma's JsonValue requirement; config is always a valid JSON object
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    config: dataSource.config as any,
+    config: dataSource.config as Prisma.InputJsonValue,
   }));
 
   await dataSourceInterface.createMany(dataSourcesToCreate);

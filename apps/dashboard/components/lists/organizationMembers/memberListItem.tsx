@@ -47,7 +47,7 @@ const MemberListItem = ({ user, isLastAdmin }: Props) => {
   );
 };
 
-MemberListItem.Skeleton = () => {
+MemberListItem.Skeleton = function MemberListItemSkeleton() {
   return (
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-2 sm:flex-2/3">

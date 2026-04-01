@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 type Environment = "PRODUCTION" | "STAGING" | "DEVELOPMENT";
 
@@ -44,11 +44,11 @@ export function RecentDashboards({
 }: {
   dashboards: RecentDashboard[];
 }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   if (dashboards.length === 0) {
     return (

@@ -6,6 +6,7 @@ import StatCard from "@/components/charts/statCard";
 import ChartGrid from "@/components/chartGrid";
 import { Badge } from "@/components/ui/badge";
 import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
+import DashboardSkeleton from "@/components/dashboard/dashboardSkeleton";
 import Container from "@/components/layout/container";
 import {
   Card,
@@ -214,7 +215,7 @@ const DashboardContent = async ({
 const Page = (props: DashboardPageProps) => {
   return (
     <Container>
-      <Suspense fallback={<div>Loading dashboard…</div>}>
+      <Suspense fallback={<DashboardSkeleton />}>
         <DashboardContent props={props} />
       </Suspense>
     </Container>

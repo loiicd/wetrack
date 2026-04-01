@@ -64,7 +64,7 @@ type ChartInput = NonNullable<z.infer<typeof stackSchema>["charts"]>[number];
 export const mainWorkflow = async (
   data: z.infer<typeof stackSchema>,
   orgId: string,
-) => {
+): Promise<{ stackId: string }> => {
   const stack = { key: data.key, environment: data.environment };
   const stackId = await createStack(stack, orgId);
 
@@ -90,6 +90,8 @@ export const mainWorkflow = async (
 
   const dashboardKeys = (data.dashboards ?? []).map((d) => d.key);
   await dashboardInterface.deleteNotInKeys(stackId, dashboardKeys);
+
+  return { stackId };
 };
 
 const createStack = async (stack: Stack, orgId: string) => {

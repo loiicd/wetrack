@@ -1,5 +1,5 @@
 import { JSONPath } from "jsonpath-plus";
-import alasql from "alasql";
+import alasql from "@/lib/vendors/alasql";
 import { queryInterface } from "../database/query";
 import { getChartData } from "./getChartData";
 import { validateSql } from "../sql/validateSql";

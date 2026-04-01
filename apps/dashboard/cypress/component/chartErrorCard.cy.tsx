@@ -3,46 +3,64 @@ import ChartErrorCard from "@/components/charts/chartErrorCard";
 describe("ChartErrorCard", () => {
   it("renders the chart title", () => {
     cy.mount(
-      <ChartErrorCard
-        title="Revenue Chart"
-        message="DataSource not reachable"
-      />,
+      <ChartErrorCard title="Revenue Chart" message="DataSource not reachable" />,
     );
     cy.contains("Revenue Chart").should("be.visible");
   });
 
-  it("renders the error message", () => {
+  it("renders a user-friendly hint (not the raw error)", () => {
     cy.mount(
-      <ChartErrorCard
-        title="Revenue Chart"
-        message="DataSource not reachable"
-      />,
+      <ChartErrorCard title="Revenue Chart" message="DataSource not reachable" />,
     );
-    cy.contains("DataSource not reachable").should("be.visible");
+    // Raw message is hidden behind the details toggle; hint is always visible
+    cy.contains("Die Datenquelle konnte nicht erreicht werden.").should("be.visible");
   });
 
-  it("renders a generic subtitle about the loading failure", () => {
+  it("categorizes a network error correctly", () => {
     cy.mount(
-      <ChartErrorCard title="My Chart" message="Timeout" />,
+      <ChartErrorCard title="Net Chart" message="fetch failed: ECONNREFUSED" />,
     );
-    cy.contains("Chart konnte nicht geladen werden.").should("be.visible");
+    cy.contains("API-Fehler").should("be.visible");
   });
 
-  it("renders the alert icon", () => {
+  it("categorizes a SQL/query error correctly", () => {
+    cy.mount(
+      <ChartErrorCard title="SQL Chart" message="alasql: syntax error near FROM" />,
+    );
+    cy.contains("Abfrage-Fehler").should("be.visible");
+  });
+
+  it("categorizes a config error correctly", () => {
+    cy.mount(
+      <ChartErrorCard title="Config Chart" message="zod: invalid field type" />,
+    );
+    cy.contains("Konfigurations-Fehler").should("be.visible");
+  });
+
+  it("hides technical details by default and shows them after toggle", () => {
+    const rawMsg = "ECONNREFUSED 127.0.0.1:5432";
+    cy.mount(<ChartErrorCard title="Detail Test" message={rawMsg} />);
+    // Raw message should NOT be visible initially
+    cy.contains(rawMsg).should("not.exist");
+    // Click to expand
+    cy.contains("Technische Details").click();
+    cy.contains(rawMsg).should("be.visible");
+    // Click again to collapse
+    cy.contains("Technische Details").click();
+    cy.contains(rawMsg).should("not.exist");
+  });
+
+  it("renders a refresh button", () => {
     cy.mount(
       <ChartErrorCard title="Error" message="Something went wrong" />,
     );
-    // lucide-react renders an SVG
-    cy.get("svg").should("exist");
+    cy.get('button[title="Aktualisieren"]').should("exist");
   });
 
-  it("renders long error messages without layout breakage", () => {
-    const longMessage =
-      "Error: ECONNREFUSED – Connection refused by host 192.168.1.100:5432 after 3 retries. " +
-      "Check that the database server is running and that the network is reachable.";
+  it("renders an icon SVG", () => {
     cy.mount(
-      <ChartErrorCard title="DB Error" message={longMessage} />,
+      <ChartErrorCard title="Icon Test" message="timeout" />,
     );
-    cy.contains(longMessage).should("be.visible");
+    cy.get("svg").should("exist");
   });
 });

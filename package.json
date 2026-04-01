@@ -27,5 +27,8 @@
   ],
   "dependencies": {
     "@vvo/tzdb": "^6.198.0"
-  }
+  },
+  "trustedDependencies": [
+    "cypress"
+  ]
 }

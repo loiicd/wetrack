@@ -4,6 +4,8 @@ import InvitationList from "@/components/lists/invitationList";
 import MemberList from "@/components/lists/organizationMembers/memberList";
 import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { DeleteOrganizationSection } from "@/components/auth/DeleteOrganizationSection";
 
 const Page = async () => {
   return (
@@ -31,6 +33,20 @@ const Page = async () => {
             </Suspense>
           </TabsContent>
         </Tabs>
+
+        <Separator />
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <h4 className="text-lg font-semibold text-destructive">
+              Gefahrenzone
+            </h4>
+            <p className="text-sm text-muted-foreground">
+              Diese Aktionen sind unwiderruflich. Bitte mit Vorsicht verwenden.
+            </p>
+          </div>
+          <DeleteOrganizationSection />
+        </div>
       </div>
     </Container>
   );

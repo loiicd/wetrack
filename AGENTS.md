@@ -1,5 +1,35 @@
 # WeTrack – AI Agent Guide
 
+## ⚡ Skills – IMMER zuerst lesen
+
+Dieses Projekt hat spezialisierte **Skills** installiert. **Vor jeder relevanten Arbeit MÜSSEN diese Skills gelesen und angewendet werden.**
+
+```bash
+# Verfügbare Skills prüfen
+npx skills list
+```
+
+| Skill | Wann nutzen |
+|-------|-------------|
+| `clerk-custom-ui` | Custom Sign-In/Sign-Up UI, Appearance, Themes |
+| `clerk-nextjs-patterns` | Middleware, Server Actions, Caching mit Clerk |
+| `clerk-backend-api` | Clerk Backend API (Orgs, User, Memberships) |
+| `clerk` | Allgemeine Clerk-Integration, Setup |
+| `cypress` | E2E Tests mit Cypress |
+| `shadcn` | shadcn/ui Komponenten hinzufügen/konfigurieren |
+| `prisma-cli` | Prisma Migrations, DB-Operationen |
+| `prisma-postgres` | Prisma mit PostgreSQL/Neon |
+
+**Regel:** Wenn du an Auth-Code arbeitest → `clerk-*` Skills lesen. Wenn du E2E Tests schreibst → `cypress` Skill lesen. Wenn du UI-Komponenten hinzufügst → `shadcn` Skill lesen.
+
+```bash
+# Skill-Inhalte lesen (Beispiel)
+cat .agents/skills/clerk-custom-ui/skill.md
+cat .agents/skills/cypress/skill.md
+```
+
+---
+
 WeTrack ist eine **Dashboard-as-Code** Plattform. Dashboards, Charts, DataSources und Queries werden als TypeScript-Code im Repository definiert, mit dem CLI synthetisiert und über eine REST-API in die laufende Next.js-App deployed.
 
 ---

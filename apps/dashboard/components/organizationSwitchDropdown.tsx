@@ -12,10 +12,11 @@ import {
 } from "./ui/dropdown-menu";
 import { ChevronsUpDownIcon, PlusIcon } from "lucide-react";
 import { SidebarMenuButton } from "./ui/sidebar";
-import { CreateOrganization, useOrganizationList } from "@clerk/nextjs";
+import { useOrganizationList } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Suspense, useOptimistic, useState, useTransition } from "react";
-import { Dialog, DialogContent } from "./ui/dialog";
+import { useOptimistic, useState, useTransition } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { CreateOrganizationForm } from "./auth/CreateOrganizationForm";
 
 type Organization = {
   id: string;
@@ -118,10 +119,11 @@ const OrganizationSwitchDropdown = ({
         open={createOrganizationOpen}
         onOpenChange={setCreateOrganizationOpen}
       >
-        <DialogContent className="w-fit max-w-[calc(100%-2rem)] border-none bg-transparent p-0 shadow-none ring-0 sm:max-w-175">
-          <Suspense>
-            <CreateOrganization />
-          </Suspense>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Organisation erstellen</DialogTitle>
+          </DialogHeader>
+          <CreateOrganizationForm onSuccess={() => setCreateOrganizationOpen(false)} />
         </DialogContent>
       </Dialog>
     </DropdownMenu>

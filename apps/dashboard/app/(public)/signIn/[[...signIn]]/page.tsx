@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { SignIn } from "@clerk/nextjs";
+import { SignInForm } from "@/components/auth/SignInForm";
 
 const Page = () => {
   return (
     <Suspense>
-      <SignIn />
+      <SignInForm />
     </Suspense>
   );
 };

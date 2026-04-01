@@ -25,10 +25,9 @@ const InviteUserDialog = () => {
       />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>Benutzer einladen</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently remove the user
-            from the organization.
+            Lade ein Teammitglied per E-Mail in deine Organisation ein.
           </DialogDescription>
         </DialogHeader>
         <InviteUserForm />

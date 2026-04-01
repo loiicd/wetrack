@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import Link from "next/link";
+import type { Route } from "next";
 import { Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -161,7 +162,7 @@ export function SignInForm() {
       <p className="text-center text-sm text-muted-foreground">
         Noch kein Konto?{" "}
         <Link
-          href="/signUp/[[...signUp]]"
+          href={"/signUp" as Route}
           className="font-medium text-foreground underline-offset-4 hover:underline"
           data-testid="sign-in-signup-link"
         >

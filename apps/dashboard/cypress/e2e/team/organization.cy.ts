@@ -5,11 +5,12 @@ describe("Create Organization", () => {
   beforeEach(() => {
     cy.signIn();
     cy.visit("/");
+    // Open the sidebar org switcher dropdown to reveal "Create organization"
+    cy.get('[data-testid="org-switcher-trigger"]', { timeout: 10000 }).click();
   });
 
   it("can open create organization dialog from sidebar", () => {
-    // The sidebar org switcher has the create org option
-    cy.contains("Create organization").should("exist");
+    cy.contains("Create organization").should("be.visible");
   });
 
   it("shows create organization form with name input", () => {
@@ -48,21 +49,21 @@ describe("Delete Organization", () => {
   });
 
   it("opens delete confirmation dialog", () => {
-    cy.get('[data-testid="delete-org-trigger"]').click();
+    cy.get('[data-testid="delete-org-trigger"]').first().click();
     cy.get('[data-testid="delete-org-dialog"]').should("be.visible");
     cy.contains("Organisation löschen").should("be.visible");
     cy.contains("unwiderruflich").should("be.visible");
   });
 
   it("disables submit when confirmation input is empty", () => {
-    cy.get('[data-testid="delete-org-trigger"]').click();
+    cy.get('[data-testid="delete-org-trigger"]').first().click();
     cy.get('[data-testid="delete-org-confirm-submit"]').click();
     // Should show validation error (name doesn't match)
     cy.get('[data-testid="delete-org-confirm-input"]').should("be.visible");
   });
 
   it("shows error when confirmation name doesn't match", () => {
-    cy.get('[data-testid="delete-org-trigger"]').click();
+    cy.get('[data-testid="delete-org-trigger"]').first().click();
     cy.get('[data-testid="delete-org-confirm-input"]').type(
       "wrong organization name",
     );

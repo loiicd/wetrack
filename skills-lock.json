@@ -21,6 +21,11 @@
       "sourceType": "github",
       "computedHash": "57b557ba9ee0578b4b8f9aa3ee07459e211422cb0abe53d9bfb97a27cf9b6d9c"
     },
+    "clerk-testing": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "computedHash": "3d9adf5f21d00c952d5bc63da971cd1b3767ed18ad3b6d60d9c2343a4339492c"
+    },
     "cypress": {
       "source": "bobmatnyc/claude-mpm-skills",
       "sourceType": "github",

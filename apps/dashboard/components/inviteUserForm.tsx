@@ -26,7 +26,7 @@ import { Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 const formSchema = z.object({
-  email: z.email(),
+  email: z.email({ error: "Bitte eine gültige E-Mail-Adresse eingeben." }),
   role: z.enum(["org:admin", "org:member"]),
 });
 
@@ -56,7 +56,7 @@ const InviteUserForm = () => {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form onSubmit={form.handleSubmit(handleSubmit)} noValidate>
       <FieldGroup>
         <FieldSet>
           <Controller
@@ -65,7 +65,7 @@ const InviteUserForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>E-Mail</FieldLabel>
-                <Input aria-invalid={fieldState.invalid} {...field} />
+                <Input aria-invalid={fieldState.invalid} type="email" {...field} />
                 {fieldState.error && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

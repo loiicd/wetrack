@@ -39,11 +39,8 @@ const OrganizationSwitchDropdown = ({
   const [displayed, setOptimisticOrg] = useOptimistic(activeOrganization);
   const [createOrganizationOpen, setCreateOrganizationOpen] = useState(false);
 
-  if (!setActive) {
-    return null;
-  }
-
   const handleSwitchOrganization = (org: Organization) => {
+    if (!setActive) return;
     startTransition(async () => {
       setOptimisticOrg(org);
       await setActive({ organization: org.id });
@@ -59,6 +56,7 @@ const OrganizationSwitchDropdown = ({
             variant="default"
             size="lg"
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            data-testid="org-switcher-trigger"
           >
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
               <Image

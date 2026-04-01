@@ -21,9 +21,11 @@ describe("Team Management – Invite User", () => {
 
   it("shows validation error for invalid email in invite form", () => {
     cy.contains("Invite User").click();
-    // Type invalid email and submit
-    cy.get('input[type="email"]').first().type("not-an-email");
-    cy.contains("button", "Invite").click();
+    // Scope to the dialog to avoid clicking the covered trigger button
+    cy.get('[role="dialog"]').within(() => {
+      cy.get('input[type="email"]').type("not-an-email");
+      cy.contains("button", "Invite").click();
+    });
     cy.contains("gültige E-Mail").should("be.visible");
   });
 

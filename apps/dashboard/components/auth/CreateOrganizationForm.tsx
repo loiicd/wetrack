@@ -85,7 +85,7 @@ export function CreateOrganizationForm({ onSuccess }: Props) {
           <Button
             type="submit"
             className="w-full"
-            disabled={form.formState.isSubmitting || !createOrganization}
+            disabled={form.formState.isSubmitting}
             data-testid="create-org-submit"
           >
             {form.formState.isSubmitting ? (

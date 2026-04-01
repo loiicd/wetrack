@@ -5,6 +5,7 @@ const isPublicRoute = createRouteMatcher([
   "/signIn(.*)",
   "/signUp(.*)",
   "/api/dashboard(.*)", // CLI deploy endpoint - authenticated via API key separately
+  "/api/test(.*)", // Development-only test endpoints (blocked in production by route handler)
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

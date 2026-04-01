@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useOrganization, useClerk } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -33,7 +33,6 @@ type Props = {
 export function DeleteOrganizationDialog({ organizationName }: Props) {
   const [open, setOpen] = useState(false);
   const { signOut } = useClerk();
-  const { organization } = useOrganization();
 
   const confirmSchema = z.object({
     name: z.literal(organizationName, {
@@ -54,11 +53,8 @@ export function DeleteOrganizationDialog({ organizationName }: Props) {
     }
     toast.success("Organisation wurde gelöscht.");
     setOpen(false);
-    // Sign out and redirect since the org no longer exists
     await signOut({ redirectUrl: "/signIn" });
   };
-
-  if (!organization) return null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

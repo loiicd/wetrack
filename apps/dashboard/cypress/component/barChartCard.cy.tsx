@@ -1,9 +1,13 @@
-import BarChartCard from "@/components/charts/barChartCard";
-import type { DataFrame } from "@/types/dataframe";
+import BarChartCard from "../../components/charts/barChartCard";
+import type { DataFrame } from "../../types/dataframe";
 
 const sampleData: DataFrame = {
   fields: [
-    { name: "product", type: "string", values: ["Apples", "Bananas", "Cherries"] },
+    {
+      name: "product",
+      type: "string",
+      values: ["Apples", "Bananas", "Cherries"],
+    },
     { name: "revenue", type: "number", values: [300, 500, 150] },
   ],
 };
@@ -32,7 +36,11 @@ describe("BarChartCard", () => {
       <BarChartCard
         title="Vertical Bar Chart"
         data={sampleData}
-        config={{ ...baseConfig, categoryField: "product", valueFields: ["revenue"] }}
+        config={{
+          ...baseConfig,
+          categoryField: "product",
+          valueFields: ["revenue"],
+        }}
       />,
     );
     cy.contains("Vertical Bar Chart").should("be.visible");
@@ -45,7 +53,12 @@ describe("BarChartCard", () => {
       <BarChartCard
         title="Horizontal Bar Chart"
         data={sampleData}
-        config={{ ...baseConfig, orientation: "horizontal", categoryField: "product", valueFields: ["revenue"] }}
+        config={{
+          ...baseConfig,
+          orientation: "horizontal",
+          categoryField: "product",
+          valueFields: ["revenue"],
+        }}
       />,
     );
     cy.contains("Horizontal Bar Chart").should("be.visible");
@@ -57,7 +70,11 @@ describe("BarChartCard", () => {
       <BarChartCard
         title="Multi-Series"
         data={multiSeriesData}
-        config={{ ...baseConfig, categoryField: "month", valueFields: ["online", "offline"] }}
+        config={{
+          ...baseConfig,
+          categoryField: "month",
+          valueFields: ["online", "offline"],
+        }}
       />,
     );
     cy.get("svg").should("exist");
@@ -68,7 +85,12 @@ describe("BarChartCard", () => {
       <BarChartCard
         title="Stacked"
         data={multiSeriesData}
-        config={{ ...baseConfig, stacked: true, categoryField: "month", valueFields: ["online", "offline"] }}
+        config={{
+          ...baseConfig,
+          stacked: true,
+          categoryField: "month",
+          valueFields: ["online", "offline"],
+        }}
       />,
     );
     cy.get("svg").should("exist");
@@ -79,7 +101,11 @@ describe("BarChartCard", () => {
       <BarChartCard
         title="Empty Chart"
         data={emptyData}
-        config={{ ...baseConfig, categoryField: "product", valueFields: ["revenue"] }}
+        config={{
+          ...baseConfig,
+          categoryField: "product",
+          valueFields: ["revenue"],
+        }}
       />,
     );
     cy.contains("Keine Daten für dieses Chart.").should("be.visible");
@@ -90,7 +116,12 @@ describe("BarChartCard", () => {
       <BarChartCard
         title="No Card"
         data={sampleData}
-        config={{ ...baseConfig, showCard: false, categoryField: "product", valueFields: ["revenue"] }}
+        config={{
+          ...baseConfig,
+          showCard: false,
+          categoryField: "product",
+          valueFields: ["revenue"],
+        }}
       />,
     );
     cy.get("svg").should("exist");
@@ -102,7 +133,11 @@ describe("BarChartCard", () => {
         title="With Description"
         description="Shows product revenue"
         data={sampleData}
-        config={{ ...baseConfig, categoryField: "product", valueFields: ["revenue"] }}
+        config={{
+          ...baseConfig,
+          categoryField: "product",
+          valueFields: ["revenue"],
+        }}
       />,
     );
     cy.contains("Shows product revenue").should("be.visible");

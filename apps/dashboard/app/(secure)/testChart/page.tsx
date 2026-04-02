@@ -1,0 +1,151 @@
+// Beispiel 5: Scatter mit vielen Punkten
+const data5: DataFrame = {
+  fields: [
+    {
+      name: "x",
+      type: "number",
+      values: Array.from({ length: 50 }, (_, i) => i + 1),
+    },
+    {
+      name: "y",
+      type: "number",
+      values: Array.from({ length: 50 }, (_, i) =>
+        Math.round(Math.sin(i / 5) * 20 + 30 + Math.random() * 10),
+      ),
+    },
+  ],
+};
+const config5 = {
+  y: { label: "y", color: "var(--chart-4)", type: "scatter" },
+} as const;
+import CartesianChart, { DataFrame } from "@/components/charts/CartesianChart";
+
+const Page = () => {
+  const data1: DataFrame = {
+    fields: [
+      {
+        name: "month",
+        type: "string",
+        values: [
+          "Januar",
+          "Februar",
+          "März",
+          "April",
+          "Mai",
+          "Juni",
+          "Juli",
+          "August",
+          "September",
+          "Oktober",
+          "November",
+          "Dezember",
+        ],
+      },
+      {
+        name: "Aufrufe",
+        type: "number",
+        values: [30, 20, 50, 40, 60, 35, 45, 25, 55, 30, 20, 50],
+      },
+      {
+        name: "Besucher",
+        type: "number",
+        values: [20, 15, 40, 30, 50, 25, 35, 20, 45, 25, 15, 40],
+      },
+      {
+        name: "Conversions",
+        type: "number",
+        values: [5, 3, 10, 7, 12, 6, 8, 4, 11, 6, 3, 9],
+      },
+    ],
+  };
+  const config1 = {
+    Aufrufe: { label: "Aufrufe", color: "var(--chart-1)", type: "bar" },
+    Besucher: { label: "Besucher", color: "var(--chart-2)", type: "bar" },
+    Conversions: {
+      label: "Conversions",
+      color: "var(--chart-3)",
+      type: "line",
+    },
+  } as const;
+
+  const data2: DataFrame = {
+    fields: [
+      { name: "Tag", type: "string", values: ["Mo", "Di", "Mi", "Do", "Fr"] },
+      { name: "Umsatz", type: "number", values: [100, 120, 90, 140, 110] },
+      { name: "Kosten", type: "number", values: [80, 70, 60, 100, 90] },
+    ],
+  };
+  const config2 = {
+    Umsatz: { label: "Umsatz", color: "var(--chart-1)", type: "area" },
+    Kosten: { label: "Kosten", color: "var(--chart-2)", type: "area" },
+  } as const;
+
+  const data3: DataFrame = {
+    fields: [
+      { name: "x", type: "number", values: [1, 2, 3, 4, 5, 6] },
+      { name: "y", type: "number", values: [10, 15, 8, 20, 12, 18] },
+    ],
+  };
+  const config3 = {
+    y: { label: "y", color: "var(--chart-4)", type: "scatter" },
+  } as const;
+
+  const data4: DataFrame = {
+    fields: [
+      { name: "Quartal", type: "string", values: ["Q1", "Q2", "Q3", "Q4"] },
+      { name: "Gewinn", type: "number", values: [200, 300, 250, 400] },
+    ],
+  };
+  const config4 = {
+    Gewinn: { label: "Gewinn", color: "var(--chart-5)", type: "area" },
+  } as const;
+
+  return (
+    <div className="container mx-auto p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <CartesianChart
+            data={data1}
+            config={config1}
+            title="Bar + Line (Monate)"
+            description="Aufrufe/Besucher als Balken, Conversions als Linie."
+          />
+        </div>
+        <div>
+          <CartesianChart
+            data={data2}
+            config={config2}
+            title="Area + Scatter (Wochentage)"
+            description="Umsatz/Kosten als Fläche, Events als Punkte."
+          />
+        </div>
+        <div>
+          <CartesianChart
+            data={data3}
+            config={config3}
+            title="Scatter (xy)"
+            description="Nur Punkte (Scatter)."
+          />
+        </div>
+        <div>
+          <CartesianChart
+            data={data4}
+            config={config4}
+            title="Area (Quartale)"
+            description="Nur Fläche (Area)."
+          />
+        </div>
+        <div>
+          <CartesianChart
+            data={data5}
+            config={config5}
+            title="Scatter (viele Punkte)"
+            description="Scatter-Plot mit 50 zufälligen Punkten."
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Page;

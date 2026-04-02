@@ -16,6 +16,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+
+import BarChartAxes from "./bar/BarChartAxes";
+import BarChartBars from "./bar/BarChartBars";
 import ChartWrapper from "../chartWrapper";
 
 type BarChartCardProps = {
@@ -70,17 +73,14 @@ const BarChartCard = ({
     showCard = true,
   } = config;
 
+  const rechartsLayout =
+    orientation === "horizontal" ? "vertical" : "horizontal";
+
   const rechartsData = dataFrameToRechartsData(
     data,
     categoryField,
     valueFields,
   );
-
-  // Recharts layout ist invertiert zur visuellen Ausrichtung:
-  // orientation "vertical"   → Balken zeigen nach oben   → recharts layout "horizontal"
-  // orientation "horizontal" → Balken zeigen nach rechts → recharts layout "vertical"
-  const rechartsLayout =
-    orientation === "horizontal" ? "vertical" : "horizontal";
 
   const chartConfig: ChartConfig = Object.fromEntries(
     valueFields.map((vf, i) => [
@@ -101,64 +101,32 @@ const BarChartCard = ({
           Keine Daten für dieses Chart.
         </p>
       ) : (
-        <ChartContainer config={chartConfig} className="h-full w-full">
+        <ChartContainer config={chartConfig} className="h-64 w-full">
           <BarChart
             accessibilityLayer
             data={rechartsData}
             layout={rechartsLayout}
-            margin={{ top: 4, right: 16, left: 0, bottom: 4 }}
           >
             <CartesianGrid
               vertical={orientation === "vertical"}
               horizontal={orientation === "horizontal"}
             />
-
-            {orientation === "horizontal" ? (
-              <>
-                <YAxis
-                  type="category"
-                  dataKey={categoryField}
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  width={100}
-                />
-                <XAxis type="number" hide={!showLabels} />
-              </>
-            ) : (
-              <>
-                <XAxis
-                  type="category"
-                  dataKey={categoryField}
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                />
-                <YAxis type="number" hide={!showLabels} />
-              </>
-            )}
-
+            <BarChartAxes
+              orientation={orientation}
+              categoryField={categoryField}
+              showLabels={showLabels}
+            />
             {showTooltip && (
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             )}
-
-            {valueFields.map((vf, i) => (
-              <Bar
-                key={vf}
-                dataKey={vf}
-                fill={colors?.[i] ?? DEFAULT_COLORS[i % DEFAULT_COLORS.length]}
-                radius={stacked ? 0 : 4}
-                stackId={stackId}
-              >
-                {showLabels && (
-                  <LabelList
-                    dataKey={vf}
-                    position={orientation === "horizontal" ? "right" : "top"}
-                    className="fill-foreground text-xs"
-                  />
-                )}
-              </Bar>
-            ))}
+            <BarChartBars
+              valueFields={valueFields}
+              colors={colors}
+              stacked={stacked}
+              showLabels={showLabels}
+              orientation={orientation}
+              stackId={stackId}
+            />
           </BarChart>
         </ChartContainer>
       )}

@@ -4,11 +4,10 @@
 // and behavior that modifies Cypress.
 // ***********************************************************
 
+
+import "../../app/globals.css";
 import "./commands";
 import { mount } from "cypress/react";
-
-// Import global styles so CSS variables and base styles are available
-import "@/app/globals.css";
 
 // Augment the Cypress namespace to include the `mount` command type
 declare global {

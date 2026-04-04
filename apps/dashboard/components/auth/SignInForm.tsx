@@ -35,8 +35,11 @@ export function SignInForm() {
   });
 
   const isLoading = fetchStatus === "fetching" || form.formState.isSubmitting;
+  const isReady = !!signIn;
 
   const handleSubmit = async (values: FormValues) => {
+    if (!signIn) return;
+
     const { error } = await signIn.password({
       identifier: values.email,
       password: values.password,
@@ -146,7 +149,7 @@ export function SignInForm() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isLoading}
+              disabled={isLoading || !isReady}
               data-testid="sign-in-submit"
             >
               {isLoading ? (

@@ -218,7 +218,12 @@ const CartesianChart = ({
             <motion.div
               layoutId={`card-${title}-${id}`}
               ref={cardRef}
-              transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 25,
+                mass: 0.8,
+              }}
               className="relative flex h-full w-full max-w-[calc(100vw-2rem)] flex-col overflow-auto bg-card shadow-sm sm:rounded-t-3xl [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [scrollbar-width:none]"
             >
               <div className="flex items-start justify-between p-8">
@@ -242,10 +247,25 @@ const CartesianChart = ({
                   aria-label="Schließen"
                   layoutId={`button-${title}-${id}`}
                   onClick={() => setActive(false)}
-                  transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 25,
+                    mass: 0.8,
+                  }}
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <path d="M18 6 6 18" />
                     <path d="m6 6 12 12" />
                   </svg>
@@ -253,7 +273,12 @@ const CartesianChart = ({
               </div>
               <motion.div
                 layoutId={`chart-${title}-${id}`}
-                transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 25,
+                  mass: 0.8,
+                }}
                 className="flex-1 px-8 pb-10 min-h-0"
               >
                 {chartContent}
@@ -290,20 +315,44 @@ const CartesianChart = ({
           <motion.button
             aria-label="Öffnen"
             layoutId={`button-${title}-${id}`}
-            transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 25,
+              mass: 0.8,
+            }}
             onClick={(e) => {
               e.stopPropagation();
               setActive(true);
             }}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M5 12h14" />
               <path d="M12 5v14" />
             </svg>
           </motion.button>
         </div>
-        <motion.div layoutId={`chart-${title}-${id}`} transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }} className="h-48">
+        <motion.div
+          layoutId={`chart-${title}-${id}`}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 25,
+            mass: 0.8,
+          }}
+          className="h-48"
+        >
           {chartContent}
         </motion.div>
       </motion.div>

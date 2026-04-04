@@ -4,7 +4,6 @@
 // and behavior that modifies Cypress.
 // ***********************************************************
 
-
 import "../../app/globals.css";
 import "./commands";
 import { mount } from "cypress/react";

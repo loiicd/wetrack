@@ -19,6 +19,7 @@ export type Environment = (typeof Environment)[keyof typeof Environment]
 
 
 export const ChartType = {
+  CARTESIAN: 'CARTESIAN',
   BAR: 'BAR',
   LINE: 'LINE',
   STAT: 'STAT',

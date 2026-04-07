@@ -18,7 +18,8 @@ const data5: DataFrame = {
 const config5 = {
   y: { label: "y", color: "var(--chart-4)", type: "scatter" },
 } as const;
-import CartesianChart, { DataFrame } from "@/components/charts/CartesianChart";
+import CartesianChart, { DataFrame } from "@/components/widgets/CartesianChart";
+import DonutChartCard from "@/components/widgets/donutChartCard";
 import TableWidget from "@/components/widgets/table";
 
 const Page = () => {
@@ -163,6 +164,119 @@ const Page = () => {
             config={config5}
             title="Scatter (viele Punkte)"
             description="Scatter-Plot mit 50 zufälligen Punkten."
+          />
+        </div>
+
+        {/* ── Donut Charts ─────────────────────────────────── */}
+        <div>
+          <DonutChartCard
+            title="Marktanteile"
+            description="Prozentualer Anteil pro Produktkategorie"
+            data={{
+              fields: [
+                {
+                  name: "Kategorie",
+                  type: "string",
+                  values: ["Elektronik", "Kleidung", "Lebensmittel", "Haushalt", "Sport"],
+                },
+                {
+                  name: "Anteil",
+                  type: "number",
+                  values: [35, 25, 20, 12, 8],
+                },
+              ],
+            }}
+            config={{
+              nameField: "Kategorie",
+              valueField: "Anteil",
+              showTooltip: true,
+              showLegend: true,
+            }}
+          />
+        </div>
+        <div>
+          <DonutChartCard
+            title="Budget-Verteilung"
+            description="Ausgaben nach Bereich (Q1 2024)"
+            data={{
+              fields: [
+                {
+                  name: "Bereich",
+                  type: "string",
+                  values: ["Marketing", "Entwicklung", "Support", "Vertrieb"],
+                },
+                {
+                  name: "Budget",
+                  type: "number",
+                  values: [45000, 120000, 30000, 60000],
+                },
+              ],
+            }}
+            config={{
+              nameField: "Bereich",
+              valueField: "Budget",
+              colors: ["var(--chart-3)", "var(--chart-1)", "var(--chart-5)", "var(--chart-2)"],
+              showTooltip: true,
+              showLegend: true,
+            }}
+          />
+        </div>
+        <div>
+          <DonutChartCard
+            title="Gerätetypen"
+            description="Besucher nach Endgerät (letzte 30 Tage)"
+            data={{
+              fields: [
+                {
+                  name: "Gerät",
+                  type: "string",
+                  values: ["Mobile", "Desktop", "Tablet"],
+                },
+                {
+                  name: "Besucher",
+                  type: "number",
+                  values: [5820, 3210, 970],
+                },
+              ],
+            }}
+            config={{
+              nameField: "Gerät",
+              valueField: "Besucher",
+              showTooltip: true,
+              showLegend: true,
+            }}
+          />
+        </div>
+        <div>
+          <DonutChartCard
+            title="Aufgaben-Status"
+            description="Aktueller Sprint-Überblick"
+            data={{
+              fields: [
+                {
+                  name: "Status",
+                  type: "string",
+                  values: ["Erledigt", "In Arbeit", "Offen", "Blockiert"],
+                },
+                {
+                  name: "Anzahl",
+                  type: "number",
+                  values: [18, 7, 12, 3],
+                },
+              ],
+            }}
+            config={{
+              nameField: "Status",
+              valueField: "Anzahl",
+              colors: [
+                "var(--chart-2)",
+                "var(--chart-1)",
+                "var(--chart-4)",
+                "var(--chart-5)",
+              ],
+              showTooltip: true,
+              showLegend: false,
+            }}
           />
         </div>
       </div>

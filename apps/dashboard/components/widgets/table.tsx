@@ -2,7 +2,7 @@
 
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
-import { DataFrame } from "../charts/CartesianChart";
+import { DataFrame } from "./CartesianChart";
 import {
   Table,
   TableHead,

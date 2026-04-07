@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
-import { ReactNode, useEffect, useId, useRef, useState } from "react";
+import { ReactNode, useEffect, useId } from "react";
 import { useQueryState } from "nuqs";
 
 type ExpandableWidgetCardProps = {
@@ -38,7 +38,6 @@ const ExpandableWidgetCard = ({
   const [openWidget, setOpenWidget] = useQueryState("widget", {
     history: "push",
   });
-  const cardRef = useRef<HTMLDivElement>(null);
   const id = useId();
 
   const defaultWidgetKey = title
@@ -50,65 +49,42 @@ const ExpandableWidgetCard = ({
   const resolvedWidgetKey = widgetQueryKey ?? defaultWidgetKey;
   const active = openWidget === resolvedWidgetKey;
 
+  const headerId = `header-${resolvedWidgetKey}-${id}`;
+  const cardId = `card-${resolvedWidgetKey}-${id}`;
+  const contentId = `content-${resolvedWidgetKey}-${id}`;
+  const buttonId = `button-${resolvedWidgetKey}-${id}`;
+
   useEffect(() => {
     onExpandedChange?.(active);
   }, [active, onExpandedChange]);
 
-  const closeWidget = () => {
-    void setOpenWidget(null);
-  };
-
-  const openWidgetInUrl = () => {
-    void setOpenWidget(resolvedWidgetKey);
-  };
-
   useEffect(() => {
+    if (!active) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeWidget();
-      }
+      if (event.key === "Escape") void setOpenWidget(null);
     };
-
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
-        closeWidget();
-      }
-    };
-
     window.addEventListener("keydown", onKeyDown);
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, []);
-
-  const headerId = `header-${title ?? "widget"}-${id}`;
-  const cardId = `card-${title ?? "widget"}-${id}`;
-  const contentId = `content-${title ?? "widget"}-${id}`;
-  const buttonId = `button-${title ?? "widget"}-${id}`;
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [active, setOpenWidget]);
 
   return (
     <>
       <AnimatePresence>
-        {active ? (
+        {active && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 h-full w-full bg-white/50 backdrop-blur-md dark:bg-black/50"
+            className="fixed inset-0 z-40 bg-white/50 backdrop-blur-md dark:bg-black/50"
+            onClick={() => void setOpenWidget(null)}
           />
-        ) : null}
+        )}
       </AnimatePresence>
 
       <AnimatePresence>
-        {active ? (
+        {active && (
           <div className="fixed inset-0 z-50 grid place-items-center sm:mt-16">
             <motion.div
-              ref={cardRef}
               layoutId={cardId}
               transition={springTransition}
               className={cn(
@@ -122,38 +98,27 @@ const ExpandableWidgetCard = ({
                   transition={springTransition}
                   className="min-w-0"
                 >
-                  {title ? (
+                  {title && (
                     <h3 className="text-2xl leading-tight font-semibold">
                       {title}
                     </h3>
-                  ) : null}
-                  {description ? (
+                  )}
+                  {description && (
                     <p className="mt-1 text-sm text-muted-foreground">
                       {description}
                     </p>
-                  ) : null}
+                  )}
                 </motion.div>
 
                 <motion.button
                   aria-label="Schließen"
                   layoutId={buttonId}
-                  onClick={closeWidget}
+                  onClick={() => void setOpenWidget(null)}
                   transition={springTransition}
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                   </svg>
                 </motion.button>
               </div>
@@ -161,22 +126,19 @@ const ExpandableWidgetCard = ({
               <motion.div
                 layoutId={contentId}
                 transition={springTransition}
-                className={cn(
-                  "flex-1 px-8 pb-10 min-h-0",
-                  expandedContentClassName,
-                )}
+                className={cn("flex-1 px-8 pb-10 min-h-0", expandedContentClassName)}
               >
                 {children}
               </motion.div>
             </motion.div>
           </div>
-        ) : null}
+        )}
       </AnimatePresence>
 
-      {!active ? (
+      {!active && (
         <motion.div
           layoutId={cardId}
-          onClick={openOnCardClick ? openWidgetInUrl : undefined}
+          onClick={openOnCardClick ? () => void setOpenWidget(resolvedWidgetKey) : undefined}
           transition={springTransition}
           className={cn(
             "flex h-full flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow",
@@ -190,39 +152,26 @@ const ExpandableWidgetCard = ({
               transition={springTransition}
               className="min-w-0"
             >
-              {title ? (
+              {title && (
                 <h3 className="text-base leading-snug font-medium">{title}</h3>
-              ) : null}
-              {description ? (
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {description}
-                </p>
-              ) : null}
+              )}
+              {description && (
+                <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+              )}
             </motion.div>
 
             <motion.button
               aria-label="Öffnen"
               layoutId={buttonId}
               transition={springTransition}
-              onClick={(event) => {
-                event.stopPropagation();
-                openWidgetInUrl();
+              onClick={(e) => {
+                e.stopPropagation();
+                void setOpenWidget(resolvedWidgetKey);
               }}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" /><path d="M12 5v14" />
               </svg>
             </motion.button>
           </div>
@@ -235,9 +184,13 @@ const ExpandableWidgetCard = ({
             {children}
           </motion.div>
         </motion.div>
-      ) : null}
+      )}
     </>
   );
 };
 
 export default ExpandableWidgetCard;
+
+
+
+

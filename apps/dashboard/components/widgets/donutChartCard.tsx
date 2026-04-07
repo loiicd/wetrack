@@ -103,9 +103,7 @@ const DonutChartCard = ({
           strokeWidth={2}
           // eslint-disable-next-line react-hooks/refs
           isAnimationActive={!isExpanded && !hasAnimated.current}
-          onAnimationEnd={() => {
-            hasAnimated.current = true;
-          }}
+          onAnimationEnd={() => { hasAnimated.current = true; }}
         >
           {chartData.map((entry, i) => (
             <Cell

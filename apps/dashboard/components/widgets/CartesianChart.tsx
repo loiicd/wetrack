@@ -155,32 +155,6 @@ const CartesianChart = ({
   const autoConfig = config || autoChartConfig(data);
   const rows = dataFrameToRows(data);
 
-  const chartContent = (
-    <ChartContainer config={autoConfig} className="h-full w-full">
-      <ComposedChart accessibilityLayer data={rows}>
-        <CartesianGrid vertical={false} />
-        <XAxis
-          dataKey={catField}
-          tickLine={false}
-          tickMargin={10}
-          axisLine={false}
-        />
-        <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent indicator="dashed" />}
-        />
-        {renderSeries(
-          valFields,
-          autoConfig,
-          !isExpanded && !hasAnimated.current,
-          () => {
-            hasAnimated.current = true;
-          },
-        )}
-      </ComposedChart>
-    </ChartContainer>
-  );
-
   return (
     <ExpandableWidgetCard
       title={title}
@@ -191,7 +165,25 @@ const CartesianChart = ({
       collapsedContentClassName="h-48"
       expandedContentClassName="flex-1"
     >
-      {chartContent}
+      <ChartContainer config={autoConfig} className="h-full w-full">
+        <ComposedChart accessibilityLayer data={rows}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey={catField}
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+          />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator="dashed" />}
+          />
+          {/* eslint-disable-next-line react-hooks/refs */}
+          {renderSeries(valFields, autoConfig, !isExpanded && !hasAnimated.current, () => {
+            hasAnimated.current = true;
+          })}
+        </ComposedChart>
+      </ChartContainer>
     </ExpandableWidgetCard>
   );
 };

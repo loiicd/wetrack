@@ -1,8 +1,7 @@
-import BarChartCard from "@/components/charts/barChartCard";
-import ChartErrorCard from "@/components/charts/chartErrorCard";
-import ClockCard from "@/components/charts/clockCard";
-import LineChartCard from "@/components/charts/lineChartCard";
-import StatCard from "@/components/charts/statCard";
+import CartesianChart from "@/components/widgets/CartesianChart";
+import ClockWidget from "@/components/widgets/clockWidget";
+import StatCard from "@/components/widgets/statCard";
+import WidgetErrorCard from "@/components/widgets/widgetErrorCard";
 import ChartGrid from "@/components/chartGrid";
 import { Badge } from "@/components/ui/badge";
 import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
@@ -65,6 +64,16 @@ const DashboardContent = async ({
             config.categoryField,
             ...config.valueFields,
           ]);
+          const chartConfig = Object.fromEntries(
+            config.valueFields.map((vf, i) => [
+              vf,
+              {
+                label: vf,
+                color: config.colors?.[i] ?? `var(--chart-${(i % 5) + 1})`,
+                type: "bar" as const,
+              },
+            ]),
+          );
           return {
             id: chart.id,
             x: chart.layoutX,
@@ -72,11 +81,11 @@ const DashboardContent = async ({
             w: chart.layoutW,
             h: chart.layoutH,
             content: (
-              <BarChartCard
+              <CartesianChart
                 title={chart.label}
-                description={chart.description}
+                description={chart.description ?? undefined}
                 data={dataFrame}
-                config={config}
+                config={chartConfig}
               />
             ),
           };
@@ -89,6 +98,16 @@ const DashboardContent = async ({
             config.xField,
             ...config.valueFields,
           ]);
+          const chartConfig = Object.fromEntries(
+            config.valueFields.map((vf, i) => [
+              vf,
+              {
+                label: vf,
+                color: config.colors?.[i] ?? `var(--chart-${(i % 5) + 1})`,
+                type: "line" as const,
+              },
+            ]),
+          );
           return {
             id: chart.id,
             x: chart.layoutX,
@@ -96,11 +115,11 @@ const DashboardContent = async ({
             w: chart.layoutW,
             h: chart.layoutH,
             content: (
-              <LineChartCard
+              <CartesianChart
                 title={chart.label}
-                description={chart.description}
+                description={chart.description ?? undefined}
                 data={dataFrame}
-                config={config}
+                config={chartConfig}
               />
             ),
           };
@@ -136,14 +155,13 @@ const DashboardContent = async ({
             w: chart.layoutW,
             h: chart.layoutH,
             content: (
-              <ClockCard
+              <ClockWidget
                 timeZone={config.timeZone as TimeZone | undefined}
                 label={config.label}
                 labelFormat={config.labelFormat}
                 showHours={config.showHours}
                 showMinutes={config.showMinutes}
                 showSeconds={config.showSeconds}
-                showCard={config.showCard}
               />
             ),
           };
@@ -164,7 +182,7 @@ const DashboardContent = async ({
           y: chart.layoutY,
           w: chart.layoutW,
           h: chart.layoutH,
-          content: <ChartErrorCard title={chart.label} message={message} />,
+          content: <WidgetErrorCard title={chart.label} message={message} />,
         };
       }
     }),

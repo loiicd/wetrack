@@ -21,6 +21,9 @@ const config5 = {
 import CartesianChart, { DataFrame } from "@/components/widgets/CartesianChart";
 import DonutChartCard from "@/components/widgets/donutChartCard";
 import TableWidget from "@/components/widgets/table";
+import StatCard from "@/components/widgets/statCard";
+import ClockWidget from "@/components/widgets/clockWidget";
+import { Suspense } from "react";
 
 const Page = () => {
   const data1: DataFrame = {
@@ -103,8 +106,9 @@ const Page = () => {
   } as const;
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <Suspense>
+      <div className="container mx-auto p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <CartesianChart
             data={data1}
@@ -279,8 +283,80 @@ const Page = () => {
             }}
           />
         </div>
+
+        {/* ── Stat Cards ────────────────────────────────────── */}
+        <div>
+          <StatCard
+            title="Gesamtumsatz"
+            description="Kumulierter Umsatz (YTD)"
+            data={{
+              fields: [
+                {
+                  name: "umsatz",
+                  type: "number",
+                  values: [142300],
+                },
+              ],
+            }}
+            config={{ valueField: "umsatz", unit: "€", decimals: 0, color: "var(--chart-1)", showCard: true }}
+          />
+        </div>
+        <div>
+          <StatCard
+            title="Conversion Rate"
+            description="Monatlicher Verlauf"
+            data={{
+              fields: [
+                {
+                  name: "rate",
+                  type: "number",
+                  values: [3.2, 3.8, 4.1, 3.9, 4.5, 4.8, 5.1, 4.9, 5.4, 5.8, 5.5, 6.1],
+                },
+              ],
+            }}
+            config={{ valueField: "rate", unit: "%", decimals: 1, color: "var(--chart-2)", showCard: true }}
+          />
+        </div>
+        <div>
+          <StatCard
+            title="Offene Tickets"
+            description="Stand heute"
+            data={{
+              fields: [
+                {
+                  name: "tickets",
+                  type: "number",
+                  values: [42, 38, 45, 50, 47, 39, 42],
+                },
+              ],
+            }}
+            config={{ valueField: "tickets", decimals: 0, color: "var(--chart-4)", showCard: true }}
+          />
+        </div>
+
+        {/* ── Clock Widgets ─────────────────────────────────── */}
+        <div>
+          <ClockWidget
+            timeZone="Europe/Berlin"
+            labelFormat="full"
+          />
+        </div>
+        <div>
+          <ClockWidget
+            timeZone="America/New_York"
+            labelFormat="city"
+          />
+        </div>
+        <div>
+          <ClockWidget
+            timeZone="Asia/Tokyo"
+            labelFormat="full"
+            showSeconds={false}
+          />
+        </div>
       </div>
     </div>
+    </Suspense>
   );
 };
 

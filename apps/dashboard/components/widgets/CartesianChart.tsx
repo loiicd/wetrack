@@ -27,10 +27,10 @@ type ChartConfig = {
 
 type FieldType = "number" | "string" | "time" | "boolean";
 
-type Field<T = any> = {
+type Field = {
   name: string;
   type: FieldType;
-  values: T[];
+  values: unknown[];
 };
 
 export type DataFrame = {
@@ -38,11 +38,11 @@ export type DataFrame = {
   fields: Field[];
 };
 
-function dataFrameToRows(df: DataFrame): Record<string, any>[] {
+function dataFrameToRows(df: DataFrame): Record<string, unknown>[] {
   if (!df.fields.length) return [];
   const len = df.fields[0].values.length;
   return Array.from({ length: len }, (_, i) => {
-    const row: Record<string, any> = {};
+    const row: Record<string, unknown> = {};
     for (const field of df.fields) {
       row[field.name] = field.values[i];
     }

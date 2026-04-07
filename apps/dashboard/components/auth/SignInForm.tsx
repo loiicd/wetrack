@@ -88,11 +88,7 @@ export function SignInForm() {
               </div>
             )}
 
-            <Field
-              data-invalid={
-                !!form.formState.errors.email || !!emailError
-              }
-            >
+            <Field data-invalid={!!form.formState.errors.email || !!emailError}>
               <FieldLabel htmlFor="email">E-Mail</FieldLabel>
               <Input
                 id="email"
@@ -111,9 +107,7 @@ export function SignInForm() {
             </Field>
 
             <Field
-              data-invalid={
-                !!form.formState.errors.password || !!passwordError
-              }
+              data-invalid={!!form.formState.errors.password || !!passwordError}
             >
               <FieldLabel htmlFor="password">Passwort</FieldLabel>
               <Input

@@ -10,12 +10,12 @@ import {
   Area,
   Scatter,
 } from "recharts";
-import { AnimatePresence, motion } from "motion/react";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import ExpandableWidgetCard from "@/components/widgets/expandableWidgetCard";
 
 type ChartConfig = {
   [key: string]: {
@@ -144,10 +144,8 @@ const CartesianChart = ({
   title,
   description,
 }: GenericChartProps) => {
-  const [active, setActive] = React.useState(false);
-  const cardRef = React.useRef<HTMLDivElement>(null);
-  const id = React.useId();
   const hasAnimated = React.useRef(false);
+  const [isExpanded, setIsExpanded] = React.useState(false);
 
   const catField = data.fields.find((f) => f.type === "string")?.name || "";
   const valFields = config
@@ -156,25 +154,6 @@ const CartesianChart = ({
 
   const autoConfig = config || autoChartConfig(data);
   const rows = dataFrameToRows(data);
-
-  React.useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setActive(false);
-    };
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
-        setActive(false);
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, []);
 
   const chartContent = (
     <ChartContainer config={autoConfig} className="h-full w-full">
@@ -190,173 +169,30 @@ const CartesianChart = ({
           cursor={false}
           content={<ChartTooltipContent indicator="dashed" />}
         />
-        {renderSeries(valFields, autoConfig, !hasAnimated.current, () => {
-          hasAnimated.current = true;
-        })}
+        {renderSeries(
+          valFields,
+          autoConfig,
+          !isExpanded && !hasAnimated.current,
+          () => {
+            hasAnimated.current = true;
+          },
+        )}
       </ComposedChart>
     </ChartContainer>
   );
 
   return (
-    <>
-      {/* Backdrop */}
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-10 h-full w-full bg-white/50 backdrop-blur-md dark:bg-black/50"
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Expanded */}
-      <AnimatePresence>
-        {active && (
-          <div className="fixed inset-0 z-100 grid place-items-center sm:mt-16">
-            <motion.div
-              layoutId={`card-${title}-${id}`}
-              ref={cardRef}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 25,
-                mass: 0.8,
-              }}
-              className="relative flex h-full w-full max-w-[calc(100vw-2rem)] flex-col overflow-auto bg-card shadow-sm sm:rounded-t-3xl [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [scrollbar-width:none]"
-            >
-              <div className="flex items-start justify-between p-8">
-                <div>
-                  {description && (
-                    <motion.p
-                      layoutId={`description-${title}-${id}`}
-                      className="text-sm text-muted-foreground"
-                    >
-                      {description}
-                    </motion.p>
-                  )}
-                  <motion.h3
-                    layoutId={`title-${title}-${id}`}
-                    className="mt-0.5 text-2xl font-semibold"
-                  >
-                    {title}
-                  </motion.h3>
-                </div>
-                <motion.button
-                  aria-label="Schließen"
-                  layoutId={`button-${title}-${id}`}
-                  onClick={() => setActive(false)}
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 25,
-                    mass: 0.8,
-                  }}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                  </svg>
-                </motion.button>
-              </div>
-              <motion.div
-                layoutId={`chart-${title}-${id}`}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 25,
-                  mass: 0.8,
-                }}
-                className="flex-1 px-8 pb-10 min-h-0"
-              >
-                {chartContent}
-              </motion.div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Collapsed card */}
-      <motion.div
-        layoutId={`card-${title}-${id}`}
-        onClick={() => setActive(true)}
-        transition={{ type: "spring", stiffness: 400, damping: 25, mass: 0.8 }}
-        className="flex cursor-pointer flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
-      >
-        <div className="flex items-start justify-between">
-          <div>
-            {description && (
-              <motion.p
-                layoutId={`description-${title}-${id}`}
-                className="text-sm text-muted-foreground"
-              >
-                {description}
-              </motion.p>
-            )}
-            <motion.h3
-              layoutId={`title-${title}-${id}`}
-              className="font-semibold"
-            >
-              {title}
-            </motion.h3>
-          </div>
-          <motion.button
-            aria-label="Öffnen"
-            layoutId={`button-${title}-${id}`}
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 25,
-              mass: 0.8,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setActive(true);
-            }}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M5 12h14" />
-              <path d="M12 5v14" />
-            </svg>
-          </motion.button>
-        </div>
-        <motion.div
-          layoutId={`chart-${title}-${id}`}
-          transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 25,
-            mass: 0.8,
-          }}
-          className="h-48"
-        >
-          {chartContent}
-        </motion.div>
-      </motion.div>
-    </>
+    <ExpandableWidgetCard
+      title={title}
+      description={description}
+      widgetQueryKey={title ? `chart-${title}` : undefined}
+      onExpandedChange={setIsExpanded}
+      openOnCardClick
+      collapsedContentClassName="h-48"
+      expandedContentClassName="flex-1"
+    >
+      {chartContent}
+    </ExpandableWidgetCard>
   );
 };
 

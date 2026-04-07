@@ -19,6 +19,7 @@ const config5 = {
   y: { label: "y", color: "var(--chart-4)", type: "scatter" },
 } as const;
 import CartesianChart, { DataFrame } from "@/components/charts/CartesianChart";
+import TableWidget from "@/components/widgets/table";
 
 const Page = () => {
   const data1: DataFrame = {
@@ -112,11 +113,25 @@ const Page = () => {
           />
         </div>
         <div>
+          <TableWidget
+            data={data1}
+            title="Tabelle: Monatliche Metriken"
+            description="Aufrufe, Besucher und Conversions pro Monat"
+          />
+        </div>
+        <div>
           <CartesianChart
             data={data2}
             config={config2}
             title="Area + Scatter (Wochentage)"
             description="Umsatz/Kosten als Fläche, Events als Punkte."
+          />
+        </div>
+        <div>
+          <TableWidget
+            data={data2}
+            title="Tabelle: Tägliche Finanzen"
+            description="Umsatz und Kosten pro Wochentag"
           />
         </div>
         <div>
@@ -133,6 +148,13 @@ const Page = () => {
             config={config4}
             title="Area (Quartale)"
             description="Nur Fläche (Area)."
+          />
+        </div>
+        <div>
+          <TableWidget
+            data={data4}
+            title="Tabelle: Quartalsgewinn"
+            description="Gewinn nach Quartal"
           />
         </div>
         <div>

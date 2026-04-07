@@ -82,19 +82,27 @@ const ChartGrid = ({
   // Pick effective column count based on container width
   const effectiveCols =
     containerWidth > 0
-      ? (BREAKPOINTS.find((bp) => containerWidth <= bp.maxWidth)?.cols ?? columns)
+      ? (BREAKPOINTS.find((bp) => containerWidth <= bp.maxWidth)?.cols ??
+        columns)
       : columns;
 
   const isReflowed = effectiveCols < columns;
   const layoutMap = isReflowed
-    ? new Map(reflowWidgets(widgets, effectiveCols, columns).map((r) => [r.id, r]))
+    ? new Map(
+        reflowWidgets(widgets, effectiveCols, columns).map((r) => [r.id, r]),
+      )
     : null;
 
   const columnWidth =
-    containerWidth > 0 ? (containerWidth - gap * (effectiveCols - 1)) / effectiveCols : 0;
+    containerWidth > 0
+      ? (containerWidth - gap * (effectiveCols - 1)) / effectiveCols
+      : 0;
 
   const maxRow = isReflowed
-    ? Math.max(...(layoutMap ? [...layoutMap.values()].map((r) => r.ry + r.rh) : [1]), 1)
+    ? Math.max(
+        ...(layoutMap ? [...layoutMap.values()].map((r) => r.ry + r.rh) : [1]),
+        1,
+      )
     : Math.max(...widgets.map((w) => w.y + w.h), 1);
 
   return (

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const nunitoSans = Nunito_Sans({ variable: "--font-sans" });
 
@@ -20,7 +21,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "WeTrack – Dashboard-as-Code",
-  description: "Define dashboards, data sources, queries and charts as TypeScript code. Deploy with one CLI command.",
+  description:
+    "Define dashboards, data sources, queries and charts as TypeScript code. Deploy with one CLI command.",
 };
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -33,17 +35,19 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </ClerkProvider>
+        <NuqsAdapter>
+          <ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </ClerkProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

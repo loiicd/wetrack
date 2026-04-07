@@ -16,9 +16,8 @@ import { dashboardInterface } from "@/lib/database/dashboard";
 import { toDataFrame } from "@/lib/dataframe";
 import { getQueryData } from "@/lib/workflows/getQueryData";
 import {
-  barChartConfigSchema,
+  cartesianChartConfigSchema,
   clockCardConfigSchema,
-  lineChartConfigSchema,
   statCardConfigSchema,
 } from "@/schemas/dashboard";
 import type { TimeZone } from "@/types/timezone";
@@ -57,8 +56,8 @@ const DashboardContent = async ({
   const widgets = await Promise.all(
     charts.map(async (chart) => {
       try {
-        if (chart.type === "BAR") {
-          const config = barChartConfigSchema.parse(chart.config);
+        if (chart.type === "CARTESIAN" || chart.type === "BAR" || chart.type === "LINE") {
+          const config = cartesianChartConfigSchema.parse(chart.config);
           const queryResult = await getQueryData(chart.queryId!);
           const dataFrame = toDataFrame(queryResult, [
             config.categoryField,
@@ -70,41 +69,7 @@ const DashboardContent = async ({
               {
                 label: vf,
                 color: config.colors?.[i] ?? `var(--chart-${(i % 5) + 1})`,
-                type: "bar" as const,
-              },
-            ]),
-          );
-          return {
-            id: chart.id,
-            x: chart.layoutX,
-            y: chart.layoutY,
-            w: chart.layoutW,
-            h: chart.layoutH,
-            content: (
-              <CartesianChart
-                title={chart.label}
-                description={chart.description ?? undefined}
-                data={dataFrame}
-                config={chartConfig}
-              />
-            ),
-          };
-        }
-
-        if (chart.type === "LINE") {
-          const config = lineChartConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId!);
-          const dataFrame = toDataFrame(queryResult, [
-            config.xField,
-            ...config.valueFields,
-          ]);
-          const chartConfig = Object.fromEntries(
-            config.valueFields.map((vf, i) => [
-              vf,
-              {
-                label: vf,
-                color: config.colors?.[i] ?? `var(--chart-${(i % 5) + 1})`,
-                type: "line" as const,
+                type: (config.seriesTypes?.[i] ?? "bar") as "bar" | "line" | "area" | "scatter",
               },
             ]),
           );

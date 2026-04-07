@@ -18,47 +18,32 @@ const dataSourceSchema = z.object({
   }),
 });
 
-export const barChartConfigSchema = z.object({
-  /** Feldname der Kategorie-Achse (X bei vertical, Y bei horizontal) */
+export const cartesianChartConfigSchema = z.object({
+  /** Feldname der Kategorie-Achse */
   categoryField: z.string(),
-  /** Ein oder mehrere Wert-Felder – ermöglicht gruppierte/gestapelte Bars */
+  /** Ein oder mehrere Wert-Felder */
   valueFields: z.array(z.string()).min(1),
-  /** Ausrichtung der Bars: vertical = Balken nach oben, horizontal = nach rechts */
+  /** Serientyp pro Feld (default: "bar" für alle) */
+  seriesTypes: z
+    .array(z.enum(["bar", "line", "area", "scatter"]))
+    .optional(),
+  /** Ausrichtung für Bar-Serien */
   orientation: z.enum(["vertical", "horizontal"]).default("vertical"),
-  /** Bars stapeln statt gruppieren */
+  /** Bar-Serien stapeln statt gruppieren */
   stacked: z.boolean().default(false),
-  /** Wert-Labels direkt an den Bars anzeigen */
-  showLabels: z.boolean().default(false),
+  /** Datenpunkte bei Line-/Area-Serien markieren */
+  showDots: z.boolean().default(true),
   /** Tooltip bei Hover anzeigen */
   showTooltip: z.boolean().default(true),
+  /** Achsen-Labels anzeigen */
+  showLabels: z.boolean().default(false),
   /** Farben pro Serie (CSS-Farbe oder var(--...)); Defaults: var(--chart-1) usw. */
   colors: z.array(z.string()).optional(),
   /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
   showCard: z.boolean().default(true),
 });
 
-export type BarChartConfig = z.infer<typeof barChartConfigSchema>;
-
-export const lineChartConfigSchema = z.object({
-  /** Feldname der X-Achse (Kategorie / Zeit) */
-  xField: z.string(),
-  /** Ein oder mehrere Wert-Felder – eine Linie pro Feld */
-  valueFields: z.array(z.string()).min(1),
-  /** Datenpunkte mit Dot markieren */
-  showDots: z.boolean().default(true),
-  /** Fläche unter der Linie füllen */
-  filled: z.boolean().default(false),
-  /** Tooltip bei Hover anzeigen */
-  showTooltip: z.boolean().default(true),
-  /** Achsen-Labels anzeigen */
-  showLabels: z.boolean().default(false),
-  /** Farben pro Serie */
-  colors: z.array(z.string()).optional(),
-  /** Card-Border, -Hintergrund und -Schatten anzeigen (default: true) */
-  showCard: z.boolean().default(true),
-});
-
-export type LineChartConfig = z.infer<typeof lineChartConfigSchema>;
+export type CartesianChartConfig = z.infer<typeof cartesianChartConfigSchema>;
 
 export const statCardConfigSchema = z.object({
   /** Feldname des anzuzeigenden Werts (erstes Element der ersten Zeile) */
@@ -111,19 +96,8 @@ const chartSchema = z.discriminatedUnion("type", [
     dataSource: z.string().optional(),
     label: z.string(),
     description: z.string().optional(),
-    type: z.literal("bar"),
-    config: barChartConfigSchema,
-    layout: chartLayoutSchema.optional(),
-  }),
-  z.object({
-    key: z.string(),
-    dashboard: z.string(),
-    query: z.string().optional(),
-    dataSource: z.string().optional(),
-    label: z.string(),
-    description: z.string().optional(),
-    type: z.literal("line"),
-    config: lineChartConfigSchema,
+    type: z.literal("cartesian"),
+    config: cartesianChartConfigSchema,
     layout: chartLayoutSchema.optional(),
   }),
   z.object({

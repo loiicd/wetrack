@@ -1,0 +1,6 @@
+-- AlterEnum
+ALTER TYPE "ChartType" ADD VALUE 'CARTESIAN';
+
+-- AlterTable
+ALTER TABLE "Credential" ALTER COLUMN "id" DROP DEFAULT,
+ALTER COLUMN "updatedAt" DROP DEFAULT;

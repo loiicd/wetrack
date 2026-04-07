@@ -285,13 +285,13 @@ const createCharts = async (
       dashboardId,
       queryId,
       type:
-        chart.type === "line"
-          ? ("LINE" as const)
+        chart.type === "cartesian"
+          ? ("CARTESIAN" as const)
           : chart.type === "stat"
             ? ("STAT" as const)
             : chart.type === "clock"
               ? ("CLOCK" as const)
-              : ("BAR" as const),
+              : ("CARTESIAN" as const),
       label: chart.label,
       description: chart.description ?? null,
       config: chart.config,

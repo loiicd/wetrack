@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { shadcn } from "@clerk/ui/themes";
 
 const nunitoSans = Nunito_Sans({ variable: "--font-sans" });
 
@@ -36,7 +37,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NuqsAdapter>
-          <ClerkProvider>
+          <ClerkProvider
+            appearance={{
+              theme: shadcn,
+            }}
+          >
             <ThemeProvider
               attribute="class"
               defaultTheme="system"

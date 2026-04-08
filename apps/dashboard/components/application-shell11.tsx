@@ -31,15 +31,13 @@ import {
   SidebarMenu,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import UserDropdown from "./userDropdown";
-import OrganizationSwitch from "./organizationSwitch";
 import { SiteHeader } from "./site-header";
 import { Suspense } from "react";
-import OrganizationSwitchSkeleton from "./organizationSwitchSkeleton";
 import {
   PrimaryNavigationMobile,
   PrimaryNavigationSidebar,
 } from "./layout/primaryNavigation";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 const data = {
   user: {
@@ -61,9 +59,12 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <ScrollArea className="min-h-0 flex-1">
           <SidebarGroup>
             <SidebarMenu>
-              <Suspense fallback={<OrganizationSwitchSkeleton />}>
-                <OrganizationSwitch />
-              </Suspense>
+              <OrganizationSwitcher
+                createOrganizationMode="navigation"
+                createOrganizationUrl="/create-organization"
+                organizationProfileMode="navigation"
+                organizationProfileUrl="/organization-profile"
+              />
             </SidebarMenu>
           </SidebarGroup>
           <Suspense fallback={null}>
@@ -74,10 +75,6 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   );
 }
-
-export const iframeHeight = "800px";
-
-export const description = "A sidebar with a header and a search form.";
 
 function MobileHeader() {
   return (
@@ -163,9 +160,11 @@ export async function ApplicationShell11({
       >
         <SiteHeader
           userSlot={
-            <Suspense fallback={null}>
-              <UserDropdown />
-            </Suspense>
+            <UserButton
+              showName
+              userProfileMode="navigation"
+              userProfileUrl="/user-profile"
+            />
           }
         />
         <div className="hidden flex-1 pt-(--header-height) md:flex">

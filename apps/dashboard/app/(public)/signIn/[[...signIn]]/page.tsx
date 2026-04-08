@@ -1,11 +1,11 @@
-import { Suspense } from "react";
-import { SignInForm } from "@/components/auth/SignInForm";
+import Container from "@/components/layout/container";
+import { SignIn } from "@clerk/nextjs";
 
 const Page = () => {
   return (
-    <Suspense>
-      <SignInForm />
-    </Suspense>
+    <Container>
+      <SignIn />
+    </Container>
   );
 };
 

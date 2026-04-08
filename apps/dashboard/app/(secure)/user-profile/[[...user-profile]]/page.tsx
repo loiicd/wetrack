@@ -1,10 +1,12 @@
 import Container from "@/components/layout/container";
-import { SignUp } from "@clerk/nextjs";
+import { UserProfile } from "@clerk/nextjs";
 
 const Page = () => {
   return (
     <Container>
-      <SignUp />
+      <div className="flex flex-col justify-center items-center">
+        <UserProfile />
+      </div>
     </Container>
   );
 };

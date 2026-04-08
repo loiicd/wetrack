@@ -2,25 +2,26 @@ import { stackSchema } from "@/schemas/dashboard";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { mainWorkflow } from "@/lib/workflows/main";
-import { checkFeature } from "@/lib/billing/featureGate";
+// import { checkFeature } from "@/lib/billing/featureGate";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
 
 export const POST = async (request: NextRequest) => {
-  const { orgId } = await auth();
+  const { orgId: clerkOrgId } = await auth();
+  const orgId = clerkOrgId ?? process.env.WETRACK_DEFAULT_ORG_ID;
 
   if (!orgId) {
     return new NextResponse("Organization required", { status: 403 });
   }
 
-  const canDeploy = await checkFeature("feature:deploy");
-  if (!canDeploy) {
-    return NextResponse.json(
-      { error: "Plan upgrade required. Visit /settings/billing to upgrade." },
-      { status: 402 },
-    );
-  }
+  // const canDeploy = await checkFeature("feature:deploy");
+  // if (!canDeploy) {
+  //   return NextResponse.json(
+  //     { error: "Plan upgrade required. Visit /settings/billing to upgrade." },
+  //     { status: 402 },
+  //   );
+  // }
 
   let body: unknown;
   try {

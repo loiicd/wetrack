@@ -22,8 +22,6 @@ import {
 const navItems: { title: string; url: Route; icon: LucideIcon }[] = [
   { title: "Home", url: "/", icon: Home },
   { title: "Dashboards", url: "/dashboard", icon: LayoutDashboardIcon },
-  { title: "Data Sources", url: "/datasource", icon: EthernetPortIcon },
-  { title: "Queries", url: "/query", icon: Search },
   { title: "Settings", url: "/organization-profile" as Route, icon: Settings },
 ];
 

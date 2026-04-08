@@ -59,12 +59,7 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <ScrollArea className="min-h-0 flex-1">
           <SidebarGroup>
             <SidebarMenu>
-              <OrganizationSwitcher
-                createOrganizationMode="navigation"
-                createOrganizationUrl="/create-organization"
-                organizationProfileMode="navigation"
-                organizationProfileUrl="/organization-profile"
-              />
+              <OrganizationSwitcher />
             </SidebarMenu>
           </SidebarGroup>
           <Suspense fallback={null}>
@@ -158,15 +153,7 @@ export async function ApplicationShell11({
         className="flex flex-col"
         style={{ "--sidebar-width-icon": "3rem" } as React.CSSProperties}
       >
-        <SiteHeader
-          userSlot={
-            <UserButton
-              showName
-              userProfileMode="navigation"
-              userProfileUrl="/user-profile"
-            />
-          }
-        />
+        <SiteHeader userSlot={<UserButton showName />} />
         <div className="hidden flex-1 pt-(--header-height) md:flex">
           <AppSidebar />
           <SidebarInset>{children}</SidebarInset>

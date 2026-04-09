@@ -1,5 +1,5 @@
 import { stackSchema } from "@/schemas/dashboard";
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { mainWorkflow } from "@/lib/workflows/main";
 // import { checkFeature } from "@/lib/billing/featureGate";
@@ -7,12 +7,11 @@ import { revalidateTag, revalidatePath } from "next/cache";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
 
-const client = await clerkClient();
-
 export const POST = async (request: NextRequest) => {
   console.log("[POST /api/dashboard] Request received");
 
-  const { isAuthenticated, getToken } = await auth({
+  // @ts-expect-error - Clerk's auth function is not well-typed, but we know it returns these values
+  const { isAuthenticated, getToken, claims } = await auth({
     acceptsToken: ["api_key"],
   });
 
@@ -20,6 +19,8 @@ export const POST = async (request: NextRequest) => {
     "[POST /api/dashboard] Authentication check complete, isAuthenticated:",
     isAuthenticated,
   );
+
+  console.log("[POST /api/dashboard] Auth claims:", claims);
 
   const token1 = await getToken();
 
@@ -30,34 +31,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const secret = request.headers.get("authorization");
-
-  console.log(secret);
-
-  if (!secret) {
-    console.warn("[POST /api/dashboard] No authorization header");
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
-  const token = secret.replace(/^Bearer\s+/i, "");
-
-  console.log(token);
-
-  if (!token) {
-    console.warn("[POST /api/dashboard] No token after Bearer prefix");
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
-  let apiKey;
-
-  try {
-    apiKey = await client.apiKeys.verify(secret);
-  } catch (error) {
-    console.warn("[POST /api/dashboard] API key verification failed:", error);
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
-  const orgId = apiKey.subject;
+  const orgId = token1?.claims?.sub;
   console.log("[POST /api/dashboard] Authenticated orgId:", orgId);
 
   if (!orgId) {

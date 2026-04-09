@@ -10,27 +10,30 @@ import { dashboardInterface } from "@/lib/database/dashboard";
 export const POST = async (request: NextRequest) => {
   console.log("[POST /api/dashboard] Request received");
 
-  // @ts-expect-error - Clerk's auth function is not well-typed, but we know it returns these values
-  const { isAuthenticated, getToken, claims } = await auth({
+  const response = await auth({
     acceptsToken: ["api_key"],
   });
 
   console.log(
     "[POST /api/dashboard] Authentication check complete, isAuthenticated:",
-    isAuthenticated,
+    response.isAuthenticated,
   );
 
-  console.log("[POST /api/dashboard] Auth claims:", claims);
+  // @ts-expect-error Clerk's types are incomplete, so we have to do some manual checks
+  console.log("[POST /api/dashboard] Auth claims:", response.claims);
+  // @ts-expect-error Clerk's types are incomplete, so we have to do some manual checks
+  console.log("[POST /api/dashboard] Auth token type:", response.orgId);
 
-  const token1 = await getToken();
+  const token1 = await response.getToken();
 
   console.log("[POST /api/dashboard] Auth token:", token1);
 
-  if (!isAuthenticated) {
+  if (!response.isAuthenticated) {
     console.warn("[POST /api/dashboard] Unauthorized request");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // @ts-expect-error Clerk's types are incomplete, so we have to do some manual checks
   const orgId = token1?.claims?.sub;
   console.log("[POST /api/dashboard] Authenticated orgId:", orgId);
 

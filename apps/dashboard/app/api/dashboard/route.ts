@@ -31,6 +31,8 @@ export const POST = async (request: NextRequest) => {
 
   const token = secret.replace(/^Bearer\s+/i, "");
 
+  console.log(token);
+
   if (!token) {
     console.warn("[POST /api/dashboard] No token after Bearer prefix");
     return new NextResponse("Unauthorized", { status: 401 });

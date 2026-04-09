@@ -29,7 +29,7 @@ export const POST = async (request: NextRequest) => {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const apiKey = await client.apiKeys.verify();
+  const apiKey = await client.apiKeys.verify(secret);
 
   const orgId = apiKey.subject;
   console.log("[POST /api/dashboard] Authenticated orgId:", orgId);

@@ -19,22 +19,13 @@ export const POST = async (request: NextRequest) => {
     response.isAuthenticated,
   );
 
-  // @ts-expect-error Clerk's types are incomplete, so we have to do some manual checks
-  console.log("[POST /api/dashboard] Auth claims:", response.claims);
-  // @ts-expect-error Clerk's types are incomplete, so we have to do some manual checks
-  console.log("[POST /api/dashboard] Auth token type:", response.orgId);
-
-  const token1 = await response.getToken();
-
-  console.log("[POST /api/dashboard] Auth token:", token1);
+  const orgId = await response.getToken();
 
   if (!response.isAuthenticated) {
     console.warn("[POST /api/dashboard] Unauthorized request");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // @ts-expect-error Clerk's types are incomplete, so we have to do some manual checks
-  const orgId = token1?.claims?.sub;
   console.log("[POST /api/dashboard] Authenticated orgId:", orgId);
 
   if (!orgId) {

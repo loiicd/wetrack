@@ -29,7 +29,18 @@ export const POST = async (request: NextRequest) => {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const apiKey = await client.apiKeys.verify(secret);
+  const token = secret.replace(/^Bearer\s+/i, "");
+
+  if (!token) {
+    console.warn("[POST /api/dashboard] No token after Bearer prefix");
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  try {
+    const apiKey = await client.apiKeys.verify(secret);
+  } catch (error) {
+    console.warn("[POST /api/dashboard] API key verification failed:", error);
+  }
 
   const orgId = apiKey.subject;
   console.log("[POST /api/dashboard] Authenticated orgId:", orgId);

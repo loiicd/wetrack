@@ -36,10 +36,13 @@ export const POST = async (request: NextRequest) => {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
+  let apiKey;
+
   try {
-    const apiKey = await client.apiKeys.verify(secret);
+    apiKey = await client.apiKeys.verify(secret);
   } catch (error) {
     console.warn("[POST /api/dashboard] API key verification failed:", error);
+    return new NextResponse("Unauthorized", { status: 401 });
   }
 
   const orgId = apiKey.subject;

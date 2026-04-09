@@ -20,10 +20,16 @@ export const POST = async (request: NextRequest) => {
   //   console.warn("[POST /api/dashboard] Unauthorized request");
   //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   // }
+  const secret = request.headers.get("authorization");
 
-  const apiKey = await client.apiKeys.verify(
-    request.headers.get("authorization")!,
-  );
+  console.log(secret);
+
+  if (!secret) {
+    console.warn("[POST /api/dashboard] No authorization header");
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  const apiKey = await client.apiKeys.verify();
 
   const orgId = apiKey.subject;
   console.log("[POST /api/dashboard] Authenticated orgId:", orgId);

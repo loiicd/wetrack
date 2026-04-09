@@ -12,14 +12,24 @@ const client = await clerkClient();
 export const POST = async (request: NextRequest) => {
   console.log("[POST /api/dashboard] Request received");
 
-  // const { isAuthenticated } = await auth({
-  //   acceptsToken: ["api_key"],
-  // });
+  const { isAuthenticated, getToken } = await auth({
+    acceptsToken: ["api_key"],
+  });
 
-  // if (!isAuthenticated) {
-  //   console.warn("[POST /api/dashboard] Unauthorized request");
-  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  // }
+  console.log(
+    "[POST /api/dashboard] Authentication check complete, isAuthenticated:",
+    isAuthenticated,
+  );
+
+  const token1 = await getToken();
+
+  console.log("[POST /api/dashboard] Auth token:", token1);
+
+  if (!isAuthenticated) {
+    console.warn("[POST /api/dashboard] Unauthorized request");
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const secret = request.headers.get("authorization");
 
   console.log(secret);

@@ -19,7 +19,7 @@ export const POST = async (request: NextRequest) => {
     response.isAuthenticated,
   );
 
-  const orgId = await response.getToken();
+  const orgId = response.tokenType;
 
   if (!response.isAuthenticated) {
     console.warn("[POST /api/dashboard] Unauthorized request");

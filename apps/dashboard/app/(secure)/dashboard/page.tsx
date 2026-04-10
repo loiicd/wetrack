@@ -4,8 +4,11 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardList from "@/components/lists/dashboardList";
+import { getPageAuth } from "@/lib/auth/getPageAuth";
 
-const Page = () => {
+const Page = async () => {
+  const { orgId } = await getPageAuth();
+
   return (
     <Container>
       <div className="space-y-6">
@@ -24,7 +27,7 @@ const Page = () => {
           </Link>
         </div>
         <Suspense fallback={<DashboardList.skeleton />}>
-          <DashboardList />
+          <DashboardList orgId={orgId} />
         </Suspense>
       </div>
     </Container>

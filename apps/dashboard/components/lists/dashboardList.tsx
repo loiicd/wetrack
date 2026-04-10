@@ -2,9 +2,12 @@ import { dashboardInterface } from "@/lib/database/dashboard";
 import { auth } from "@clerk/nextjs/server";
 import DashboardListItem from "./dashboardListItem";
 
-const DashboardList = async () => {
-  const { orgId } = await auth();
-  const dashboards = await dashboardInterface.getMany(orgId ?? undefined);
+type Props = {
+  orgId: string;
+};
+
+const DashboardList = async ({ orgId }: Props) => {
+  const dashboards = await dashboardInterface.getMany(orgId);
 
   return (
     <div className="flex flex-col gap-4">

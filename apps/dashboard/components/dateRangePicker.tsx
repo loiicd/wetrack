@@ -1,8 +1,9 @@
 "use client";
 
-import { addDays, format } from "date-fns";
+import { addDays, format, parseISO } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { type DateRange } from "react-day-picker";
+import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -11,13 +12,33 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DateRangePicker = () => {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(new Date().getFullYear(), 0, 20),
-    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-  });
+  const [fromQuery, setFromQuery] = useQueryState("dateFrom");
+  const [toQuery, setToQuery] = useQueryState("dateTo");
+  const [date, setDate] = useState<DateRange | undefined>(undefined);
+
+  useEffect(() => {
+    const defaultFrom = new Date(new Date().getFullYear(), 0, 20);
+    const defaultTo = addDays(defaultFrom, 20);
+
+    const from = fromQuery ? parseISO(fromQuery) : defaultFrom;
+    const to = toQuery ? parseISO(toQuery) : defaultTo;
+
+    setDate({ from, to });
+  }, []);
+
+  const handleDateChange = (newDate: DateRange | undefined) => {
+    setDate(newDate);
+
+    if (newDate?.from) {
+      setFromQuery(newDate.from.toISOString());
+    }
+    if (newDate?.to) {
+      setToQuery(newDate.to.toISOString());
+    }
+  };
 
   return (
     <Field className="mx-auto w-60">
@@ -51,7 +72,7 @@ const DateRangePicker = () => {
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateChange}
             numberOfMonths={2}
           />
         </PopoverContent>

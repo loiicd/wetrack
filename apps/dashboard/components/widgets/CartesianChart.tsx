@@ -162,7 +162,7 @@ const CartesianChart = ({
       widgetQueryKey={title ? `chart-${title}` : undefined}
       onExpandedChange={setIsExpanded}
       openOnCardClick
-      collapsedContentClassName="h-48"
+      collapsedContentClassName="flex-1"
       expandedContentClassName="flex-1"
     >
       <ChartContainer config={autoConfig} className="h-full w-full">
@@ -179,9 +179,14 @@ const CartesianChart = ({
             content={<ChartTooltipContent indicator="dashed" />}
           />
           {/* eslint-disable-next-line react-hooks/refs */}
-          {renderSeries(valFields, autoConfig, !isExpanded && !hasAnimated.current, () => {
-            hasAnimated.current = true;
-          })}
+          {renderSeries(
+            valFields,
+            autoConfig,
+            !isExpanded && !hasAnimated.current,
+            () => {
+              hasAnimated.current = true;
+            },
+          )}
         </ComposedChart>
       </ChartContainer>
     </ExpandableWidgetCard>

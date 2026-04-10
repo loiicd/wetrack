@@ -1,14 +1,14 @@
 import { Suspense } from "react";
 import Container from "@/components/layout/container";
-import { HeroSection } from "@/components/home/heroSection";
+import HeroSection from "@/components/sections/heroSection";
 import { RecentDashboards } from "@/components/home/recentDashboards";
 import { StatsSection } from "@/components/home/statsSection";
 import { WorkflowTimeline } from "@/components/home/workflowTimeline";
-import { auth } from "@clerk/nextjs/server";
 import { dashboardInterface } from "@/lib/database/dashboard";
 import { stackInterface } from "@/lib/database/stack";
 import { dataSourceInterface } from "@/lib/database/dataSource";
 import { queryInterface } from "@/lib/database/query";
+import { getPageAuth } from "@/lib/auth/getPageAuth";
 
 async function getStatsData(orgId?: string) {
   try {
@@ -54,8 +54,8 @@ async function getRecentDashboards(orgId?: string) {
 }
 
 const Page = async () => {
-  const { orgId } = await auth();
-  
+  const { orgId } = await getPageAuth();
+
   const [stats, dashboards] = await Promise.all([
     getStatsData(orgId ?? undefined),
     getRecentDashboards(orgId ?? undefined),

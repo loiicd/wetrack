@@ -31,7 +31,7 @@ const DateRangePicker = () => {
   };
 
   return (
-    <Field className="mx-auto w-60">
+    <Field className="mx-auto">
       <Popover>
         <PopoverTrigger
           render={

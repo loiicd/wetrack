@@ -38,11 +38,11 @@ const Test = ({ dashboard }: Props) => {
       <Button size="icon" variant="secondary">
         <LoaderIcon />
       </Button>
-      <Select items={items}>
+      <Select items={items} defaultValue={3000}>
         <SelectTrigger className="w-[180px]">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent alignItemWithTrigger={false}>
           <SelectGroup>
             {items.map((item) => (
               <SelectItem key={item.value} value={item.value}>

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import Container from "@/components/layout/container";
 import HeroSection from "@/components/sections/heroSection";
-import { RecentDashboards } from "@/components/home/recentDashboards";
 import { StatsSection } from "@/components/home/statsSection";
 import { WorkflowTimeline } from "@/components/home/workflowTimeline";
 import { dashboardInterface } from "@/lib/database/dashboard";
@@ -9,6 +8,7 @@ import { stackInterface } from "@/lib/database/stack";
 import { dataSourceInterface } from "@/lib/database/dataSource";
 import { queryInterface } from "@/lib/database/query";
 import { getPageAuth } from "@/lib/auth/getPageAuth";
+import DashboardList from "@/components/lists/dashboardList";
 
 async function getStatsData(orgId?: string) {
   try {
@@ -36,30 +36,10 @@ async function getStatsData(orgId?: string) {
   }
 }
 
-async function getRecentDashboards(orgId?: string) {
-  try {
-    const dashboards = await dashboardInterface.getMany(orgId);
-    // Sort by updatedAt descending and take first 6
-    const recent = dashboards
-      .sort(
-        (a, b) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-      )
-      .slice(0, 6);
-    return recent;
-  } catch (error) {
-    console.error("Failed to fetch dashboards:", error);
-    return [];
-  }
-}
-
 const Page = async () => {
   const { orgId, userId } = await getPageAuth();
 
-  const [stats, dashboards] = await Promise.all([
-    getStatsData(orgId ?? undefined),
-    getRecentDashboards(orgId ?? undefined),
-  ]);
+  const [stats] = await Promise.all([getStatsData(orgId ?? undefined)]);
 
   return (
     <Container>
@@ -81,16 +61,9 @@ const Page = async () => {
           </Suspense>
         </div>
 
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">
-              Zuletzt aktualisierte Dashboards
-            </h2>
-          </div>
-          <Suspense fallback={<div>Laden...</div>}>
-            <RecentDashboards dashboards={dashboards} />
-          </Suspense>
-        </div>
+        <Suspense fallback={<DashboardList.skeleton />}>
+          <DashboardList orgId={orgId} />
+        </Suspense>
 
         <WorkflowTimeline />
       </div>

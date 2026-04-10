@@ -19,14 +19,12 @@ export const POST = async (request: NextRequest) => {
     response.isAuthenticated,
   );
 
-  // @ts-expect-error Clerk's types don't include orgId, but we add it in middleware
-  const orgId = response.orgId;
-
   if (!response.isAuthenticated) {
     console.warn("[POST /api/dashboard] Unauthorized request");
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const orgId = response.orgId;
   console.log("[POST /api/dashboard] Authenticated orgId:", orgId);
 
   if (!orgId) {

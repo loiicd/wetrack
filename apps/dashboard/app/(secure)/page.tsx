@@ -54,7 +54,7 @@ async function getRecentDashboards(orgId?: string) {
 }
 
 const Page = async () => {
-  const { orgId } = await getPageAuth();
+  const { orgId, userId } = await getPageAuth();
 
   const [stats, dashboards] = await Promise.all([
     getStatsData(orgId ?? undefined),
@@ -64,7 +64,9 @@ const Page = async () => {
   return (
     <Container>
       <div className="space-y-8">
-        <HeroSection />
+        <Suspense>
+          <HeroSection userId={userId} />
+        </Suspense>
 
         <div>
           <h2 className="text-2xl font-bold mb-4">Überblick</h2>

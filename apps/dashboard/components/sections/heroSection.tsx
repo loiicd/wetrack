@@ -1,15 +1,15 @@
-"use client";
+import { userInterface } from "@/lib/clerk/user";
 
-import { useUser } from "@clerk/nextjs";
+type Props = {
+  userId: string;
+};
 
-const HeroSection = () => {
-  const { isSignedIn, user, isLoaded } = useUser();
+const HeroSection = async ({ userId }: Props) => {
+  const user = await userInterface.get(userId);
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">
-        Willkommen zurück, {isLoaded && isSignedIn ? user.firstName : "User"}!
-      </h1>
+      <h1 className="text-3xl font-bold">Welcome back, {user.firstName}</h1>
     </div>
   );
 };

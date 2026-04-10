@@ -4,11 +4,12 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
+  ItemMedia,
   ItemTitle,
 } from "../ui/item";
 import { Skeleton } from "../ui/skeleton";
 import Link from "next/link";
-import { ChevronRightIcon } from "lucide-react";
+import { ChevronRightIcon, LayoutDashboardIcon } from "lucide-react";
 
 type Props = {
   dashboard: Dashboard;
@@ -20,6 +21,9 @@ const DashboardListItem = ({ dashboard }: Props) => {
       variant="outline"
       render={<Link href={`/dashboard/${dashboard.id}`} />}
     >
+      <ItemMedia>
+        <LayoutDashboardIcon />
+      </ItemMedia>
       <ItemContent>
         <ItemTitle>{dashboard.label}</ItemTitle>
         <ItemDescription>{dashboard.description}</ItemDescription>

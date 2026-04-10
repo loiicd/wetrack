@@ -7,10 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
 import DashboardSkeleton from "@/components/dashboard/dashboardSkeleton";
 import Container from "@/components/layout/container";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
 import { toDataFrame } from "@/lib/dataframe";
@@ -21,32 +18,27 @@ import {
   statCardConfigSchema,
 } from "@/schemas/dashboard";
 import type { TimeZone } from "@/types/timezone";
-import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { connection } from "next/server";
+import { getPageAuth } from "@/lib/auth/getPageAuth";
 
 type DashboardPageProps = {
   params: Promise<{ dashboardId: string }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const DashboardContent = async ({
-  props,
-}: {
-  props: DashboardPageProps;
-}) => {
+const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
   await connection();
   const { dashboardId } = await props.params;
 
-  const { orgId } = await auth();
+  const { orgId } = await getPageAuth();
   const dashboard = await dashboardInterface.getById(dashboardId);
 
   if (!dashboard) {
     return notFound();
   }
 
-  // Ensure user can only access dashboards belonging to their org
   if (orgId && dashboard.stack?.orgId && orgId !== dashboard.stack.orgId) {
     return notFound();
   }
@@ -56,7 +48,11 @@ const DashboardContent = async ({
   const widgets = await Promise.all(
     charts.map(async (chart) => {
       try {
-        if (chart.type === "CARTESIAN" || chart.type === "BAR" || chart.type === "LINE") {
+        if (
+          chart.type === "CARTESIAN" ||
+          chart.type === "BAR" ||
+          chart.type === "LINE"
+        ) {
           const config = cartesianChartConfigSchema.parse(chart.config);
           const queryResult = await getQueryData(chart.queryId!);
           const dataFrame = toDataFrame(queryResult, [
@@ -69,7 +65,11 @@ const DashboardContent = async ({
               {
                 label: vf,
                 color: config.colors?.[i] ?? `var(--chart-${(i % 5) + 1})`,
-                type: (config.seriesTypes?.[i] ?? "bar") as "bar" | "line" | "area" | "scatter",
+                type: (config.seriesTypes?.[i] ?? "bar") as
+                  | "bar"
+                  | "line"
+                  | "area"
+                  | "scatter",
               },
             ]),
           );
@@ -154,8 +154,20 @@ const DashboardContent = async ({
   );
 
   const env = dashboard.stack?.environment;
-  const envBadge = env === "PRODUCTION" ? "default" : env === "STAGING" ? "secondary" : "outline";
-  const envLabel = env === "PRODUCTION" ? "Production" : env === "STAGING" ? "Staging" : env === "DEVELOPMENT" ? "Development" : null;
+  const envBadge =
+    env === "PRODUCTION"
+      ? "default"
+      : env === "STAGING"
+        ? "secondary"
+        : "outline";
+  const envLabel =
+    env === "PRODUCTION"
+      ? "Production"
+      : env === "STAGING"
+        ? "Staging"
+        : env === "DEVELOPMENT"
+          ? "Development"
+          : null;
 
   return (
     <div className="flex flex-col gap-4">

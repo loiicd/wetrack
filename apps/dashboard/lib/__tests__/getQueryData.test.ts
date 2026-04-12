@@ -18,7 +18,7 @@ vi.mock("next/cache", () => ({
 vi.mock("jsonpath-plus", () => ({
   JSONPath: vi.fn(),
 }));
-vi.mock("alasql", () => ({
+vi.mock("@/lib/vendors/alasql", () => ({
   default: vi.fn(),
 }));
 
@@ -27,7 +27,7 @@ import { getChartData } from "../workflows/getChartData";
 import { validateSql } from "../sql/validateSql";
 import { getQueryData } from "../workflows/getQueryData";
 import { JSONPath } from "jsonpath-plus";
-import alasql from "alasql";
+import alasql from "@/lib/vendors/alasql";
 
 beforeEach(() => {
   vi.clearAllMocks();

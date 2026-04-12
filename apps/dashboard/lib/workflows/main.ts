@@ -1,13 +1,14 @@
 import { chartInterface } from "@/lib/database/chart";
+import type { DatabaseClient } from "@/lib/database/client";
 import { dataSourceInterface } from "@/lib/database/dataSource";
 import { dashboardInterface } from "@/lib/database/dashboard";
+import prisma from "@/lib/database/prisma";
 import { queryInterface } from "@/lib/database/query";
 import { stackInterface } from "@/lib/database/stack";
-import { Environment, StackId } from "@/types";
-import { stackSchema } from "@/schemas/dashboard";
+import type { Environment, StackId } from "@/types";
+import type { StackSyncInput } from "@/schemas/dashboard";
 import { QueryType } from "@/generated/prisma/enums";
 import { Prisma } from "@/generated/prisma/client";
-import z from "zod";
 
 type Stack = {
   key: string;
@@ -44,7 +45,7 @@ type SQLQueryInput = {
 
 type QueryInput = JSONPathQueryInput | SQLQueryInput;
 
-type ChartInput = NonNullable<z.infer<typeof stackSchema>["charts"]>[number];
+type ChartInput = StackSyncInput["charts"][number];
 
 // type TransformInput = {
 //   key: string;
@@ -62,52 +63,48 @@ type ChartInput = NonNullable<z.infer<typeof stackSchema>["charts"]>[number];
 // };
 
 export const mainWorkflow = async (
-  data: z.infer<typeof stackSchema>,
+  data: StackSyncInput,
   orgId: string,
 ): Promise<{ stackId: string }> => {
-  const stack = { key: data.key, environment: data.environment };
-  const stackId = await createStack(stack, orgId);
+  return prisma.$transaction(async (tx) => {
+    const stack = { key: data.key, environment: data.environment };
+    const stackId = await createStack(stack, orgId, tx);
 
-  await createDashboards(data.dashboards, stackId);
-  await createDataSources(stackId, data.dataSources);
+    await createDashboards(data.dashboards, stackId, tx);
+    await createDataSources(stackId, data.dataSources, tx);
 
-  const dataSourceMap = await resolveDataSourceMap(stackId);
-  await createQueries(stackId, data.queries, dataSourceMap);
+    const dataSourceMap = await resolveDataSourceMap(stackId, tx);
+    await createQueries(stackId, data.queries, dataSourceMap, tx);
 
-  const dashboardMap = await resolveDashboardMap(stackId);
-  const queryMap = await resolveQueryMap(stackId);
-  await createCharts(stackId, data.charts, dashboardMap, queryMap);
+    const dashboardMap = await resolveDashboardMap(stackId, tx);
+    const queryMap = await resolveQueryMap(stackId, tx);
+    await createCharts(stackId, data.charts, dashboardMap, queryMap, tx);
 
-  // Gelöschte Einträge entfernen (Reihenfolge: Charts → Queries → DataSources → Dashboards)
-  const chartKeys = (data.charts ?? []).map((c) => c.key);
-  await chartInterface.deleteNotInKeys(stackId, chartKeys);
+    await cleanupStackResources(stackId, data, tx);
 
-  const queryKeys = (data.queries ?? []).map((q) => q.key);
-  await queryInterface.deleteNotInKeys(stackId, queryKeys);
-
-  const dataSourceKeys = (data.dataSources ?? []).map((ds) => ds.key);
-  await dataSourceInterface.deleteNotInKeys(stackId, dataSourceKeys);
-
-  const dashboardKeys = (data.dashboards ?? []).map((d) => d.key);
-  await dashboardInterface.deleteNotInKeys(stackId, dashboardKeys);
-
-  return { stackId };
+    return { stackId };
+  });
 };
 
-const createStack = async (stack: Stack, orgId: string) => {
+const createStack = async (
+  stack: Stack,
+  orgId: string,
+  db: DatabaseClient,
+) => {
   return await stackInterface.create({
     key: stack.key,
     environment: stack.environment,
     orgId,
     version: 1,
-  });
+  }, db);
 };
 
 const createDashboards = async (
-  dashboards: z.infer<typeof stackSchema>["dashboards"],
+  dashboards: StackSyncInput["dashboards"],
   stackId: StackId,
+  db: DatabaseClient,
 ) => {
-  if (!dashboards?.length) {
+  if (!dashboards.length) {
     return;
   }
 
@@ -118,14 +115,16 @@ const createDashboards = async (
       description: d.description,
       stackId,
     })),
+    db,
   );
 };
 
 const createDataSources = async (
   stackId: StackId,
-  dataSources: DataSource[] | undefined,
+  dataSources: DataSource[],
+  db: DatabaseClient,
 ) => {
-  if (!dataSources?.length) {
+  if (!dataSources.length) {
     return;
   }
 
@@ -136,20 +135,22 @@ const createDataSources = async (
     config: dataSource.config as Prisma.InputJsonValue,
   }));
 
-  await dataSourceInterface.createMany(dataSourcesToCreate);
+  await dataSourceInterface.createMany(dataSourcesToCreate, db);
 };
 
 const resolveDataSourceMap = async (
   stackId: StackId,
+  db: DatabaseClient,
 ): Promise<Record<string, string>> => {
-  const dataSources = await dataSourceInterface.getByStackId(stackId);
+  const dataSources = await dataSourceInterface.getByStackId(stackId, db);
   return Object.fromEntries(dataSources.map((ds) => [ds.key, ds.id]));
 };
 
 const resolveDashboardMap = async (
   stackId: StackId,
+  db: DatabaseClient,
 ): Promise<Record<string, string>> => {
-  const dashboards = await dashboardInterface.getByStackId(stackId);
+  const dashboards = await dashboardInterface.getByStackId(stackId, db);
   return Object.fromEntries(
     dashboards.map((dashboard) => [dashboard.key, dashboard.id]),
   );
@@ -157,10 +158,11 @@ const resolveDashboardMap = async (
 
 const createQueries = async (
   stackId: StackId,
-  queries: QueryInput[] | undefined,
+  queries: QueryInput[],
   dataSourceMap: Record<string, string>,
+  db: DatabaseClient,
 ) => {
-  if (!queries?.length) {
+  if (!queries.length) {
     return;
   }
 
@@ -214,10 +216,10 @@ const createQueries = async (
     }
   });
 
-  await queryInterface.createMany(queriesToCreate);
+  await queryInterface.createMany(queriesToCreate, db);
 
   // sourceQuery-Verknüpfungen nachträglich via Update setzen (kein zweiter Create)
-  const queryMap = await resolveQueryMap(stackId);
+  const queryMap = await resolveQueryMap(stackId, db);
   const sourceQueryUpdates = ordered.filter((q) => q.sourceQuery);
   if (sourceQueryUpdates.length > 0) {
     await Promise.all(
@@ -229,7 +231,7 @@ const createQueries = async (
             `sourceQuery '${query.sourceQuery}' nicht gefunden für Query '${query.key}'.`,
           );
         }
-        return queryInterface.updateSourceQueryId(ownId, sourceId);
+        return queryInterface.updateSourceQueryId(ownId, sourceId, db);
       }),
     );
   }
@@ -237,18 +239,20 @@ const createQueries = async (
 
 const resolveQueryMap = async (
   stackId: StackId,
+  db: DatabaseClient,
 ): Promise<Record<string, string>> => {
-  const queries = await queryInterface.getByStackId(stackId);
+  const queries = await queryInterface.getByStackId(stackId, db);
   return Object.fromEntries(queries.map((query) => [query.key, query.id]));
 };
 
 const createCharts = async (
   stackId: StackId,
-  charts: ChartInput[] | undefined,
+  charts: ChartInput[],
   dashboardMap: Record<string, string>,
   queryMap: Record<string, string>,
+  db: DatabaseClient,
 ) => {
-  if (!charts?.length) {
+  if (!charts.length) {
     return;
   }
 
@@ -265,12 +269,10 @@ const createCharts = async (
       chart.type === "clock"
         ? null
         : (() => {
-            const id = queryMap[(chart as { query: string }).query];
+            const id = queryMap[chart.query];
             if (!id) {
               throw new Error(
-                `Query with key '${
-                  (chart as { query: string }).query
-                }' not found for chart '${chart.key}'`,
+                `Query with key '${chart.query}' not found for chart '${chart.key}'`,
               );
             }
             return id;
@@ -302,5 +304,35 @@ const createCharts = async (
     };
   });
 
-  await chartInterface.createMany(chartsToCreate);
+  await chartInterface.createMany(chartsToCreate, db);
+};
+
+const cleanupStackResources = async (
+  stackId: StackId,
+  data: StackSyncInput,
+  db: DatabaseClient,
+) => {
+  await chartInterface.deleteNotInKeys(
+    stackId,
+    data.charts.map((chart) => chart.key),
+    db,
+  );
+
+  await queryInterface.deleteNotInKeys(
+    stackId,
+    data.queries.map((query) => query.key),
+    db,
+  );
+
+  await dataSourceInterface.deleteNotInKeys(
+    stackId,
+    data.dataSources.map((dataSource) => dataSource.key),
+    db,
+  );
+
+  await dashboardInterface.deleteNotInKeys(
+    stackId,
+    data.dashboards.map((dashboard) => dashboard.key),
+    db,
+  );
 };

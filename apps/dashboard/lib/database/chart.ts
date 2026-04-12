@@ -1,11 +1,15 @@
 import { ChartCreateManyInput } from "@/generated/prisma/models";
 import prisma from "./prisma";
+import type { DatabaseClient } from "./client";
 
 export const chartInterface = {
-  async createMany(data: ChartCreateManyInput[]) {
+  async createMany(
+    data: ChartCreateManyInput[],
+    db: DatabaseClient = prisma,
+  ) {
     await Promise.all(
       data.map((chart) =>
-        prisma.chart.upsert({
+        db.chart.upsert({
           where: {
             stackId_key: { stackId: chart.stackId, key: chart.key },
           },
@@ -52,8 +56,12 @@ export const chartInterface = {
     });
   },
 
-  async deleteNotInKeys(stackId: string, keys: string[]) {
-    await prisma.chart.deleteMany({
+  async deleteNotInKeys(
+    stackId: string,
+    keys: string[],
+    db: DatabaseClient = prisma,
+  ) {
+    await db.chart.deleteMany({
       where: {
         stackId,
         key: { notIn: keys },

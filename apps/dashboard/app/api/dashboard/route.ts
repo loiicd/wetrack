@@ -1,4 +1,4 @@
-import { stackSchema } from "@/schemas/dashboard";
+import { stackSyncSchema } from "@/schemas/dashboard";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { mainWorkflow } from "@/lib/workflows/main";
@@ -40,14 +40,18 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const parsed = stackSchema.safeParse(body);
+  const parsed = stackSyncSchema.safeParse(body);
   if (!parsed.success) {
     console.error(
-      "[POST /api/dashboard] Schema validation failed:",
+      "[POST /api/dashboard] Full stack validation failed:",
       parsed.error.issues,
     );
     return NextResponse.json(
-      { error: "Validation failed", issues: parsed.error.issues },
+      {
+        error:
+          "Validation failed. POST /api/dashboard expects a complete stack snapshot with dashboards, dataSources, queries, and charts arrays.",
+        issues: parsed.error.issues,
+      },
       { status: 422 },
     );
   }

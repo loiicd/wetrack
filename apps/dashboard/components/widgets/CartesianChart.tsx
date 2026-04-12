@@ -144,7 +144,7 @@ const CartesianChart = ({
   title,
   description,
 }: GenericChartProps) => {
-  const hasAnimated = React.useRef(false);
+  const [hasAnimated, setHasAnimated] = React.useState(false);
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const catField = data.fields.find((f) => f.type === "string")?.name || "";
@@ -154,6 +154,7 @@ const CartesianChart = ({
 
   const autoConfig = config || autoChartConfig(data);
   const rows = dataFrameToRows(data);
+  const shouldAnimate = !isExpanded && !hasAnimated;
 
   return (
     <ExpandableWidgetCard
@@ -178,13 +179,12 @@ const CartesianChart = ({
             cursor={false}
             content={<ChartTooltipContent indicator="dashed" />}
           />
-          {/* eslint-disable-next-line react-hooks/refs */}
           {renderSeries(
             valFields,
             autoConfig,
-            !isExpanded && !hasAnimated.current,
+            shouldAnimate,
             () => {
-              hasAnimated.current = true;
+              setHasAnimated(true);
             },
           )}
         </ComposedChart>

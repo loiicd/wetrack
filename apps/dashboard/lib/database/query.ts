@@ -1,5 +1,6 @@
 import { QueryType } from "@/generated/prisma/enums";
 import prisma from "./prisma";
+import type { DatabaseClient } from "./client";
 
 type QueryUpsertInput = {
   stackId: string;
@@ -13,15 +14,19 @@ type QueryUpsertInput = {
 };
 
 export const queryInterface = {
-  async updateSourceQueryId(id: string, sourceQueryId: string) {
-    return await prisma.query.update({
+  async updateSourceQueryId(
+    id: string,
+    sourceQueryId: string,
+    db: DatabaseClient = prisma,
+  ) {
+    return await db.query.update({
       where: { id },
       data: { sourceQueryId },
     });
   },
 
-  async create(data: QueryUpsertInput) {
-    return await prisma.query.upsert({
+  async create(data: QueryUpsertInput, db: DatabaseClient = prisma) {
+    return await db.query.upsert({
       where: {
         stackId_key: { stackId: data.stackId, key: data.key },
       },
@@ -46,11 +51,11 @@ export const queryInterface = {
     });
   },
 
-  async createMany(data: QueryUpsertInput[]) {
+  async createMany(data: QueryUpsertInput[], db: DatabaseClient = prisma) {
     // Sequentiell um Reihenfolge (sourceQuery-Abhängigkeiten) zu respektieren
     for (const d of data) {
       try {
-        await prisma.query.upsert({
+        await db.query.upsert({
           where: {
             stackId_key: { stackId: d.stackId, key: d.key },
           },
@@ -85,8 +90,8 @@ export const queryInterface = {
     return await prisma.query.findUnique({ where: { id } });
   },
 
-  async getByStackId(stackId: string) {
-    return await prisma.query.findMany({
+  async getByStackId(stackId: string, db: DatabaseClient = prisma) {
+    return await db.query.findMany({
       where: { stackId },
     });
   },
@@ -99,8 +104,12 @@ export const queryInterface = {
     });
   },
 
-  async deleteNotInKeys(stackId: string, keys: string[]) {
-    await prisma.query.deleteMany({
+  async deleteNotInKeys(
+    stackId: string,
+    keys: string[],
+    db: DatabaseClient = prisma,
+  ) {
+    await db.query.deleteMany({
       where: {
         stackId,
         key: { notIn: keys },

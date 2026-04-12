@@ -92,8 +92,7 @@ const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string().optional(),
-    dataSource: z.string().optional(),
+    query: z.string(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("cartesian"),
@@ -103,8 +102,7 @@ const chartSchema = z.discriminatedUnion("type", [
   z.object({
     key: z.string(),
     dashboard: z.string(),
-    query: z.string().optional(),
-    dataSource: z.string().optional(),
+    query: z.string(),
     label: z.string(),
     description: z.string().optional(),
     type: z.literal("stat"),
@@ -151,3 +149,16 @@ export const stackSchema = z.object({
   dashboards: z.array(dashboardSchema).optional(),
   queries: z.array(querySchema).optional(),
 });
+
+export const stackSyncSchema = z
+  .object({
+    key: z.string(),
+    environment: z.enum(["PRODUCTION", "STAGING", "DEVELOPMENT"]),
+    dataSources: z.array(dataSourceSchema),
+    charts: z.array(chartSchema),
+    dashboards: z.array(dashboardSchema),
+    queries: z.array(querySchema),
+  })
+  .strict();
+
+export type StackSyncInput = z.infer<typeof stackSyncSchema>;

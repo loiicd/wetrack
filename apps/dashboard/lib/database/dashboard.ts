@@ -1,4 +1,5 @@
 import prisma from "./prisma";
+import type { DatabaseClient } from "./client";
 
 export const dashboardInterface = {
   async create(data: {
@@ -6,8 +7,8 @@ export const dashboardInterface = {
     label: string;
     description: string;
     stackId: string;
-  }) {
-    return await prisma.dashboard.upsert({
+  }, db: DatabaseClient = prisma) {
+    return await db.dashboard.upsert({
       where: {
         stackId_key: { stackId: data.stackId, key: data.key },
       },
@@ -29,10 +30,11 @@ export const dashboardInterface = {
       description?: string | null;
       stackId: string;
     }[],
+    db: DatabaseClient = prisma,
   ) {
     await Promise.all(
       data.map((d) =>
-        prisma.dashboard.upsert({
+        db.dashboard.upsert({
           where: {
             stackId_key: { stackId: d.stackId, key: d.key },
           },
@@ -57,8 +59,8 @@ export const dashboardInterface = {
     });
   },
 
-  async getByStackId(stackId: string) {
-    return await prisma.dashboard.findMany({
+  async getByStackId(stackId: string, db: DatabaseClient = prisma) {
+    return await db.dashboard.findMany({
       where: { stackId },
     });
   },
@@ -96,8 +98,12 @@ export const dashboardInterface = {
     return Array.from(latestByKey.values());
   },
 
-  async deleteNotInKeys(stackId: string, keys: string[]) {
-    await prisma.dashboard.deleteMany({
+  async deleteNotInKeys(
+    stackId: string,
+    keys: string[],
+    db: DatabaseClient = prisma,
+  ) {
+    await db.dashboard.deleteMany({
       where: {
         stackId,
         key: { notIn: keys },

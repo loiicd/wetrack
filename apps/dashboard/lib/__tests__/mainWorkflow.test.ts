@@ -4,6 +4,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 // Mocks – vi.hoisted so factories run before module imports
 // ---------------------------------------------------------------------------
 const mocks = vi.hoisted(() => ({
+  prisma: {
+    $transaction: vi.fn(),
+  },
   stackInterface: { create: vi.fn() },
   dashboardInterface: { createMany: vi.fn(), getByStackId: vi.fn(), deleteNotInKeys: vi.fn() },
   dataSourceInterface: { createMany: vi.fn(), getByStackId: vi.fn(), deleteNotInKeys: vi.fn() },
@@ -16,6 +19,7 @@ const mocks = vi.hoisted(() => ({
   chartInterface: { createMany: vi.fn(), deleteNotInKeys: vi.fn() },
 }));
 
+vi.mock("@/lib/database/prisma", () => ({ default: mocks.prisma }));
 vi.mock("@/lib/database/stack", () => ({ stackInterface: mocks.stackInterface }));
 vi.mock("@/lib/database/dashboard", () => ({ dashboardInterface: mocks.dashboardInterface }));
 vi.mock("@/lib/database/dataSource", () => ({ dataSourceInterface: mocks.dataSourceInterface }));
@@ -29,6 +33,7 @@ import { mainWorkflow } from "../workflows/main";
 // ---------------------------------------------------------------------------
 const STACK_ID = "stack-id-1";
 const ORG_ID = "org_123";
+const TX = { __tx: true };
 
 const baseStackData = () => ({
   key: "my-stack",
@@ -43,8 +48,8 @@ const baseStackData = () => ({
   charts: [
     {
       key: "chart-1",
-      label: "Bar Chart",
-      type: "bar" as const,
+      label: "Cartesian Chart",
+      type: "cartesian" as const,
       dashboard: "dash-1",
       query: "q-1",
       config: { categoryField: "id", valueFields: ["value"], orientation: "vertical" as const },
@@ -53,6 +58,9 @@ const baseStackData = () => ({
 });
 
 const setupDefaultMocks = () => {
+  mocks.prisma.$transaction.mockImplementation(async (callback: (tx: typeof TX) => Promise<unknown>) =>
+    callback(TX),
+  );
   mocks.stackInterface.create.mockResolvedValue(STACK_ID);
   mocks.dashboardInterface.createMany.mockResolvedValue(undefined);
   mocks.dashboardInterface.getByStackId.mockResolvedValue([{ key: "dash-1", id: "dash-id-1" }]);
@@ -82,6 +90,7 @@ describe("mainWorkflow", () => {
 
     expect(mocks.stackInterface.create).toHaveBeenCalledWith(
       expect.objectContaining({ key: "my-stack", environment: "PRODUCTION", orgId: ORG_ID }),
+      TX,
     );
     expect(mocks.dashboardInterface.createMany).toHaveBeenCalled();
     expect(mocks.dataSourceInterface.createMany).toHaveBeenCalled();
@@ -89,13 +98,19 @@ describe("mainWorkflow", () => {
     expect(mocks.chartInterface.createMany).toHaveBeenCalled();
   });
 
+  it("runs the full sync inside a transaction", async () => {
+    await mainWorkflow(baseStackData() as never, ORG_ID);
+
+    expect(mocks.prisma.$transaction).toHaveBeenCalledTimes(1);
+  });
+
   it("cleans up deleted resources in correct order", async () => {
     await mainWorkflow(baseStackData() as never, ORG_ID);
 
-    expect(mocks.chartInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["chart-1"]);
-    expect(mocks.queryInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["q-1"]);
-    expect(mocks.dataSourceInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["ds-1"]);
-    expect(mocks.dashboardInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["dash-1"]);
+    expect(mocks.chartInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["chart-1"], TX);
+    expect(mocks.queryInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["q-1"], TX);
+    expect(mocks.dataSourceInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["ds-1"], TX);
+    expect(mocks.dashboardInterface.deleteNotInKeys).toHaveBeenCalledWith(STACK_ID, ["dash-1"], TX);
   });
 
   it("handles empty optional arrays gracefully", async () => {
@@ -116,14 +131,6 @@ describe("mainWorkflow", () => {
     expect(mocks.chartInterface.createMany).not.toHaveBeenCalled();
   });
 
-  it("handles undefined optional arrays gracefully", async () => {
-    const data = { key: "min-stack", environment: "DEVELOPMENT" as const };
-
-    await mainWorkflow(data as never as never, ORG_ID);
-
-    expect(mocks.dashboardInterface.createMany).not.toHaveBeenCalled();
-  });
-
   describe("chart type mapping", () => {
     const makeChart = (type: string, config: object) => ({
       ...baseStackData(),
@@ -132,22 +139,16 @@ describe("mainWorkflow", () => {
       ],
     });
 
-    it("maps 'line' chart type to LINE", async () => {
-      await mainWorkflow(makeChart("line", { xField: "x", valueFields: ["y"] }) as never, ORG_ID);
+    it("maps 'cartesian' chart type to CARTESIAN", async () => {
+      await mainWorkflow(makeChart("cartesian", { categoryField: "x", valueFields: ["y"] }) as never, ORG_ID);
       const call = mocks.chartInterface.createMany.mock.calls[0][0];
-      expect(call[0].type).toBe("LINE");
+      expect(call[0].type).toBe("CARTESIAN");
     });
 
     it("maps 'stat' chart type to STAT", async () => {
       await mainWorkflow(makeChart("stat", { valueField: "v" }) as never, ORG_ID);
       const call = mocks.chartInterface.createMany.mock.calls[0][0];
       expect(call[0].type).toBe("STAT");
-    });
-
-    it("maps 'bar' chart type to BAR", async () => {
-      await mainWorkflow(baseStackData() as never, ORG_ID);
-      const call = mocks.chartInterface.createMany.mock.calls[0][0];
-      expect(call[0].type).toBe("BAR");
     });
 
     it("maps 'clock' chart type to CLOCK with null queryId", async () => {
@@ -212,6 +213,7 @@ describe("mainWorkflow", () => {
       expect(mocks.queryInterface.updateSourceQueryId).toHaveBeenCalledWith(
         "qid-derived",
         "qid-base",
+        TX,
       );
     });
   });

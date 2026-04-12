@@ -88,6 +88,24 @@ describe("POST /api/dashboard", () => {
     const response = await POST(makeRequest(validStack));
 
     expect(response.status).toBe(200);
-    expect(mocks.mainWorkflow).toHaveBeenCalledWith(validStack, "org_123");
+    expect(mocks.mainWorkflow).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...validStack,
+        charts: [
+          expect.objectContaining({
+            ...validStack.charts[0],
+            config: expect.objectContaining({
+              ...validStack.charts[0].config,
+              showCard: true,
+              showDots: true,
+              showLabels: false,
+              showTooltip: true,
+              stacked: false,
+            }),
+          }),
+        ],
+      }),
+      "org_123",
+    );
   });
 });

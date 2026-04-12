@@ -1,5 +1,6 @@
 import { DataSourceCreateManyInput } from "@/generated/prisma/models";
 import prisma from "./prisma";
+import type { DatabaseClient } from "./client";
 
 export const dataSourceInterface = {
   async create(
@@ -7,8 +8,9 @@ export const dataSourceInterface = {
       DataSourceCreateManyInput,
       "key" | "type" | "config" | "stackId"
     >,
+    db: DatabaseClient = prisma,
   ) {
-    return await prisma.dataSource.upsert({
+    return await db.dataSource.upsert({
       where: {
         stackId_key: { stackId: data.stackId, key: data.key },
       },
@@ -23,10 +25,13 @@ export const dataSourceInterface = {
     });
   },
 
-  async createMany(data: DataSourceCreateManyInput[]) {
+  async createMany(
+    data: DataSourceCreateManyInput[],
+    db: DatabaseClient = prisma,
+  ) {
     await Promise.all(
       data.map((d) =>
-        prisma.dataSource
+        db.dataSource
           .upsert({
             where: {
               stackId_key: { stackId: d.stackId, key: d.key },
@@ -71,8 +76,8 @@ export const dataSourceInterface = {
     });
   },
 
-  async getByStackId(stackId: string) {
-    return await prisma.dataSource.findMany({
+  async getByStackId(stackId: string, db: DatabaseClient = prisma) {
+    return await db.dataSource.findMany({
       where: { stackId },
     });
   },
@@ -85,8 +90,12 @@ export const dataSourceInterface = {
     });
   },
 
-  async deleteNotInKeys(stackId: string, keys: string[]) {
-    await prisma.dataSource.deleteMany({
+  async deleteNotInKeys(
+    stackId: string,
+    keys: string[],
+    db: DatabaseClient = prisma,
+  ) {
+    await db.dataSource.deleteMany({
       where: {
         stackId,
         key: { notIn: keys },

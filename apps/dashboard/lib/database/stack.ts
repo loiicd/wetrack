@@ -1,10 +1,14 @@
 import { StackCreateInput } from "@/generated/prisma/models";
 import prisma from "./prisma";
 import { StackId } from "@/types/ids";
+import type { DatabaseClient } from "./client";
 
 export const stackInterface = {
-  async create(data: StackCreateInput & { orgId: string }): Promise<StackId> {
-    const stackRecord = await prisma.stack.upsert({
+  async create(
+    data: StackCreateInput & { orgId: string },
+    db: DatabaseClient = prisma,
+  ): Promise<StackId> {
+    const stackRecord = await db.stack.upsert({
       where: {
         key_environment_orgId: {
           key: data.key,

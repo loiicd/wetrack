@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { deleteCredential } from "@/actions/credential/delete";
 import { CreateCredentialForm } from "./createCredentialForm";
-import { Plus, Trash2, KeyRound } from "lucide-react";
+import { Plus, Trash2, KeyRound, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type Credential = {
@@ -35,6 +35,7 @@ type Credential = {
 
 type Props = {
   initialCredentials: Credential[];
+  vaultConfigured: boolean;
 };
 
 const typeLabels: Record<string, string> = {
@@ -44,7 +45,7 @@ const typeLabels: Record<string, string> = {
   header: "Custom Header",
 };
 
-export function CredentialList({ initialCredentials }: Props) {
+export function CredentialList({ initialCredentials, vaultConfigured }: Props) {
   const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deletingLabel, setDeletingLabel] = useState<string | null>(null);
@@ -74,29 +75,45 @@ export function CredentialList({ initialCredentials }: Props) {
             Manage encrypted credentials for your data source connections.
           </p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger
-            render={
-              <Button>
-                <Plus data-icon="inline-start" />
-                Add Credential
-              </Button>
-            }
-          />
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Credential</DialogTitle>
-              <DialogDescription>
-                Create a new encrypted credential for use in DataSource
-                configurations.
-              </DialogDescription>
-            </DialogHeader>
-            <CreateCredentialForm onCreated={handleCreated} />
-          </DialogContent>
-        </Dialog>
+        {vaultConfigured && (
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger
+              render={
+                <Button>
+                  <Plus data-icon="inline-start" />
+                  Add Credential
+                </Button>
+              }
+            />
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Credential</DialogTitle>
+                <DialogDescription>
+                  Create a new encrypted credential for use in DataSource
+                  configurations.
+                </DialogDescription>
+              </DialogHeader>
+              <CreateCredentialForm onCreated={handleCreated} />
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
-      {credentials.length === 0 ? (
+      {!vaultConfigured && (
+        <div className="flex items-start gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
+          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-destructive" />
+          <div className="space-y-1">
+            <p className="text-sm font-medium">Vault not configured</p>
+            <p className="text-sm text-muted-foreground">
+              Set the <code className="rounded bg-muted px-1 py-0.5 text-xs">VAULT_SECRET</code> environment
+              variable to enable the Credential Vault. Without it, credentials cannot be
+              created or decrypted.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {vaultConfigured && credentials.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-12 text-center">
           <KeyRound className="mb-3 size-8 text-muted-foreground" />
           <p className="text-sm font-medium">No credentials yet</p>
@@ -105,7 +122,9 @@ export function CredentialList({ initialCredentials }: Props) {
             data sources.
           </p>
         </div>
-      ) : (
+      )}
+
+      {credentials.length > 0 && (
         <Table>
           <TableHeader>
             <TableRow>

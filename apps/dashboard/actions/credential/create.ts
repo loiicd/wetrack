@@ -1,7 +1,7 @@
 "use server";
 
 import { credentialInterface } from "@/lib/database/credential";
-import { encryptSecret } from "@/lib/vault/encryption";
+import { encryptSecret, isVaultConfigured } from "@/lib/vault/encryption";
 import { withAuth } from "@/lib/auth/withAuth";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 import { revalidateTag } from "next/cache";
@@ -17,6 +17,12 @@ const createCredentialSchema = z.object({
 export const createCredential = async (formData: FormData) => {
   return withErrorHandling(() =>
     withAuth("org:admin", async (_userId, orgId) => {
+      if (!isVaultConfigured()) {
+        throw new Error(
+          "VAULT_SECRET is not configured. Set the VAULT_SECRET environment variable to enable credential encryption.",
+        );
+      }
+
       const raw = {
         label: formData.get("label"),
         type: formData.get("type"),

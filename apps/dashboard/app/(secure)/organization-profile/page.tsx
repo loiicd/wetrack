@@ -2,16 +2,23 @@ import Container from "@/components/layout/container";
 import { CredentialList } from "@/components/credentials/credentialList";
 import { getPageAuth } from "@/lib/auth/getPageAuth";
 import { credentialInterface } from "@/lib/database/credential";
+import { isVaultConfigured } from "@/lib/vault/encryption";
 
 const OrganizationProfilePage = async () => {
   const { orgId } = await getPageAuth();
-  const credentials = await credentialInterface.getByOrgId(orgId);
+  const vaultConfigured = isVaultConfigured();
+  const credentials = vaultConfigured
+    ? await credentialInterface.getByOrgId(orgId)
+    : [];
 
   return (
     <Container>
       <div className="space-y-8">
         <h1>Organization Settings</h1>
-        <CredentialList initialCredentials={credentials} />
+        <CredentialList
+          initialCredentials={credentials}
+          vaultConfigured={vaultConfigured}
+        />
       </div>
     </Container>
   );

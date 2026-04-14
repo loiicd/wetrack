@@ -1,0 +1,159 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { deleteCredential } from "@/actions/credential/delete";
+import { CreateCredentialForm } from "./createCredentialForm";
+import { Plus, Trash2, KeyRound } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+type Credential = {
+  id: string;
+  label: string;
+  type: string;
+  headerName: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type Props = {
+  initialCredentials: Credential[];
+};
+
+const typeLabels: Record<string, string> = {
+  "api-key": "API Key",
+  bearer: "Bearer",
+  basic: "Basic Auth",
+  header: "Custom Header",
+};
+
+export function CredentialList({ initialCredentials }: Props) {
+  const router = useRouter();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deletingLabel, setDeletingLabel] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
+  const credentials = initialCredentials;
+
+  const handleDelete = async (label: string) => {
+    setDeletingLabel(label);
+    const result = await deleteCredential(label);
+    if (result.success) {
+      startTransition(() => router.refresh());
+    }
+    setDeletingLabel(null);
+  };
+
+  const handleCreated = () => {
+    setDialogOpen(false);
+    startTransition(() => router.refresh());
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-semibold">Credential Vault</h2>
+          <p className="text-sm text-muted-foreground">
+            Manage encrypted credentials for your data source connections.
+          </p>
+        </div>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger
+            render={
+              <Button>
+                <Plus data-icon="inline-start" />
+                Add Credential
+              </Button>
+            }
+          />
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Credential</DialogTitle>
+              <DialogDescription>
+                Create a new encrypted credential for use in DataSource
+                configurations.
+              </DialogDescription>
+            </DialogHeader>
+            <CreateCredentialForm onCreated={handleCreated} />
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {credentials.length === 0 ? (
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-12 text-center">
+          <KeyRound className="mb-3 size-8 text-muted-foreground" />
+          <p className="text-sm font-medium">No credentials yet</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Add a credential to securely inject API keys and tokens into your
+            data sources.
+          </p>
+        </div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Label</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Header</TableHead>
+              <TableHead>Value</TableHead>
+              <TableHead>Updated</TableHead>
+              <TableHead className="w-12" />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {credentials.map((cred) => (
+              <TableRow key={cred.id}>
+                <TableCell className="font-mono text-sm">
+                  {cred.label}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="secondary">
+                    {typeLabels[cred.type] ?? cred.type}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {cred.type === "header"
+                    ? cred.headerName ?? "—"
+                    : "—"}
+                </TableCell>
+                <TableCell className="font-mono text-muted-foreground">
+                  ••••••••
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {new Date(cred.updatedAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="destructive"
+                    size="icon-xs"
+                    onClick={() => handleDelete(cred.label)}
+                    disabled={deletingLabel === cred.label}
+                  >
+                    <Trash2 />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </div>
+  );
+}

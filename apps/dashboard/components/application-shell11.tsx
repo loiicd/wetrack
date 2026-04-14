@@ -2,6 +2,7 @@ import {
   BadgeCheck,
   Bell,
   CreditCard,
+  HomeIcon,
   LogOut,
   Search,
   Sparkles,

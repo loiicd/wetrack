@@ -39,6 +39,7 @@ model Stack {
   dataSources DataSource[]
   charts      Chart[]
   queries     Query[]
+  filters     Filter[]
 
   @@unique([key, environment, orgId])
 }
@@ -143,9 +144,9 @@ model Credential {
   id             String   @id @default(uuid())
   orgId          String
   label          String
-  type           String   // "api-key" | "bearer" | "basic" | "header"
+  type           String // "api-key" | "bearer" | "basic" | "header"
   encryptedValue String
-  headerName     String?  // for "header" type: the HTTP header name
+  headerName     String? // for "header" type: the HTTP header name
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

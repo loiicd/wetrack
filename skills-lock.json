@@ -31,6 +31,11 @@
       "sourceType": "github",
       "computedHash": "2d086f605ccd314a4e878c74c4b77a06879a9a180bcf6b983ca5baa187e77463"
     },
+    "grill-me": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "computedHash": "784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea"
+    },
     "prisma-cli": {
       "source": "prisma/skills",
       "sourceType": "github",

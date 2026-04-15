@@ -117,7 +117,9 @@ const executeQuery = async (queryId: string, filterContext?: Record<string, any>
 
   // Load filters for this stack and select those that target this query
   const filters = await filterInterface.getByStackId(query.stackId as string);
-  const applicableFilters = (filters || []).filter((f: any) =>
+  // Normalize filters: merge stored JSON `config` into the top-level object so callers can access `field`, `targets`, etc.
+  const normalizedFilters = (filters || []).map((f: any) => ({ ...(f || {}), ...(f.config || {}) }));
+  const applicableFilters = normalizedFilters.filter((f: any) =>
     Array.isArray(f.targets)
       ? f.targets.some((t: any) => t.type === "query" && t.key === query.key)
       : false,

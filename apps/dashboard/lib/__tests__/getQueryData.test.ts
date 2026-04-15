@@ -66,7 +66,7 @@ describe("getQueryData", () => {
 
       const result = await getQueryData("q1");
 
-      expect(getChartData).toHaveBeenCalledWith("ds1");
+      expect(getChartData).toHaveBeenCalledWith("ds1", undefined);
       expect(JSONPath).toHaveBeenCalledWith({ path: "$[*]", json: rawData });
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });

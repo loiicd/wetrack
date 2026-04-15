@@ -51,6 +51,7 @@ const validStack = {
   queries: [
     { key: "q-1", type: "jsonpath" as const, dataSource: "ds-1", jsonPath: "$[*]" },
   ],
+  filters: [],
   charts: [
     {
       key: "chart-1",

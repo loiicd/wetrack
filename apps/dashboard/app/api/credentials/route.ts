@@ -1,4 +1,5 @@
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta, ensureOrgFolder, isInfisicalNotFoundOrConflict } from "@/lib/vault/infisical";
+import { credentialInterface } from "@/lib/database/credential";
+import { encryptSecret, isVaultConfigured } from "@/lib/vault/encryption";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
@@ -15,39 +16,7 @@ export const GET = async () => {
   const { orgId } = await auth();
   if (!orgId) return new NextResponse("Organization required", { status: 403 });
 
-  if (!isInfisicalConfigured()) {
-    return NextResponse.json([]);
-  }
-
-  const client = await getInfisicalClient();
-  let secrets: { secretKey: string; secretComment?: string; createdAt: string; updatedAt: string }[] = [];
-  try {
-    const response = await client.secrets().listSecrets({
-      projectId: getProjectId(),
-      environment: getEnvironment(),
-      secretPath: getSecretPath(orgId),
-    });
-    secrets = response.secrets;
-  } catch (e) {
-    // Folder doesn't exist yet (org has no credentials) — return empty list
-    if (isInfisicalNotFoundOrConflict(e)) {
-      secrets = [];
-    } else {
-      throw e;
-    }
-  }
-
-  const credentials = secrets.map((secret) => {
-    const meta = parseCredentialMeta(secret.secretComment);
-    return {
-      secretKey: secret.secretKey,
-      type: meta.type,
-      headerName: meta.headerName ?? null,
-      createdAt: secret.createdAt,
-      updatedAt: secret.updatedAt,
-    };
-  });
-
+  const credentials = await credentialInterface.getByOrgId(orgId);
   return NextResponse.json(credentials);
 };
 
@@ -55,9 +24,9 @@ export const POST = async (request: NextRequest) => {
   const { orgId } = await auth();
   if (!orgId) return new NextResponse("Organization required", { status: 403 });
 
-  if (!isInfisicalConfigured()) {
+  if (!isVaultConfigured()) {
     return NextResponse.json(
-      { error: "Infisical is not configured. Set INFISICAL_CLIENT_ID, INFISICAL_CLIENT_SECRET, and INFISICAL_PROJECT_ID environment variables." },
+      { error: "VAULT_SECRET is not configured. Set the VAULT_SECRET environment variable to enable credential encryption." },
       { status: 503 },
     );
   }
@@ -79,26 +48,21 @@ export const POST = async (request: NextRequest) => {
 
   const { label, type, value, headerName } = parsed.data;
 
-  const meta: Record<string, string> = { type };
-  if (headerName) {
-    meta.headerName = headerName;
-  }
+  const encryptedValue = await encryptSecret(value);
 
-  const client = await getInfisicalClient();
-  await ensureOrgFolder(orgId);
-  await client.secrets().createSecret(label, {
-    secretValue: value,
-    secretComment: JSON.stringify(meta),
-    projectId: getProjectId(),
-    environment: getEnvironment(),
-    secretPath: getSecretPath(orgId),
+  const credential = await credentialInterface.create({
+    orgId,
+    label,
+    type,
+    encryptedValue,
+    headerName,
   });
 
   // Invalidate caches that reference this credential
   revalidateTag(`credential:${orgId}:${label}`, "max");
 
   return NextResponse.json(
-    { label, type },
+    { id: credential.id, label: credential.label, type: credential.type },
     { status: 201 },
   );
 };

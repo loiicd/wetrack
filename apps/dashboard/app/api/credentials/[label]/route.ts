@@ -1,4 +1,4 @@
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath } from "@/lib/vault/infisical";
+import { credentialInterface } from "@/lib/database/credential";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
@@ -13,12 +13,7 @@ export const DELETE = async (_req: NextRequest, { params }: Params) => {
   const decodedLabel = decodeURIComponent(label);
 
   try {
-    const client = await getInfisicalClient();
-    await client.secrets().deleteSecret(decodedLabel, {
-      projectId: getProjectId(),
-      environment: getEnvironment(),
-      secretPath: getSecretPath(orgId),
-    });
+    await credentialInterface.deleteByLabel(orgId, decodedLabel);
   } catch {
     return NextResponse.json({ error: "Credential not found" }, { status: 404 });
   }

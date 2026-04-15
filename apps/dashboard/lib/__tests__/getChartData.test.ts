@@ -6,31 +6,20 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 vi.mock("@/lib/database/dataSource", () => ({
   dataSourceInterface: { getById: vi.fn() },
 }));
-
-const mockGetSecret = vi.fn();
-const mockGetInfisicalClient = vi.fn().mockResolvedValue({
-  secrets: () => ({
-    getSecret: mockGetSecret,
-  }),
-});
-
-vi.mock("@/lib/vault/infisical", async () => {
-  const actual = await vi.importActual<typeof import("@/lib/vault/infisical")>("@/lib/vault/infisical");
-  return {
-    ...actual,
-    getInfisicalClient: (...args: unknown[]) => mockGetInfisicalClient(...args),
-    getProjectId: () => "test-project",
-    getEnvironment: () => "prod",
-    getSecretPath: (orgId: string) => `/${orgId}`,
-  };
-});
-
+vi.mock("@/lib/database/credential", () => ({
+  credentialInterface: { getByLabel: vi.fn() },
+}));
+vi.mock("@/lib/vault/encryption", () => ({
+  decryptSecret: vi.fn(),
+}));
 // next/cache: make unstable_cache a pass-through so we test real logic
 vi.mock("next/cache", () => ({
   unstable_cache: (fn: () => unknown) => fn,
 }));
 
 import { dataSourceInterface } from "../database/dataSource";
+import { credentialInterface } from "../database/credential";
+import { decryptSecret } from "../vault/encryption";
 import { getChartData } from "../workflows/getChartData";
 import { CredentialError } from "../errors/CredentialError";
 
@@ -100,15 +89,15 @@ describe("getChartData", () => {
     await expect(getChartData("ds1")).rejects.toThrow("too large");
   });
 
-  describe("credential injection via Infisical", () => {
+  describe("credential injection", () => {
     const dsWithCred = mockDs({ config: { url: "https://api.example.com/data", method: "get", credential: "my-key" } });
 
     it("injects Bearer token for 'bearer' credential type", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockResolvedValue({
-        secretValue: "secret-token",
-        secretComment: JSON.stringify({ type: "bearer" }),
-      });
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
+        type: "bearer", encryptedValue: "enc", headerName: null,
+      } as never);
+      vi.mocked(decryptSecret).mockResolvedValue("secret-token");
       mockFetch({ ok: true });
 
       await getChartData("ds1");
@@ -121,10 +110,10 @@ describe("getChartData", () => {
 
     it("injects X-Api-Key for 'api-key' credential type", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockResolvedValue({
-        secretValue: "apikey123",
-        secretComment: JSON.stringify({ type: "api-key" }),
-      });
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
+        type: "api-key", encryptedValue: "enc", headerName: null,
+      } as never);
+      vi.mocked(decryptSecret).mockResolvedValue("apikey123");
       mockFetch({ ok: true });
 
       await getChartData("ds1");
@@ -135,10 +124,10 @@ describe("getChartData", () => {
 
     it("injects Basic auth for 'basic' credential type", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockResolvedValue({
-        secretValue: "user:pass",
-        secretComment: JSON.stringify({ type: "basic" }),
-      });
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
+        type: "basic", encryptedValue: "enc", headerName: null,
+      } as never);
+      vi.mocked(decryptSecret).mockResolvedValue("user:pass");
       mockFetch({ ok: true });
 
       await getChartData("ds1");
@@ -150,10 +139,10 @@ describe("getChartData", () => {
 
     it("injects custom header for 'header' credential type", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockResolvedValue({
-        secretValue: "custom-value",
-        secretComment: JSON.stringify({ type: "header", headerName: "X-Custom-Key" }),
-      });
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
+        type: "header", encryptedValue: "enc", headerName: "X-Custom-Key",
+      } as never);
+      vi.mocked(decryptSecret).mockResolvedValue("custom-value");
       mockFetch({ ok: true });
 
       await getChartData("ds1");
@@ -162,20 +151,9 @@ describe("getChartData", () => {
       expect((fetchCall[1] as RequestInit).headers).toMatchObject({ "X-Custom-Key": "custom-value" });
     });
 
-    it("throws CredentialError when 'header' credential has no headerName", async () => {
+    it("throws CredentialError (not generic Error) when credential not found in vault", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockResolvedValue({
-        secretValue: "v",
-        secretComment: JSON.stringify({ type: "header" }),
-      });
-
-      await expect(getChartData("ds1")).rejects.toThrow("no headerName");
-      await expect(getChartData("ds1")).rejects.toBeInstanceOf(CredentialError);
-    });
-
-    it("throws CredentialError when credential not found in Infisical", async () => {
-      vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockRejectedValue(new Error("Secret not found"));
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue(null);
 
       await expect(getChartData("ds1")).rejects.toThrow("not found in vault");
       await expect(getChartData("ds1")).rejects.toBeInstanceOf(CredentialError);
@@ -183,27 +161,24 @@ describe("getChartData", () => {
 
     it("throws CredentialError for unknown credential type", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockResolvedValue({
-        secretValue: "v",
-        secretComment: JSON.stringify({ type: "unknown-type" }),
-      });
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
+        type: "unknown-type", encryptedValue: "enc", headerName: null,
+      } as never);
+      vi.mocked(decryptSecret).mockResolvedValue("v");
 
       await expect(getChartData("ds1")).rejects.toThrow("Unknown credential type");
       await expect(getChartData("ds1")).rejects.toBeInstanceOf(CredentialError);
     });
 
-    it("defaults to api-key type when no comment metadata", async () => {
+    it("throws CredentialError when 'header' credential has no headerName", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      mockGetSecret.mockResolvedValue({
-        secretValue: "my-api-key-value",
-        secretComment: "",
-      });
-      mockFetch({ ok: true });
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
+        type: "header", encryptedValue: "enc", headerName: null,
+      } as never);
+      vi.mocked(decryptSecret).mockResolvedValue("v");
 
-      await getChartData("ds1");
-
-      const fetchCall = vi.mocked(global.fetch).mock.calls[0];
-      expect((fetchCall[1] as RequestInit).headers).toMatchObject({ "X-Api-Key": "my-api-key-value" });
+      await expect(getChartData("ds1")).rejects.toThrow("no headerName");
+      await expect(getChartData("ds1")).rejects.toBeInstanceOf(CredentialError);
     });
   });
 

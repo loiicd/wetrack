@@ -1,5 +1,6 @@
 import { dataSourceInterface } from "../database/dataSource";
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, parseCredentialMeta } from "../vault/infisical";
+import { credentialInterface } from "../database/credential";
+import { decryptSecret } from "../vault/encryption";
 import { CredentialError } from "../errors/CredentialError";
 import { unstable_cache } from "next/cache";
 import {
@@ -18,56 +19,45 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
 
   const config = RestApiConfigSchema.parse(dataSource.config);
 
-  // Resolve credential from Infisical if referenced
+  // Resolve credential from vault if referenced
   const credentialHeaders: Record<string, string> = {};
   const cacheTags: string[] = [`datasource:${dataSourceId}`];
 
   if (config.credential) {
     const orgId = dataSource.stack.orgId;
+    const credential = await credentialInterface.getByLabel(orgId, config.credential);
 
-    // Add credential-specific cache tag so updates invalidate this cache
-    cacheTags.push(`credential:${orgId}:${config.credential}`);
-
-    let secretValue: string;
-    let meta: ReturnType<typeof parseCredentialMeta>;
-    try {
-      const client = await getInfisicalClient();
-      const secret = await client.secrets().getSecret({
-        secretName: config.credential,
-        projectId: getProjectId(),
-        environment: getEnvironment(),
-        secretPath: getSecretPath(orgId),
-        viewSecretValue: true,
-      });
-      secretValue = secret.secretValue;
-      meta = parseCredentialMeta(secret.secretComment);
-    } catch (e) {
-      if (e instanceof CredentialError) throw e;
+    if (!credential) {
       throw new CredentialError(
         `Credential "${config.credential}" not found in vault. Add it under Settings → Credentials.`,
       );
     }
 
-    switch (meta.type) {
+    // Add credential-specific cache tag so updates invalidate this cache
+    cacheTags.push(`credential:${orgId}:${config.credential}`);
+
+    const value = await decryptSecret(credential.encryptedValue);
+
+    switch (credential.type) {
       case "bearer":
-        credentialHeaders["Authorization"] = `Bearer ${secretValue}`;
+        credentialHeaders["Authorization"] = `Bearer ${value}`;
         break;
       case "api-key":
-        credentialHeaders["X-Api-Key"] = secretValue;
+        credentialHeaders["X-Api-Key"] = value;
         break;
       case "basic":
-        credentialHeaders["Authorization"] = `Basic ${Buffer.from(secretValue).toString("base64")}`;
+        credentialHeaders["Authorization"] = `Basic ${Buffer.from(value).toString("base64")}`;
         break;
       case "header":
-        if (!meta.headerName) {
+        if (!credential.headerName) {
           throw new CredentialError(
             `Credential "${config.credential}" is of type "header" but has no headerName configured.`,
           );
         }
-        credentialHeaders[meta.headerName] = secretValue;
+        credentialHeaders[credential.headerName] = value;
         break;
       default:
-        throw new CredentialError(`Unknown credential type: "${meta.type}"`);
+        throw new CredentialError(`Unknown credential type: "${credential.type}"`);
     }
   }
 

@@ -23,8 +23,11 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Run tests
-        run: cd apps/dashboard && bun run test
+      - name: Run tests (coverage)
+        run: cd apps/dashboard && bun run test:coverage
+
+      - name: Check coverage
+        run: node apps/dashboard/scripts/check-coverage.js
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4

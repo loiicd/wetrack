@@ -1,6 +1,6 @@
 "use server";
 
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta } from "@/lib/vault/infisical";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta, isInfisicalNotFoundOrConflict } from "@/lib/vault/infisical";
 import { withAuth } from "@/lib/auth/withAuth";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 
@@ -28,9 +28,13 @@ export const listCredentials = async () => {
           secretPath: getSecretPath(orgId),
         });
         secrets = response.secrets;
-      } catch {
+      } catch (e) {
         // Folder doesn't exist yet (org has no credentials) — return empty list
-        secrets = [];
+        if (isInfisicalNotFoundOrConflict(e)) {
+          secrets = [];
+        } else {
+          throw e;
+        }
       }
 
       return secrets.map((secret) => {

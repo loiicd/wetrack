@@ -1,4 +1,4 @@
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta, ensureOrgFolder } from "@/lib/vault/infisical";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta, ensureOrgFolder, isInfisicalNotFoundOrConflict } from "@/lib/vault/infisical";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
@@ -28,9 +28,13 @@ export const GET = async () => {
       secretPath: getSecretPath(orgId),
     });
     secrets = response.secrets;
-  } catch {
+  } catch (e) {
     // Folder doesn't exist yet (org has no credentials) — return empty list
-    secrets = [];
+    if (isInfisicalNotFoundOrConflict(e)) {
+      secrets = [];
+    } else {
+      throw e;
+    }
   }
 
   const credentials = secrets.map((secret) => {

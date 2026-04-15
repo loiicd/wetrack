@@ -89,13 +89,25 @@ export async function ensureOrgFolder(orgId: string): Promise<void> {
       environment: getEnvironment(),
     });
   } catch (e: unknown) {
-    // Folder already exists — safe to ignore (Infisical returns 400/409 for duplicates)
-    const message = e instanceof Error ? e.message : String(e);
-    if (message.includes("already exists") || message.includes("409") || message.includes("400")) {
-      return;
-    }
+    // Folder already exists — safe to ignore
+    if (isInfisicalNotFoundOrConflict(e)) return;
     throw e;
   }
+}
+
+/**
+ * Returns true if the error is a "not found" (404) or "conflict/already exists" (409) from Infisical.
+ * Used to distinguish missing-folder errors from real failures (network, auth, etc.).
+ */
+export function isInfisicalNotFoundOrConflict(e: unknown): boolean {
+  const message = e instanceof Error ? e.message : String(e);
+  return (
+    message.includes("already exists") ||
+    message.includes("409") ||
+    message.includes("404") ||
+    message.includes("not found") ||
+    message.includes("Folder with path")
+  );
 }
 
 /**

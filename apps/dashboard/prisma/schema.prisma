@@ -122,6 +122,22 @@ model Query {
   @@unique([stackId, key])
 }
 
+model Filter {
+  id        String   @id @default(uuid())
+  key       String
+  version   Int      @default(1)
+  stackId   String
+  label     String?
+  type      String
+  config    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stack Stack @relation(fields: [stackId], references: [id])
+
+  @@unique([stackId, key])
+}
+
 // Vault for storing encrypted external API credentials (not stack-scoped)
 model Credential {
   id             String   @id @default(uuid())

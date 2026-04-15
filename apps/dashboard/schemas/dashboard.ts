@@ -141,6 +141,65 @@ const querySchema = z.discriminatedUnion("type", [
   sqlQuerySchema,
 ]);
 
+// Filter schemas
+const filterTargetSchema = z.object({
+  type: z.enum(["query", "dataSource"]),
+  key: z.string(),
+  inject: z
+    .object({
+      location: z.enum(["query", "header", "body"]).optional(),
+      name: z.string().optional(),
+    })
+    .optional(),
+});
+
+const dateRangeFilterSchema = z.object({
+  key: z.string(),
+  label: z.string().optional(),
+  description: z.string().optional(),
+  type: z.literal("date_range"),
+  field: z.string(),
+  targets: z.array(filterTargetSchema).optional(),
+});
+
+const stringFilterSchema = z.object({
+  key: z.string(),
+  label: z.string().optional(),
+  description: z.string().optional(),
+  type: z.literal("string"),
+  field: z.string(),
+  targets: z.array(filterTargetSchema).optional(),
+});
+
+const selectFilterSchema = z.object({
+  key: z.string(),
+  label: z.string().optional(),
+  description: z.string().optional(),
+  type: z.literal("select"),
+  field: z.string(),
+  options: z.array(z.string()),
+  multiple: z.boolean().optional(),
+  targets: z.array(filterTargetSchema).optional(),
+});
+
+const numberRangeFilterSchema = z.object({
+  key: z.string(),
+  label: z.string().optional(),
+  description: z.string().optional(),
+  type: z.literal("number_range"),
+  field: z.string(),
+  targets: z.array(filterTargetSchema).optional(),
+});
+
+const filterSchema = z.discriminatedUnion("type", [
+  dateRangeFilterSchema,
+  stringFilterSchema,
+  selectFilterSchema,
+  numberRangeFilterSchema,
+]);
+
+export type Filter = z.infer<typeof filterSchema>;
+
 export const stackSchema = z.object({
   key: z.string(),
   environment: z.enum(["PRODUCTION", "STAGING", "DEVELOPMENT"]),
@@ -148,6 +207,7 @@ export const stackSchema = z.object({
   charts: z.array(chartSchema).optional(),
   dashboards: z.array(dashboardSchema).optional(),
   queries: z.array(querySchema).optional(),
+  filters: z.array(filterSchema).optional(),
 });
 
 export const stackSyncSchema = z
@@ -158,6 +218,7 @@ export const stackSyncSchema = z
     charts: z.array(chartSchema),
     dashboards: z.array(dashboardSchema),
     queries: z.array(querySchema),
+    filters: z.array(filterSchema),
   })
   .strict();
 

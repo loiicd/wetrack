@@ -10,7 +10,27 @@ import {
 
 const DEFAULT_CACHE_TTL = 60; // seconds
 
-export const getChartData = async (dataSourceId: string): Promise<unknown> => {
+function stableSerialize(obj: unknown): string {
+  if (obj === undefined) return "";
+  try {
+    return JSON.stringify(obj, (_key, value) => {
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        return Object.keys(value)
+          .sort()
+          .reduce((acc, k) => {
+            // @ts-ignore
+            acc[k] = value[k];
+            return acc;
+          }, {} as Record<string, unknown>);
+      }
+      return value;
+    });
+  } catch (e) {
+    return String(obj);
+  }
+}
+
+export const getChartData = async (dataSourceId: string, filterContext?: Record<string, any>): Promise<unknown> => {
   const dataSource = await dataSourceInterface.getById(dataSourceId);
 
   if (!dataSource) {
@@ -63,7 +83,7 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
 
   const cachedFetch = unstable_cache(
     () => callRestApi(config, credentialHeaders),
-    [`datasource:${dataSourceId}`],
+    [`datasource:${dataSourceId}`, `filters:${stableSerialize(filterContext)}`],
     {
       revalidate: DEFAULT_CACHE_TTL,
       tags: cacheTags,

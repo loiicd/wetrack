@@ -46,6 +46,12 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
 
   const charts = await chartInterface.getByDashboardId(dashboardId);
 
+  const rawSearchParams = props.searchParams ? await props.searchParams : {};
+  const filterContext = Object.fromEntries(
+    Object.entries(rawSearchParams || {}).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v]),
+  ) as Record<string, string | undefined>;
+
+
   const widgets = await Promise.all(
     charts.map(async (chart) => {
       try {
@@ -55,7 +61,7 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
           chart.type === "LINE"
         ) {
           const config = cartesianChartConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId!);
+          const queryResult = await getQueryData(chart.queryId!, filterContext);
           const dataFrame = toDataFrame(queryResult, [
             config.categoryField,
             ...config.valueFields,
@@ -93,7 +99,7 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
 
         if (chart.type === "STAT") {
           const config = statCardConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId!);
+          const queryResult = await getQueryData(chart.queryId!, filterContext);
           const dataFrame = toDataFrame(queryResult, [config.valueField]);
           return {
             id: chart.id,

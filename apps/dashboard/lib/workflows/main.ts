@@ -4,6 +4,7 @@ import { dataSourceInterface } from "@/lib/database/dataSource";
 import { dashboardInterface } from "@/lib/database/dashboard";
 import prisma from "@/lib/database/prisma";
 import { queryInterface } from "@/lib/database/query";
+import { filterInterface } from "@/lib/database/filter";
 import { stackInterface } from "@/lib/database/stack";
 import type { Environment, StackId } from "@/types";
 import type { StackSyncInput } from "@/schemas/dashboard";
@@ -72,6 +73,7 @@ export const mainWorkflow = async (
 
     await createDashboards(data.dashboards, stackId, tx);
     await createDataSources(stackId, data.dataSources, tx);
+    await createFilters(stackId, data.filters, tx);
 
     const dataSourceMap = await resolveDataSourceMap(stackId, tx);
     await createQueries(stackId, data.queries, dataSourceMap, tx);
@@ -136,6 +138,25 @@ const createDataSources = async (
   }));
 
   await dataSourceInterface.createMany(dataSourcesToCreate, db);
+};
+
+const createFilters = async (
+  stackId: StackId,
+  filters: StackSyncInput["filters"],
+  db: DatabaseClient,
+) => {
+  if (!filters || !filters.length) {
+    return;
+  }
+
+  const filtersToCreate = filters.map((f) => ({
+    stackId,
+    key: f.key,
+    type: f.type,
+    config: f as Prisma.InputJsonValue,
+  }));
+
+  await filterInterface.createMany(filtersToCreate, db);
 };
 
 const resolveDataSourceMap = async (
@@ -333,6 +354,12 @@ const cleanupStackResources = async (
   await dashboardInterface.deleteNotInKeys(
     stackId,
     data.dashboards.map((dashboard) => dashboard.key),
+    db,
+  );
+
+  await filterInterface.deleteNotInKeys(
+    stackId,
+    data.filters ? data.filters.map((f) => f.key) : [],
     db,
   );
 };

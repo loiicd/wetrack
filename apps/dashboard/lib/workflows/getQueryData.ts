@@ -26,12 +26,12 @@ function stableSerialize(obj: unknown): string {
   }
 }
 
-function getValueByPath(obj: any, path: string) {
+export function getValueByPath(obj: any, path: string) {
   if (!obj || typeof obj !== "object") return undefined;
   return path.split(".").reduce((acc: any, p) => (acc && acc[p] !== undefined ? acc[p] : undefined), obj);
 }
 
-function extractFilterValue(filter: any, ctx: Record<string, any> | undefined, fallbackDate?: { from?: string; to?: string }) {
+export function extractFilterValue(filter: any, ctx: Record<string, any> | undefined, fallbackDate?: { from?: string; to?: string }) {
   const k = filter.key;
   if (!ctx) return undefined;
   if (k in ctx) return ctx[k];
@@ -51,7 +51,7 @@ function extractFilterValue(filter: any, ctx: Record<string, any> | undefined, f
   return undefined;
 }
 
-function applyFiltersToArray(filters: any[], data: any[], ctx?: Record<string, any>) {
+export function applyFiltersToArray(filters: any[], data: any[], ctx?: Record<string, any>) {
   if (!filters || !filters.length) return data;
   // If there is exactly one date_range filter and user used generic dateFrom/dateTo keys, allow fallback
   const dateFilters = filters.filter((f) => f.type === "date_range");

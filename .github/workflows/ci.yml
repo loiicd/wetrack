@@ -10,6 +10,9 @@ jobs:
   check:
     name: Lint & Type Check
     runs-on: ubuntu-latest
+    env:
+      # Needed for prisma generate which reads DATABASE_URL during postinstall
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/wetrack_ci
 
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +33,9 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    env:
+      # Needed for prisma generate which reads DATABASE_URL during postinstall
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/wetrack_ci
 
     steps:
       - uses: actions/checkout@v4

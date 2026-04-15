@@ -1,6 +1,7 @@
 import { dataSourceInterface } from "../database/dataSource";
 import { credentialInterface } from "../database/credential";
 import { decryptSecret } from "../vault/encryption";
+import { CredentialError } from "../errors/CredentialError";
 import { unstable_cache } from "next/cache";
 import {
   RestApiConfig,
@@ -20,15 +21,20 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
 
   // Resolve credential from vault if referenced
   const credentialHeaders: Record<string, string> = {};
+  const cacheTags: string[] = [`datasource:${dataSourceId}`];
+
   if (config.credential) {
     const orgId = dataSource.stack.orgId;
     const credential = await credentialInterface.getByLabel(orgId, config.credential);
 
     if (!credential) {
-      throw new Error(
+      throw new CredentialError(
         `Credential "${config.credential}" not found in vault. Add it under Settings → Credentials.`,
       );
     }
+
+    // Add credential-specific cache tag so updates invalidate this cache
+    cacheTags.push(`credential:${orgId}:${config.credential}`);
 
     const value = await decryptSecret(credential.encryptedValue);
 
@@ -44,14 +50,14 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
         break;
       case "header":
         if (!credential.headerName) {
-          throw new Error(
+          throw new CredentialError(
             `Credential "${config.credential}" is of type "header" but has no headerName configured.`,
           );
         }
         credentialHeaders[credential.headerName] = value;
         break;
       default:
-        throw new Error(`Unknown credential type: "${credential.type}"`);
+        throw new CredentialError(`Unknown credential type: "${credential.type}"`);
     }
   }
 
@@ -60,7 +66,7 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
     [`datasource:${dataSourceId}`],
     {
       revalidate: DEFAULT_CACHE_TTL,
-      tags: [`datasource:${dataSourceId}`],
+      tags: cacheTags,
     },
   );
 

@@ -1,7 +1,8 @@
 import { credentialInterface } from "@/lib/database/credential";
-import { encryptSecret } from "@/lib/vault/encryption";
+import { encryptSecret, isVaultConfigured } from "@/lib/vault/encryption";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
 const createSchema = z.object({
@@ -22,6 +23,13 @@ export const GET = async () => {
 export const POST = async (request: NextRequest) => {
   const { orgId } = await auth();
   if (!orgId) return new NextResponse("Organization required", { status: 403 });
+
+  if (!isVaultConfigured()) {
+    return NextResponse.json(
+      { error: "VAULT_SECRET is not configured. Set the VAULT_SECRET environment variable to enable credential encryption." },
+      { status: 503 },
+    );
+  }
 
   let body: unknown;
   try {
@@ -49,6 +57,9 @@ export const POST = async (request: NextRequest) => {
     encryptedValue,
     headerName,
   });
+
+  // Invalidate caches that reference this credential
+  revalidateTag(`credential:${orgId}:${label}`, "max");
 
   return NextResponse.json(
     { id: credential.id, label: credential.label, type: credential.type },

@@ -24,6 +24,12 @@ type ErrorCategory = "network" | "query" | "config" | "unknown";
 function categorize(message: string): ErrorCategory {
   const msg = message.toLowerCase();
   if (
+    msg.includes("credential") ||
+    msg.includes("vault") ||
+    msg.includes("headername")
+  )
+    return "config";
+  if (
     msg.includes("fetch") ||
     msg.includes("network") ||
     msg.includes("econnrefused") ||

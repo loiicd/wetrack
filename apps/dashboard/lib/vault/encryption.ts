@@ -10,9 +10,19 @@ const IV_LENGTH = 12; // 96 bits for GCM
 function getVaultKey(): string {
   const secret = process.env.VAULT_SECRET;
   if (!secret) {
-    throw new Error("VAULT_SECRET environment variable is not set");
+    throw new Error(
+      "VAULT_SECRET environment variable is not set. Add VAULT_SECRET to your environment to enable the Credential Vault.",
+    );
   }
   return secret;
+}
+
+/**
+ * Returns true when the VAULT_SECRET env var is present.
+ * Use this to guard UI elements that require the vault.
+ */
+export function isVaultConfigured(): boolean {
+  return !!process.env.VAULT_SECRET;
 }
 
 async function deriveKey(secret: string): Promise<CryptoKey> {

@@ -21,6 +21,7 @@ import { dataSourceInterface } from "../database/dataSource";
 import { credentialInterface } from "../database/credential";
 import { decryptSecret } from "../vault/encryption";
 import { getChartData } from "../workflows/getChartData";
+import { CredentialError } from "../errors/CredentialError";
 
 const mockDs = (overrides: object = {}) => ({
   id: "ds1",
@@ -150,24 +151,15 @@ describe("getChartData", () => {
       expect((fetchCall[1] as RequestInit).headers).toMatchObject({ "X-Custom-Key": "custom-value" });
     });
 
-    it("throws when 'header' credential has no headerName", async () => {
-      vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
-      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
-        type: "header", encryptedValue: "enc", headerName: null,
-      } as never);
-      vi.mocked(decryptSecret).mockResolvedValue("v");
-
-      await expect(getChartData("ds1")).rejects.toThrow("no headerName");
-    });
-
-    it("throws when credential not found in vault", async () => {
+    it("throws CredentialError (not generic Error) when credential not found in vault", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
       vi.mocked(credentialInterface.getByLabel).mockResolvedValue(null);
 
       await expect(getChartData("ds1")).rejects.toThrow("not found in vault");
+      await expect(getChartData("ds1")).rejects.toBeInstanceOf(CredentialError);
     });
 
-    it("throws for unknown credential type", async () => {
+    it("throws CredentialError for unknown credential type", async () => {
       vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
       vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
         type: "unknown-type", encryptedValue: "enc", headerName: null,
@@ -175,6 +167,18 @@ describe("getChartData", () => {
       vi.mocked(decryptSecret).mockResolvedValue("v");
 
       await expect(getChartData("ds1")).rejects.toThrow("Unknown credential type");
+      await expect(getChartData("ds1")).rejects.toBeInstanceOf(CredentialError);
+    });
+
+    it("throws CredentialError when 'header' credential has no headerName", async () => {
+      vi.mocked(dataSourceInterface.getById).mockResolvedValue(dsWithCred as never);
+      vi.mocked(credentialInterface.getByLabel).mockResolvedValue({
+        type: "header", encryptedValue: "enc", headerName: null,
+      } as never);
+      vi.mocked(decryptSecret).mockResolvedValue("v");
+
+      await expect(getChartData("ds1")).rejects.toThrow("no headerName");
+      await expect(getChartData("ds1")).rejects.toBeInstanceOf(CredentialError);
     });
   });
 

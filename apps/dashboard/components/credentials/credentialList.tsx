@@ -25,17 +25,16 @@ import { Plus, Trash2, KeyRound, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type Credential = {
-  id: string;
-  label: string;
+  secretKey: string;
   type: string;
   headerName: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type Props = {
   initialCredentials: Credential[];
-  vaultConfigured: boolean;
+  infisicalConfigured: boolean;
 };
 
 const typeLabels: Record<string, string> = {
@@ -45,7 +44,7 @@ const typeLabels: Record<string, string> = {
   header: "Custom Header",
 };
 
-export function CredentialList({ initialCredentials, vaultConfigured }: Props) {
+export function CredentialList({ initialCredentials, infisicalConfigured }: Props) {
   const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deletingLabel, setDeletingLabel] = useState<string | null>(null);
@@ -72,10 +71,10 @@ export function CredentialList({ initialCredentials, vaultConfigured }: Props) {
         <div>
           <h2 className="text-lg font-semibold">Credential Vault</h2>
           <p className="text-sm text-muted-foreground">
-            Manage encrypted credentials for your data source connections.
+            Manage credentials for your data source connections via Infisical.
           </p>
         </div>
-        {vaultConfigured && (
+        {infisicalConfigured && (
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger
               render={
@@ -89,8 +88,8 @@ export function CredentialList({ initialCredentials, vaultConfigured }: Props) {
               <DialogHeader>
                 <DialogTitle>Add Credential</DialogTitle>
                 <DialogDescription>
-                  Create a new encrypted credential for use in DataSource
-                  configurations.
+                  Create a new credential stored securely in Infisical for use in
+                  DataSource configurations.
                 </DialogDescription>
               </DialogHeader>
               <CreateCredentialForm onCreated={handleCreated} />
@@ -99,21 +98,23 @@ export function CredentialList({ initialCredentials, vaultConfigured }: Props) {
         )}
       </div>
 
-      {!vaultConfigured && (
+      {!infisicalConfigured && (
         <div className="flex items-start gap-3 rounded-lg border border-destructive/30 bg-destructive/5 p-4">
           <AlertTriangle className="mt-0.5 size-5 shrink-0 text-destructive" />
           <div className="space-y-1">
-            <p className="text-sm font-medium">Vault not configured</p>
+            <p className="text-sm font-medium">Infisical not configured</p>
             <p className="text-sm text-muted-foreground">
-              Set the <code className="rounded bg-muted px-1 py-0.5 text-xs">VAULT_SECRET</code> environment
-              variable to enable the Credential Vault. Without it, credentials cannot be
-              created or decrypted.
+              Set the{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">INFISICAL_CLIENT_ID</code>,{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">INFISICAL_CLIENT_SECRET</code>, and{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">INFISICAL_PROJECT_ID</code>{" "}
+              environment variables to enable the Credential Vault.
             </p>
           </div>
         </div>
       )}
 
-      {vaultConfigured && credentials.length === 0 && (
+      {infisicalConfigured && credentials.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-12 text-center">
           <KeyRound className="mb-3 size-8 text-muted-foreground" />
           <p className="text-sm font-medium">No credentials yet</p>
@@ -138,9 +139,9 @@ export function CredentialList({ initialCredentials, vaultConfigured }: Props) {
           </TableHeader>
           <TableBody>
             {credentials.map((cred) => (
-              <TableRow key={cred.id}>
+              <TableRow key={cred.secretKey}>
                 <TableCell className="font-mono text-sm">
-                  {cred.label}
+                  {cred.secretKey}
                 </TableCell>
                 <TableCell>
                   <Badge variant="secondary">
@@ -162,8 +163,8 @@ export function CredentialList({ initialCredentials, vaultConfigured }: Props) {
                   <Button
                     variant="destructive"
                     size="icon-xs"
-                    onClick={() => handleDelete(cred.label)}
-                    disabled={deletingLabel === cred.label}
+                    onClick={() => handleDelete(cred.secretKey)}
+                    disabled={deletingLabel === cred.secretKey}
                   >
                     <Trash2 />
                   </Button>

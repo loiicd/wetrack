@@ -100,7 +100,7 @@ export function CreateCredentialForm({ onCreated }: Props) {
           autoComplete="off"
         />
         <p className="text-xs text-muted-foreground">
-          The value is encrypted at rest and never displayed after saving.
+          The value is stored securely in Infisical and never displayed after saving.
         </p>
       </div>
 

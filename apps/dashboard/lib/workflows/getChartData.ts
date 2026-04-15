@@ -1,12 +1,16 @@
 import { dataSourceInterface } from "../database/dataSource";
-import { credentialInterface } from "../database/credential";
-import { decryptSecret } from "../vault/encryption";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath } from "../vault/infisical";
 import { CredentialError } from "../errors/CredentialError";
 import { unstable_cache } from "next/cache";
 import {
   RestApiConfig,
   RestApiConfigSchema,
 } from "@/schemas/configs/restApiConfig";
+
+type CredentialMeta = {
+  type: string;
+  headerName?: string;
+};
 
 const DEFAULT_CACHE_TTL = 60; // seconds
 
@@ -19,45 +23,59 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
 
   const config = RestApiConfigSchema.parse(dataSource.config);
 
-  // Resolve credential from vault if referenced
+  // Resolve credential from Infisical if referenced
   const credentialHeaders: Record<string, string> = {};
   const cacheTags: string[] = [`datasource:${dataSourceId}`];
 
   if (config.credential) {
     const orgId = dataSource.stack.orgId;
-    const credential = await credentialInterface.getByLabel(orgId, config.credential);
 
-    if (!credential) {
+    // Add credential-specific cache tag so updates invalidate this cache
+    cacheTags.push(`credential:${orgId}:${config.credential}`);
+
+    let secretValue: string;
+    let meta: CredentialMeta;
+    try {
+      const client = await getInfisicalClient();
+      const secret = await client.secrets().getSecret({
+        secretName: config.credential,
+        projectId: getProjectId(),
+        environment: getEnvironment(),
+        secretPath: getSecretPath(orgId),
+        viewSecretValue: true,
+      });
+      secretValue = secret.secretValue;
+      // Metadata (type, headerName) is stored in the secret comment as JSON
+      meta = secret.secretComment
+        ? JSON.parse(secret.secretComment)
+        : { type: "api-key" };
+    } catch (e) {
+      if (e instanceof CredentialError) throw e;
       throw new CredentialError(
         `Credential "${config.credential}" not found in vault. Add it under Settings → Credentials.`,
       );
     }
 
-    // Add credential-specific cache tag so updates invalidate this cache
-    cacheTags.push(`credential:${orgId}:${config.credential}`);
-
-    const value = await decryptSecret(credential.encryptedValue);
-
-    switch (credential.type) {
+    switch (meta.type) {
       case "bearer":
-        credentialHeaders["Authorization"] = `Bearer ${value}`;
+        credentialHeaders["Authorization"] = `Bearer ${secretValue}`;
         break;
       case "api-key":
-        credentialHeaders["X-Api-Key"] = value;
+        credentialHeaders["X-Api-Key"] = secretValue;
         break;
       case "basic":
-        credentialHeaders["Authorization"] = `Basic ${Buffer.from(value).toString("base64")}`;
+        credentialHeaders["Authorization"] = `Basic ${Buffer.from(secretValue).toString("base64")}`;
         break;
       case "header":
-        if (!credential.headerName) {
+        if (!meta.headerName) {
           throw new CredentialError(
             `Credential "${config.credential}" is of type "header" but has no headerName configured.`,
           );
         }
-        credentialHeaders[credential.headerName] = value;
+        credentialHeaders[meta.headerName] = secretValue;
         break;
       default:
-        throw new CredentialError(`Unknown credential type: "${credential.type}"`);
+        throw new CredentialError(`Unknown credential type: "${meta.type}"`);
     }
   }
 

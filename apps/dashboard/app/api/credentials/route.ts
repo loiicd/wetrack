@@ -1,5 +1,4 @@
-import { credentialInterface } from "@/lib/database/credential";
-import { encryptSecret, isVaultConfigured } from "@/lib/vault/encryption";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured } from "@/lib/vault/infisical";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
@@ -16,7 +15,35 @@ export const GET = async () => {
   const { orgId } = await auth();
   if (!orgId) return new NextResponse("Organization required", { status: 403 });
 
-  const credentials = await credentialInterface.getByOrgId(orgId);
+  if (!isInfisicalConfigured()) {
+    return NextResponse.json([]);
+  }
+
+  const client = await getInfisicalClient();
+  const response = await client.secrets().listSecrets({
+    projectId: getProjectId(),
+    environment: getEnvironment(),
+    secretPath: getSecretPath(orgId),
+  });
+
+  const credentials = response.secrets.map((secret) => {
+    let meta: { type?: string; headerName?: string } = {};
+    try {
+      if (secret.secretComment) {
+        meta = JSON.parse(secret.secretComment);
+      }
+    } catch {
+      // ignore parse errors
+    }
+    return {
+      secretKey: secret.secretKey,
+      type: meta.type ?? "api-key",
+      headerName: meta.headerName ?? null,
+      createdAt: secret.createdAt,
+      updatedAt: secret.updatedAt,
+    };
+  });
+
   return NextResponse.json(credentials);
 };
 
@@ -24,9 +51,9 @@ export const POST = async (request: NextRequest) => {
   const { orgId } = await auth();
   if (!orgId) return new NextResponse("Organization required", { status: 403 });
 
-  if (!isVaultConfigured()) {
+  if (!isInfisicalConfigured()) {
     return NextResponse.json(
-      { error: "VAULT_SECRET is not configured. Set the VAULT_SECRET environment variable to enable credential encryption." },
+      { error: "Infisical is not configured. Set INFISICAL_CLIENT_ID, INFISICAL_CLIENT_SECRET, and INFISICAL_PROJECT_ID environment variables." },
       { status: 503 },
     );
   }
@@ -48,21 +75,25 @@ export const POST = async (request: NextRequest) => {
 
   const { label, type, value, headerName } = parsed.data;
 
-  const encryptedValue = await encryptSecret(value);
+  const meta: Record<string, string> = { type };
+  if (headerName) {
+    meta.headerName = headerName;
+  }
 
-  const credential = await credentialInterface.create({
-    orgId,
-    label,
-    type,
-    encryptedValue,
-    headerName,
+  const client = await getInfisicalClient();
+  await client.secrets().createSecret(label, {
+    secretValue: value,
+    secretComment: JSON.stringify(meta),
+    projectId: getProjectId(),
+    environment: getEnvironment(),
+    secretPath: getSecretPath(orgId),
   });
 
   // Invalidate caches that reference this credential
   revalidateTag(`credential:${orgId}:${label}`, "max");
 
   return NextResponse.json(
-    { id: credential.id, label: credential.label, type: credential.type },
+    { label, type },
     { status: 201 },
   );
 };

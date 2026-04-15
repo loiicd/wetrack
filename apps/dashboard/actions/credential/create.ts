@@ -1,7 +1,6 @@
 "use server";
 
-import { credentialInterface } from "@/lib/database/credential";
-import { encryptSecret, isVaultConfigured } from "@/lib/vault/encryption";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured } from "@/lib/vault/infisical";
 import { withAuth } from "@/lib/auth/withAuth";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 import { revalidateTag } from "next/cache";
@@ -17,9 +16,9 @@ const createCredentialSchema = z.object({
 export const createCredential = async (formData: FormData) => {
   return withErrorHandling(() =>
     withAuth("org:admin", async (_userId, orgId) => {
-      if (!isVaultConfigured()) {
+      if (!isInfisicalConfigured()) {
         throw new Error(
-          "VAULT_SECRET is not configured. Set the VAULT_SECRET environment variable to enable credential encryption.",
+          "Infisical is not configured. Set INFISICAL_CLIENT_ID, INFISICAL_CLIENT_SECRET, and INFISICAL_PROJECT_ID environment variables.",
         );
       }
 
@@ -32,22 +31,25 @@ export const createCredential = async (formData: FormData) => {
 
       const parsed = createCredentialSchema.parse(raw);
 
-      const encryptedValue = await encryptSecret(parsed.value);
+      const meta: Record<string, string> = { type: parsed.type };
+      if (parsed.headerName) {
+        meta.headerName = parsed.headerName;
+      }
 
-      const credential = await credentialInterface.create({
-        orgId,
-        label: parsed.label,
-        type: parsed.type,
-        encryptedValue,
-        headerName: parsed.headerName,
+      const client = await getInfisicalClient();
+      await client.secrets().createSecret(parsed.label, {
+        secretValue: parsed.value,
+        secretComment: JSON.stringify(meta),
+        projectId: getProjectId(),
+        environment: getEnvironment(),
+        secretPath: getSecretPath(orgId),
       });
 
       revalidateTag(`credential:${orgId}:${parsed.label}`, "max");
 
       return {
-        id: credential.id,
-        label: credential.label,
-        type: credential.type,
+        label: parsed.label,
+        type: parsed.type,
       };
     }),
   );

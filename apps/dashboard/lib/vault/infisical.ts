@@ -75,6 +75,30 @@ export function getSecretPath(orgId: string): string {
 }
 
 /**
+ * Ensures the organization folder exists in Infisical.
+ * Infisical requires folders to exist before secrets can be created in them.
+ * If the folder already exists, the call is a no-op (catches the duplicate error).
+ */
+export async function ensureOrgFolder(orgId: string): Promise<void> {
+  const client = await getInfisicalClient();
+  try {
+    await client.folders().create({
+      name: orgId,
+      path: "/",
+      projectId: getProjectId(),
+      environment: getEnvironment(),
+    });
+  } catch (e: unknown) {
+    // Folder already exists — safe to ignore (Infisical returns 400/409 for duplicates)
+    const message = e instanceof Error ? e.message : String(e);
+    if (message.includes("already exists") || message.includes("409") || message.includes("400")) {
+      return;
+    }
+    throw e;
+  }
+}
+
+/**
  * Parsed credential metadata stored in the secret's comment field.
  */
 export type CredentialMeta = {

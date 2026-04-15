@@ -1,4 +1,4 @@
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta } from "@/lib/vault/infisical";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta, ensureOrgFolder } from "@/lib/vault/infisical";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
@@ -20,13 +20,20 @@ export const GET = async () => {
   }
 
   const client = await getInfisicalClient();
-  const response = await client.secrets().listSecrets({
-    projectId: getProjectId(),
-    environment: getEnvironment(),
-    secretPath: getSecretPath(orgId),
-  });
+  let secrets: { secretKey: string; secretComment?: string; createdAt: string; updatedAt: string }[] = [];
+  try {
+    const response = await client.secrets().listSecrets({
+      projectId: getProjectId(),
+      environment: getEnvironment(),
+      secretPath: getSecretPath(orgId),
+    });
+    secrets = response.secrets;
+  } catch {
+    // Folder doesn't exist yet (org has no credentials) — return empty list
+    secrets = [];
+  }
 
-  const credentials = response.secrets.map((secret) => {
+  const credentials = secrets.map((secret) => {
     const meta = parseCredentialMeta(secret.secretComment);
     return {
       secretKey: secret.secretKey,
@@ -74,6 +81,7 @@ export const POST = async (request: NextRequest) => {
   }
 
   const client = await getInfisicalClient();
+  await ensureOrgFolder(orgId);
   await client.secrets().createSecret(label, {
     secretValue: value,
     secretComment: JSON.stringify(meta),

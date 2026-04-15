@@ -1,6 +1,6 @@
 "use server";
 
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured } from "@/lib/vault/infisical";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, ensureOrgFolder } from "@/lib/vault/infisical";
 import { withAuth } from "@/lib/auth/withAuth";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 import { revalidateTag } from "next/cache";
@@ -37,6 +37,7 @@ export const createCredential = async (formData: FormData) => {
       }
 
       const client = await getInfisicalClient();
+      await ensureOrgFolder(orgId);
       await client.secrets().createSecret(parsed.label, {
         secretValue: parsed.value,
         secretComment: JSON.stringify(meta),

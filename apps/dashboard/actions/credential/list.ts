@@ -20,13 +20,20 @@ export const listCredentials = async () => {
       }
 
       const client = await getInfisicalClient();
-      const response = await client.secrets().listSecrets({
-        projectId: getProjectId(),
-        environment: getEnvironment(),
-        secretPath: getSecretPath(orgId),
-      });
+      let secrets: { secretKey: string; secretComment?: string; createdAt: string; updatedAt: string }[] = [];
+      try {
+        const response = await client.secrets().listSecrets({
+          projectId: getProjectId(),
+          environment: getEnvironment(),
+          secretPath: getSecretPath(orgId),
+        });
+        secrets = response.secrets;
+      } catch {
+        // Folder doesn't exist yet (org has no credentials) — return empty list
+        secrets = [];
+      }
 
-      return response.secrets.map((secret) => {
+      return secrets.map((secret) => {
         const meta = parseCredentialMeta(secret.secretComment);
 
         return {

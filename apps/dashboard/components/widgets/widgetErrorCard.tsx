@@ -26,7 +26,7 @@ function categorize(message: string): ErrorCategory {
   if (
     msg.includes("credential") ||
     msg.includes("vault") ||
-    msg.includes("headerName")
+    msg.includes("headername")
   )
     return "config";
   if (

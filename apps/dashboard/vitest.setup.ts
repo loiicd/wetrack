@@ -14,9 +14,9 @@ const mockPrisma = {
   // Minimal $transaction mock: if passed an array of functions, run them and return results
   $transaction: vi.fn().mockImplementation(async (work: any) => {
     if (Array.isArray(work)) {
-      return Promise.all(work.map((w) => (typeof w === "function" ? w() : w)));
+      return Promise.all(work.map((w) => (typeof w === "function" ? w(mockPrisma) : w)));
     }
-    if (typeof work === "function") return work();
+    if (typeof work === "function") return work(mockPrisma);
     return work;
   }),
 };

@@ -29,8 +29,8 @@ type Credential = {
   label: string;
   type: string;
   headerName: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type Props = {

@@ -389,6 +389,7 @@ export const ModelName = {
   DataSource: 'DataSource',
   Chart: 'Chart',
   Query: 'Query',
+  Filter: 'Filter',
   Credential: 'Credential'
 } as const
 
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "stack" | "dashboard" | "dataSource" | "chart" | "query" | "credential"
+    modelProps: "stack" | "dashboard" | "dataSource" | "chart" | "query" | "filter" | "credential"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -779,6 +780,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Filter: {
+      payload: Prisma.$FilterPayload<ExtArgs>
+      fields: Prisma.FilterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FilterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FilterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>
+        }
+        findFirst: {
+          args: Prisma.FilterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FilterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>
+        }
+        findMany: {
+          args: Prisma.FilterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>[]
+        }
+        create: {
+          args: Prisma.FilterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>
+        }
+        createMany: {
+          args: Prisma.FilterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FilterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>[]
+        }
+        delete: {
+          args: Prisma.FilterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>
+        }
+        update: {
+          args: Prisma.FilterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>
+        }
+        deleteMany: {
+          args: Prisma.FilterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FilterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FilterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>[]
+        }
+        upsert: {
+          args: Prisma.FilterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilterPayload>
+        }
+        aggregate: {
+          args: Prisma.FilterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFilter>
+        }
+        groupBy: {
+          args: Prisma.FilterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FilterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FilterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FilterCountAggregateOutputType> | number
+        }
+      }
+    }
     Credential: {
       payload: Prisma.$CredentialPayload<ExtArgs>
       fields: Prisma.CredentialFieldRefs
@@ -970,6 +1045,21 @@ export const QueryScalarFieldEnum = {
 } as const
 
 export type QueryScalarFieldEnum = (typeof QueryScalarFieldEnum)[keyof typeof QueryScalarFieldEnum]
+
+
+export const FilterScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  version: 'version',
+  stackId: 'stackId',
+  label: 'label',
+  type: 'type',
+  config: 'config',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FilterScalarFieldEnum = (typeof FilterScalarFieldEnum)[keyof typeof FilterScalarFieldEnum]
 
 
 export const CredentialScalarFieldEnum = {
@@ -1243,6 +1333,7 @@ export type GlobalOmitConfig = {
   dataSource?: Prisma.DataSourceOmit
   chart?: Prisma.ChartOmit
   query?: Prisma.QueryOmit
+  filter?: Prisma.FilterOmit
   credential?: Prisma.CredentialOmit
 }
 

@@ -56,6 +56,7 @@ export const ModelName = {
   DataSource: 'DataSource',
   Chart: 'Chart',
   Query: 'Query',
+  Filter: 'Filter',
   Credential: 'Credential'
 } as const
 
@@ -153,6 +154,21 @@ export const QueryScalarFieldEnum = {
 } as const
 
 export type QueryScalarFieldEnum = (typeof QueryScalarFieldEnum)[keyof typeof QueryScalarFieldEnum]
+
+
+export const FilterScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  version: 'version',
+  stackId: 'stackId',
+  label: 'label',
+  type: 'type',
+  config: 'config',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FilterScalarFieldEnum = (typeof FilterScalarFieldEnum)[keyof typeof FilterScalarFieldEnum]
 
 
 export const CredentialScalarFieldEnum = {

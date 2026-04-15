@@ -236,6 +236,7 @@ export type StackWhereInput = {
   dataSources?: Prisma.DataSourceListRelationFilter
   charts?: Prisma.ChartListRelationFilter
   queries?: Prisma.QueryListRelationFilter
+  filters?: Prisma.FilterListRelationFilter
 }
 
 export type StackOrderByWithRelationInput = {
@@ -250,6 +251,7 @@ export type StackOrderByWithRelationInput = {
   dataSources?: Prisma.DataSourceOrderByRelationAggregateInput
   charts?: Prisma.ChartOrderByRelationAggregateInput
   queries?: Prisma.QueryOrderByRelationAggregateInput
+  filters?: Prisma.FilterOrderByRelationAggregateInput
 }
 
 export type StackWhereUniqueInput = Prisma.AtLeast<{
@@ -268,6 +270,7 @@ export type StackWhereUniqueInput = Prisma.AtLeast<{
   dataSources?: Prisma.DataSourceListRelationFilter
   charts?: Prisma.ChartListRelationFilter
   queries?: Prisma.QueryListRelationFilter
+  filters?: Prisma.FilterListRelationFilter
 }, "id" | "key_environment_orgId">
 
 export type StackOrderByWithAggregationInput = {
@@ -310,6 +313,7 @@ export type StackCreateInput = {
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateInput = {
@@ -324,6 +328,7 @@ export type StackUncheckedCreateInput = {
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackUpdateInput = {
@@ -338,6 +343,7 @@ export type StackUpdateInput = {
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateInput = {
@@ -352,6 +358,7 @@ export type StackUncheckedUpdateInput = {
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStackNestedInput
 }
 
 export type StackCreateManyInput = {
@@ -509,6 +516,20 @@ export type StackUpdateOneRequiredWithoutQueriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StackUpdateToOneWithWhereWithoutQueriesInput, Prisma.StackUpdateWithoutQueriesInput>, Prisma.StackUncheckedUpdateWithoutQueriesInput>
 }
 
+export type StackCreateNestedOneWithoutFiltersInput = {
+  create?: Prisma.XOR<Prisma.StackCreateWithoutFiltersInput, Prisma.StackUncheckedCreateWithoutFiltersInput>
+  connectOrCreate?: Prisma.StackCreateOrConnectWithoutFiltersInput
+  connect?: Prisma.StackWhereUniqueInput
+}
+
+export type StackUpdateOneRequiredWithoutFiltersNestedInput = {
+  create?: Prisma.XOR<Prisma.StackCreateWithoutFiltersInput, Prisma.StackUncheckedCreateWithoutFiltersInput>
+  connectOrCreate?: Prisma.StackCreateOrConnectWithoutFiltersInput
+  upsert?: Prisma.StackUpsertWithoutFiltersInput
+  connect?: Prisma.StackWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StackUpdateToOneWithWhereWithoutFiltersInput, Prisma.StackUpdateWithoutFiltersInput>, Prisma.StackUncheckedUpdateWithoutFiltersInput>
+}
+
 export type StackCreateWithoutDashboardsInput = {
   id?: string
   key: string
@@ -520,6 +541,7 @@ export type StackCreateWithoutDashboardsInput = {
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateWithoutDashboardsInput = {
@@ -533,6 +555,7 @@ export type StackUncheckedCreateWithoutDashboardsInput = {
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackCreateOrConnectWithoutDashboardsInput = {
@@ -562,6 +585,7 @@ export type StackUpdateWithoutDashboardsInput = {
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateWithoutDashboardsInput = {
@@ -575,6 +599,7 @@ export type StackUncheckedUpdateWithoutDashboardsInput = {
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStackNestedInput
 }
 
 export type StackCreateWithoutDataSourcesInput = {
@@ -588,6 +613,7 @@ export type StackCreateWithoutDataSourcesInput = {
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateWithoutDataSourcesInput = {
@@ -601,6 +627,7 @@ export type StackUncheckedCreateWithoutDataSourcesInput = {
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackCreateOrConnectWithoutDataSourcesInput = {
@@ -630,6 +657,7 @@ export type StackUpdateWithoutDataSourcesInput = {
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateWithoutDataSourcesInput = {
@@ -643,6 +671,7 @@ export type StackUncheckedUpdateWithoutDataSourcesInput = {
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStackNestedInput
 }
 
 export type StackCreateWithoutChartsInput = {
@@ -656,6 +685,7 @@ export type StackCreateWithoutChartsInput = {
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateWithoutChartsInput = {
@@ -669,6 +699,7 @@ export type StackUncheckedCreateWithoutChartsInput = {
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackCreateOrConnectWithoutChartsInput = {
@@ -698,6 +729,7 @@ export type StackUpdateWithoutChartsInput = {
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateWithoutChartsInput = {
@@ -711,6 +743,7 @@ export type StackUncheckedUpdateWithoutChartsInput = {
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStackNestedInput
 }
 
 export type StackCreateWithoutQueriesInput = {
@@ -724,6 +757,7 @@ export type StackCreateWithoutQueriesInput = {
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStackInput
 }
 
 export type StackUncheckedCreateWithoutQueriesInput = {
@@ -737,6 +771,7 @@ export type StackUncheckedCreateWithoutQueriesInput = {
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStackInput
 }
 
 export type StackCreateOrConnectWithoutQueriesInput = {
@@ -766,6 +801,7 @@ export type StackUpdateWithoutQueriesInput = {
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStackNestedInput
 }
 
 export type StackUncheckedUpdateWithoutQueriesInput = {
@@ -779,6 +815,79 @@ export type StackUncheckedUpdateWithoutQueriesInput = {
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStackNestedInput
+}
+
+export type StackCreateWithoutFiltersInput = {
+  id?: string
+  key: string
+  orgId?: string
+  version?: number
+  environment: $Enums.Environment
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
+  dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
+  charts?: Prisma.ChartCreateNestedManyWithoutStackInput
+  queries?: Prisma.QueryCreateNestedManyWithoutStackInput
+}
+
+export type StackUncheckedCreateWithoutFiltersInput = {
+  id?: string
+  key: string
+  orgId?: string
+  version?: number
+  environment: $Enums.Environment
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
+  dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
+  charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
+  queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
+}
+
+export type StackCreateOrConnectWithoutFiltersInput = {
+  where: Prisma.StackWhereUniqueInput
+  create: Prisma.XOR<Prisma.StackCreateWithoutFiltersInput, Prisma.StackUncheckedCreateWithoutFiltersInput>
+}
+
+export type StackUpsertWithoutFiltersInput = {
+  update: Prisma.XOR<Prisma.StackUpdateWithoutFiltersInput, Prisma.StackUncheckedUpdateWithoutFiltersInput>
+  create: Prisma.XOR<Prisma.StackCreateWithoutFiltersInput, Prisma.StackUncheckedCreateWithoutFiltersInput>
+  where?: Prisma.StackWhereInput
+}
+
+export type StackUpdateToOneWithWhereWithoutFiltersInput = {
+  where?: Prisma.StackWhereInput
+  data: Prisma.XOR<Prisma.StackUpdateWithoutFiltersInput, Prisma.StackUncheckedUpdateWithoutFiltersInput>
+}
+
+export type StackUpdateWithoutFiltersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  orgId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
+  dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
+  charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
+  queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
+}
+
+export type StackUncheckedUpdateWithoutFiltersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  key?: Prisma.StringFieldUpdateOperationsInput | string
+  orgId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
+  dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
+  charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
+  queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
 }
 
 
@@ -791,6 +900,7 @@ export type StackCountOutputType = {
   dataSources: number
   charts: number
   queries: number
+  filters: number
 }
 
 export type StackCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -798,6 +908,7 @@ export type StackCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   dataSources?: boolean | StackCountOutputTypeCountDataSourcesArgs
   charts?: boolean | StackCountOutputTypeCountChartsArgs
   queries?: boolean | StackCountOutputTypeCountQueriesArgs
+  filters?: boolean | StackCountOutputTypeCountFiltersArgs
 }
 
 /**
@@ -838,6 +949,13 @@ export type StackCountOutputTypeCountQueriesArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.QueryWhereInput
 }
 
+/**
+ * StackCountOutputType without action
+ */
+export type StackCountOutputTypeCountFiltersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FilterWhereInput
+}
+
 
 export type StackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -851,6 +969,7 @@ export type StackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   dataSources?: boolean | Prisma.Stack$dataSourcesArgs<ExtArgs>
   charts?: boolean | Prisma.Stack$chartsArgs<ExtArgs>
   queries?: boolean | Prisma.Stack$queriesArgs<ExtArgs>
+  filters?: boolean | Prisma.Stack$filtersArgs<ExtArgs>
   _count?: boolean | Prisma.StackCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stack"]>
 
@@ -890,6 +1009,7 @@ export type StackInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   dataSources?: boolean | Prisma.Stack$dataSourcesArgs<ExtArgs>
   charts?: boolean | Prisma.Stack$chartsArgs<ExtArgs>
   queries?: boolean | Prisma.Stack$queriesArgs<ExtArgs>
+  filters?: boolean | Prisma.Stack$filtersArgs<ExtArgs>
   _count?: boolean | Prisma.StackCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StackIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -902,6 +1022,7 @@ export type $StackPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     dataSources: Prisma.$DataSourcePayload<ExtArgs>[]
     charts: Prisma.$ChartPayload<ExtArgs>[]
     queries: Prisma.$QueryPayload<ExtArgs>[]
+    filters: Prisma.$FilterPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1309,6 +1430,7 @@ export interface Prisma__StackClient<T, Null = never, ExtArgs extends runtime.Ty
   dataSources<T extends Prisma.Stack$dataSourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$dataSourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataSourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   charts<T extends Prisma.Stack$chartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$chartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   queries<T extends Prisma.Stack$queriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$queriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QueryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  filters<T extends Prisma.Stack$filtersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Stack$filtersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FilterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1826,6 +1948,30 @@ export type Stack$queriesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.QueryScalarFieldEnum | Prisma.QueryScalarFieldEnum[]
+}
+
+/**
+ * Stack.filters
+ */
+export type Stack$filtersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Filter
+   */
+  select?: Prisma.FilterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Filter
+   */
+  omit?: Prisma.FilterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FilterInclude<ExtArgs> | null
+  where?: Prisma.FilterWhereInput
+  orderBy?: Prisma.FilterOrderByWithRelationInput | Prisma.FilterOrderByWithRelationInput[]
+  cursor?: Prisma.FilterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FilterScalarFieldEnum | Prisma.FilterScalarFieldEnum[]
 }
 
 /**

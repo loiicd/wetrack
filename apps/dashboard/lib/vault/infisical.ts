@@ -11,8 +11,11 @@ export function isInfisicalConfigured(): boolean {
   );
 }
 
+let cachedClient: InfisicalSDK | null = null;
+
 /**
- * Creates and authenticates an InfisicalSDK client via Universal Auth.
+ * Returns a cached, authenticated InfisicalSDK client via Universal Auth.
+ * The client is reused across calls to avoid repeated auth round-trips.
  *
  * Required env vars:
  *   INFISICAL_CLIENT_ID     — Machine identity client ID
@@ -24,6 +27,8 @@ export function isInfisicalConfigured(): boolean {
  *   INFISICAL_ENVIRONMENT   — Environment slug (default: "prod")
  */
 export async function getInfisicalClient(): Promise<InfisicalSDK> {
+  if (cachedClient) return cachedClient;
+
   const clientId = process.env.INFISICAL_CLIENT_ID;
   const clientSecret = process.env.INFISICAL_CLIENT_SECRET;
 
@@ -38,6 +43,7 @@ export async function getInfisicalClient(): Promise<InfisicalSDK> {
   });
 
   await client.auth().universalAuth.login({ clientId, clientSecret });
+  cachedClient = client;
 
   return client;
 }
@@ -66,4 +72,25 @@ export function getEnvironment(): string {
  */
 export function getSecretPath(orgId: string): string {
   return `/${orgId}`;
+}
+
+/**
+ * Parsed credential metadata stored in the secret's comment field.
+ */
+export type CredentialMeta = {
+  type: string;
+  headerName?: string;
+};
+
+/**
+ * Parses credential metadata (type, headerName) from a secret's comment field.
+ * Falls back to { type: "api-key" } when the comment is empty or malformed.
+ */
+export function parseCredentialMeta(secretComment?: string): CredentialMeta {
+  if (!secretComment) return { type: "api-key" };
+  try {
+    return JSON.parse(secretComment) as CredentialMeta;
+  } catch {
+    return { type: "api-key" };
+  }
 }

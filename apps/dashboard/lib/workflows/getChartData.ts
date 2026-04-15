@@ -1,16 +1,11 @@
 import { dataSourceInterface } from "../database/dataSource";
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath } from "../vault/infisical";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, parseCredentialMeta } from "../vault/infisical";
 import { CredentialError } from "../errors/CredentialError";
 import { unstable_cache } from "next/cache";
 import {
   RestApiConfig,
   RestApiConfigSchema,
 } from "@/schemas/configs/restApiConfig";
-
-type CredentialMeta = {
-  type: string;
-  headerName?: string;
-};
 
 const DEFAULT_CACHE_TTL = 60; // seconds
 
@@ -34,7 +29,7 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
     cacheTags.push(`credential:${orgId}:${config.credential}`);
 
     let secretValue: string;
-    let meta: CredentialMeta;
+    let meta: ReturnType<typeof parseCredentialMeta>;
     try {
       const client = await getInfisicalClient();
       const secret = await client.secrets().getSecret({
@@ -45,10 +40,7 @@ export const getChartData = async (dataSourceId: string): Promise<unknown> => {
         viewSecretValue: true,
       });
       secretValue = secret.secretValue;
-      // Metadata (type, headerName) is stored in the secret comment as JSON
-      meta = secret.secretComment
-        ? JSON.parse(secret.secretComment)
-        : { type: "api-key" };
+      meta = parseCredentialMeta(secret.secretComment);
     } catch (e) {
       if (e instanceof CredentialError) throw e;
       throw new CredentialError(

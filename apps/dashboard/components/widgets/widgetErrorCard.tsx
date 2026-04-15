@@ -48,7 +48,10 @@ function categorize(message: string): ErrorCategory {
     msg.includes("zod") ||
     msg.includes("invalid") ||
     msg.includes("required") ||
-    msg.includes("field")
+    msg.includes("field") ||
+    msg.includes("credential") ||
+    msg.includes("vault") ||
+    msg.includes("infisical")
   )
     return "config";
   return "unknown";

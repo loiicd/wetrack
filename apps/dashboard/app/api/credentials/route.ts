@@ -1,4 +1,4 @@
-import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured } from "@/lib/vault/infisical";
+import { getInfisicalClient, getProjectId, getEnvironment, getSecretPath, isInfisicalConfigured, parseCredentialMeta } from "@/lib/vault/infisical";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
@@ -27,17 +27,10 @@ export const GET = async () => {
   });
 
   const credentials = response.secrets.map((secret) => {
-    let meta: { type?: string; headerName?: string } = {};
-    try {
-      if (secret.secretComment) {
-        meta = JSON.parse(secret.secretComment);
-      }
-    } catch {
-      // ignore parse errors
-    }
+    const meta = parseCredentialMeta(secret.secretComment);
     return {
       secretKey: secret.secretKey,
-      type: meta.type ?? "api-key",
+      type: meta.type,
       headerName: meta.headerName ?? null,
       createdAt: secret.createdAt,
       updatedAt: secret.updatedAt,

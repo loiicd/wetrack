@@ -1,7 +1,7 @@
 import Container from "@/components/layout/container";
 import { CredentialList } from "@/components/credentials/credentialList";
 import { getPageAuth } from "@/lib/auth/getPageAuth";
-import { isInfisicalConfigured, getInfisicalClient, getProjectId, getEnvironment, getSecretPath } from "@/lib/vault/infisical";
+import { isInfisicalConfigured, getInfisicalClient, getProjectId, getEnvironment, getSecretPath, parseCredentialMeta } from "@/lib/vault/infisical";
 
 const OrganizationProfilePage = async () => {
   const { orgId } = await getPageAuth();
@@ -25,24 +25,17 @@ const OrganizationProfilePage = async () => {
       });
 
       credentials = response.secrets.map((secret) => {
-        let meta: { type?: string; headerName?: string } = {};
-        try {
-          if (secret.secretComment) {
-            meta = JSON.parse(secret.secretComment);
-          }
-        } catch {
-          // ignore parse errors
-        }
+        const meta = parseCredentialMeta(secret.secretComment);
         return {
           secretKey: secret.secretKey,
-          type: meta.type ?? "api-key",
+          type: meta.type,
           headerName: meta.headerName ?? null,
           createdAt: secret.createdAt,
           updatedAt: secret.updatedAt,
         };
       });
-    } catch {
-      // If Infisical is unreachable, show empty list
+    } catch (error) {
+      console.error("[Credential Vault] Failed to fetch credentials from Infisical:", error);
       credentials = [];
     }
   }

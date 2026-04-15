@@ -14,12 +14,16 @@ const mockGetInfisicalClient = vi.fn().mockResolvedValue({
   }),
 });
 
-vi.mock("@/lib/vault/infisical", () => ({
-  getInfisicalClient: (...args: unknown[]) => mockGetInfisicalClient(...args),
-  getProjectId: () => "test-project",
-  getEnvironment: () => "prod",
-  getSecretPath: (orgId: string) => `/${orgId}`,
-}));
+vi.mock("@/lib/vault/infisical", async () => {
+  const actual = await vi.importActual<typeof import("@/lib/vault/infisical")>("@/lib/vault/infisical");
+  return {
+    ...actual,
+    getInfisicalClient: (...args: unknown[]) => mockGetInfisicalClient(...args),
+    getProjectId: () => "test-project",
+    getEnvironment: () => "prod",
+    getSecretPath: (orgId: string) => `/${orgId}`,
+  };
+});
 
 // next/cache: make unstable_cache a pass-through so we test real logic
 vi.mock("next/cache", () => ({

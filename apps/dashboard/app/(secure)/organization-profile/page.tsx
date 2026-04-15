@@ -7,9 +7,14 @@ import { isVaultConfigured } from "@/lib/vault/encryption";
 const OrganizationProfilePage = async () => {
   const { orgId } = await getPageAuth();
   const vaultConfigured = isVaultConfigured();
-  const credentials = vaultConfigured
+  const rawCredentials = vaultConfigured
     ? await credentialInterface.getByOrgId(orgId)
     : [];
+  const credentials = rawCredentials.map((credential) => ({
+    ...credential,
+    createdAt: credential.createdAt.toISOString(),
+    updatedAt: credential.updatedAt.toISOString(),
+  }));
 
   return (
     <Container>

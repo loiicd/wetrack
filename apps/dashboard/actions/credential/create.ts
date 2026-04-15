@@ -7,12 +7,22 @@ import { withErrorHandling } from "@/lib/withErrorHandling";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
-const createCredentialSchema = z.object({
-  label: z.string().min(1).max(100),
-  type: z.enum(["api-key", "bearer", "basic", "header"]),
-  value: z.string().min(1),
-  headerName: z.string().optional(),
-});
+const createCredentialSchema = z
+  .object({
+    label: z.string().min(1).max(100),
+    type: z.enum(["api-key", "bearer", "basic", "header"]),
+    value: z.string().min(1),
+    headerName: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.type === "header" && !data.headerName) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["headerName"],
+        message: "headerName is required when type is 'header'.",
+      });
+    }
+  });
 
 export const createCredential = async (formData: FormData) => {
   return withErrorHandling(() =>

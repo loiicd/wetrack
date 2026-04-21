@@ -4,18 +4,13 @@ import prisma from "./prisma";
 import { StackId } from "@/types/ids";
 import type { DatabaseClient } from "./client";
 
-type StackCreateInputWithRawJson = StackCreateInput & {
-  orgId: string;
-  rawJson?: Prisma.InputJsonValue;
-};
-
 export const stackInterface = {
   async create(
-    data: StackCreateInputWithRawJson,
+    data: StackCreateInput & { orgId: string },
     db: DatabaseClient = prisma,
   ): Promise<StackId> {
     const { rawJson, ...rest } = data;
-    const stackRecord = await (db.stack as any).upsert({
+    const stackRecord = await db.stack.upsert({
       where: {
         key_environment_orgId: {
           key: data.key,

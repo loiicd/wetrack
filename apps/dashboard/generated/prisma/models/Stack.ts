@@ -62,6 +62,7 @@ export type StackCountAggregateOutputType = {
   environment: number
   createdAt: number
   updatedAt: number
+  rawJson: number
   _all: number
 }
 
@@ -102,6 +103,7 @@ export type StackCountAggregateInputType = {
   environment?: true
   createdAt?: true
   updatedAt?: true
+  rawJson?: true
   _all?: true
 }
 
@@ -199,6 +201,7 @@ export type StackGroupByOutputType = {
   environment: $Enums.Environment
   createdAt: Date
   updatedAt: Date
+  rawJson: runtime.JsonValue | null
   _count: StackCountAggregateOutputType | null
   _avg: StackAvgAggregateOutputType | null
   _sum: StackSumAggregateOutputType | null
@@ -232,6 +235,7 @@ export type StackWhereInput = {
   environment?: Prisma.EnumEnvironmentFilter<"Stack"> | $Enums.Environment
   createdAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
+  rawJson?: Prisma.JsonNullableFilter<"Stack">
   dashboards?: Prisma.DashboardListRelationFilter
   dataSources?: Prisma.DataSourceListRelationFilter
   charts?: Prisma.ChartListRelationFilter
@@ -247,6 +251,7 @@ export type StackOrderByWithRelationInput = {
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  rawJson?: Prisma.SortOrderInput | Prisma.SortOrder
   dashboards?: Prisma.DashboardOrderByRelationAggregateInput
   dataSources?: Prisma.DataSourceOrderByRelationAggregateInput
   charts?: Prisma.ChartOrderByRelationAggregateInput
@@ -266,6 +271,7 @@ export type StackWhereUniqueInput = Prisma.AtLeast<{
   environment?: Prisma.EnumEnvironmentFilter<"Stack"> | $Enums.Environment
   createdAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Stack"> | Date | string
+  rawJson?: Prisma.JsonNullableFilter<"Stack">
   dashboards?: Prisma.DashboardListRelationFilter
   dataSources?: Prisma.DataSourceListRelationFilter
   charts?: Prisma.ChartListRelationFilter
@@ -281,6 +287,7 @@ export type StackOrderByWithAggregationInput = {
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  rawJson?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.StackCountOrderByAggregateInput
   _avg?: Prisma.StackAvgOrderByAggregateInput
   _max?: Prisma.StackMaxOrderByAggregateInput
@@ -299,6 +306,7 @@ export type StackScalarWhereWithAggregatesInput = {
   environment?: Prisma.EnumEnvironmentWithAggregatesFilter<"Stack"> | $Enums.Environment
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Stack"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Stack"> | Date | string
+  rawJson?: Prisma.JsonNullableWithAggregatesFilter<"Stack">
 }
 
 export type StackCreateInput = {
@@ -309,6 +317,7 @@ export type StackCreateInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
@@ -324,6 +333,7 @@ export type StackUncheckedCreateInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
@@ -339,6 +349,7 @@ export type StackUpdateInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
@@ -354,6 +365,7 @@ export type StackUncheckedUpdateInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
@@ -369,6 +381,7 @@ export type StackCreateManyInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type StackUpdateManyMutationInput = {
@@ -379,6 +392,7 @@ export type StackUpdateManyMutationInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type StackUncheckedUpdateManyInput = {
@@ -389,6 +403,7 @@ export type StackUncheckedUpdateManyInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type StackKeyEnvironmentOrgIdCompoundUniqueInput = {
@@ -405,6 +420,7 @@ export type StackCountOrderByAggregateInput = {
   environment?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  rawJson?: Prisma.SortOrder
 }
 
 export type StackAvgOrderByAggregateInput = {
@@ -538,6 +554,7 @@ export type StackCreateWithoutDashboardsInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryCreateNestedManyWithoutStackInput
@@ -552,6 +569,7 @@ export type StackUncheckedCreateWithoutDashboardsInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
@@ -582,6 +600,7 @@ export type StackUpdateWithoutDashboardsInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
@@ -596,6 +615,7 @@ export type StackUncheckedUpdateWithoutDashboardsInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
@@ -610,6 +630,7 @@ export type StackCreateWithoutDataSourcesInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryCreateNestedManyWithoutStackInput
@@ -624,6 +645,7 @@ export type StackUncheckedCreateWithoutDataSourcesInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
@@ -654,6 +676,7 @@ export type StackUpdateWithoutDataSourcesInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
@@ -668,6 +691,7 @@ export type StackUncheckedUpdateWithoutDataSourcesInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
@@ -682,6 +706,7 @@ export type StackCreateWithoutChartsInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryCreateNestedManyWithoutStackInput
@@ -696,6 +721,7 @@ export type StackUncheckedCreateWithoutChartsInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   queries?: Prisma.QueryUncheckedCreateNestedManyWithoutStackInput
@@ -726,6 +752,7 @@ export type StackUpdateWithoutChartsInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUpdateManyWithoutStackNestedInput
@@ -740,6 +767,7 @@ export type StackUncheckedUpdateWithoutChartsInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   queries?: Prisma.QueryUncheckedUpdateManyWithoutStackNestedInput
@@ -754,6 +782,7 @@ export type StackCreateWithoutQueriesInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
@@ -768,6 +797,7 @@ export type StackUncheckedCreateWithoutQueriesInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
@@ -798,6 +828,7 @@ export type StackUpdateWithoutQueriesInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
@@ -812,6 +843,7 @@ export type StackUncheckedUpdateWithoutQueriesInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
@@ -826,6 +858,7 @@ export type StackCreateWithoutFiltersInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartCreateNestedManyWithoutStackInput
@@ -840,6 +873,7 @@ export type StackUncheckedCreateWithoutFiltersInput = {
   environment: $Enums.Environment
   createdAt?: Date | string
   updatedAt?: Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedCreateNestedManyWithoutStackInput
   dataSources?: Prisma.DataSourceUncheckedCreateNestedManyWithoutStackInput
   charts?: Prisma.ChartUncheckedCreateNestedManyWithoutStackInput
@@ -870,6 +904,7 @@ export type StackUpdateWithoutFiltersInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUpdateManyWithoutStackNestedInput
@@ -884,6 +919,7 @@ export type StackUncheckedUpdateWithoutFiltersInput = {
   environment?: Prisma.EnumEnvironmentFieldUpdateOperationsInput | $Enums.Environment
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rawJson?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   dashboards?: Prisma.DashboardUncheckedUpdateManyWithoutStackNestedInput
   dataSources?: Prisma.DataSourceUncheckedUpdateManyWithoutStackNestedInput
   charts?: Prisma.ChartUncheckedUpdateManyWithoutStackNestedInput
@@ -965,6 +1001,7 @@ export type StackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  rawJson?: boolean
   dashboards?: boolean | Prisma.Stack$dashboardsArgs<ExtArgs>
   dataSources?: boolean | Prisma.Stack$dataSourcesArgs<ExtArgs>
   charts?: boolean | Prisma.Stack$chartsArgs<ExtArgs>
@@ -981,6 +1018,7 @@ export type StackSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  rawJson?: boolean
 }, ExtArgs["result"]["stack"]>
 
 export type StackSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -991,6 +1029,7 @@ export type StackSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  rawJson?: boolean
 }, ExtArgs["result"]["stack"]>
 
 export type StackSelectScalar = {
@@ -1001,9 +1040,10 @@ export type StackSelectScalar = {
   environment?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  rawJson?: boolean
 }
 
-export type StackOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "orgId" | "version" | "environment" | "createdAt" | "updatedAt", ExtArgs["result"]["stack"]>
+export type StackOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "key" | "orgId" | "version" | "environment" | "createdAt" | "updatedAt" | "rawJson", ExtArgs["result"]["stack"]>
 export type StackInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dashboards?: boolean | Prisma.Stack$dashboardsArgs<ExtArgs>
   dataSources?: boolean | Prisma.Stack$dataSourcesArgs<ExtArgs>
@@ -1032,6 +1072,7 @@ export type $StackPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     environment: $Enums.Environment
     createdAt: Date
     updatedAt: Date
+    rawJson: runtime.JsonValue | null
   }, ExtArgs["result"]["stack"]>
   composites: {}
 }
@@ -1467,6 +1508,7 @@ export interface StackFieldRefs {
   readonly environment: Prisma.FieldRef<"Stack", 'Environment'>
   readonly createdAt: Prisma.FieldRef<"Stack", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Stack", 'DateTime'>
+  readonly rawJson: Prisma.FieldRef<"Stack", 'Json'>
 }
     
 

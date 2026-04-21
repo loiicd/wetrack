@@ -1,0 +1,265 @@
+---
+title: Chart Types
+description: Reference for all chart types supported by wetrack-dashboard
+---
+
+WeTrack supports three chart types: **Cartesian**, **Stat**, and **Clock**. Each chart is created with the `Chart` class and a `type`-specific `config` object.
+
+---
+
+## Cartesian
+
+`type: "cartesian"` — renders bar, line, area, or scatter series on a shared categorical axis. Mix series types within a single chart using `seriesTypes`.
+
+```typescript
+import { Chart } from "wetrack-dashboard";
+
+// Bar chart (default)
+new Chart("revenue-by-month", {
+  dashboard: "overview",
+  source: { _entity: "query", key: "monthly-revenue" },
+  label: "Revenue by Month",
+  type: "cartesian",
+  config: {
+    categoryField: "month",
+    valueFields: ["revenue"],
+  },
+});
+
+// Grouped bar chart with two series
+new Chart("revenue-vs-cost", {
+  dashboard: "overview",
+  source: { _entity: "query", key: "monthly-data" },
+  label: "Revenue vs. Cost",
+  type: "cartesian",
+  config: {
+    categoryField: "month",
+    valueFields: ["revenue", "cost"],
+    colors: ["var(--chart-1)", "var(--chart-2)"],
+  },
+});
+
+// Mixed bar + line
+new Chart("revenue-vs-target", {
+  dashboard: "overview",
+  source: { _entity: "query", key: "monthly-data" },
+  label: "Revenue vs. Target",
+  type: "cartesian",
+  config: {
+    categoryField: "month",
+    valueFields: ["revenue", "target"],
+    seriesTypes: ["bar", "line"],
+  },
+});
+
+// Horizontal stacked bar
+new Chart("sales-by-region", {
+  dashboard: "overview",
+  source: { _entity: "query", key: "regional-sales" },
+  label: "Sales by Region",
+  type: "cartesian",
+  config: {
+    categoryField: "region",
+    valueFields: ["q1", "q2", "q3", "q4"],
+    orientation: "horizontal",
+    stacked: true,
+  },
+});
+
+// Area chart
+new Chart("active-users", {
+  dashboard: "overview",
+  source: { _entity: "query", key: "user-activity" },
+  label: "Active Users",
+  type: "cartesian",
+  config: {
+    categoryField: "date",
+    valueFields: ["users"],
+    seriesTypes: ["area"],
+    showDots: false,
+  },
+});
+```
+
+**Config options**
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `categoryField` | `string` | — | **Required.** Field used for the category (x) axis |
+| `valueFields` | `string[]` | — | **Required.** One or more fields to render as series |
+| `seriesTypes` | `CartesianSeriesType[]` | `"bar"` for all | Series type per entry in `valueFields`, in the same order. Possible values: `"bar"`, `"line"`, `"area"`, `"scatter"` |
+| `orientation` | `"vertical" \| "horizontal"` | `"vertical"` | Applies to bar series — vertical = columns, horizontal = rows |
+| `stacked` | `boolean` | `false` | Stack bar series instead of grouping them |
+| `showDots` | `boolean` | `true` | Show data point markers on line / area series |
+| `showTooltip` | `boolean` | `true` | Show value tooltip on hover |
+| `showLabels` | `boolean` | `false` | Show value labels directly on the chart |
+| `colors` | `string[]` | — | CSS color or CSS variable per series, e.g. `"var(--chart-1)"` |
+| `showCard` | `boolean` | `true` | Render card border, background, and shadow |
+
+**TypeScript type**
+
+```typescript
+type CartesianSeriesType = "bar" | "line" | "area" | "scatter";
+
+type CartesianChartConfig = {
+  categoryField: string;
+  valueFields: string[];
+  seriesTypes?: CartesianSeriesType[];
+  orientation?: "vertical" | "horizontal";
+  stacked?: boolean;
+  showDots?: boolean;
+  showTooltip?: boolean;
+  showLabels?: boolean;
+  colors?: string[];
+  showCard?: boolean;
+};
+```
+
+---
+
+## Stat
+
+`type: "stat"` — displays a single numeric value with an optional unit and color. Useful for KPI widgets and summary numbers.
+
+```typescript
+import { Chart } from "wetrack-dashboard";
+
+// Basic stat card
+new Chart("total-revenue", {
+  dashboard: "overview",
+  source: { _entity: "query", key: "revenue-total" },
+  label: "Total Revenue",
+  type: "stat",
+  config: {
+    valueField: "total",
+  },
+});
+
+// With unit, decimals, and color
+new Chart("monthly-mrr", {
+  dashboard: "overview",
+  source: { _entity: "query", key: "mrr" },
+  label: "MRR",
+  type: "stat",
+  config: {
+    valueField: "mrr",
+    unit: "€",
+    decimals: 0,
+    color: "var(--chart-1)",
+  },
+});
+```
+
+**Config options**
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `valueField` | `string` | — | **Required.** Field name of the value to display |
+| `unit` | `string` | — | Unit suffix appended to the value, e.g. `"€"`, `"%"`, `"ms"` |
+| `decimals` | `number` | — | Number of decimal places (0–10) |
+| `color` | `string` | — | CSS color or CSS variable for the displayed value |
+| `showCard` | `boolean` | `true` | Render card border, background, and shadow |
+
+**TypeScript type**
+
+```typescript
+type StatCardConfig = {
+  valueField: string;
+  unit?: string;
+  decimals?: number;
+  color?: string;
+  showCard?: boolean;
+};
+```
+
+---
+
+## Clock
+
+`type: "clock"` — displays the current time, optionally in a specific timezone. Does not require a `source`.
+
+```typescript
+import { Chart } from "wetrack-dashboard";
+
+// Local time
+new Chart("local-clock", {
+  dashboard: "overview",
+  label: "Local Time",
+  type: "clock",
+  config: {},
+});
+
+// Specific timezone with city label
+new Chart("berlin-time", {
+  dashboard: "overview",
+  label: "Berlin",
+  type: "clock",
+  config: {
+    timeZone: "Europe/Berlin",
+    labelFormat: "city",
+  },
+});
+
+// Multiple timezone clocks
+new Chart("ny-time", {
+  dashboard: "overview",
+  label: "New York",
+  type: "clock",
+  config: {
+    timeZone: "America/New_York",
+    labelFormat: "offset",
+    showSeconds: false,
+  },
+});
+```
+
+**Config options**
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `timeZone` | `string` | local time | [IANA timezone identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g. `"Europe/Berlin"`, `"America/New_York"` |
+| `label` | `string` | — | Overrides the auto-generated label |
+| `labelFormat` | `"city" \| "offset" \| "abbreviation" \| "full" \| "raw"` | `"raw"` | Format for the auto-generated label when no `label` is set |
+| `showHours` | `boolean` | `true` | Show the hours segment |
+| `showMinutes` | `boolean` | `true` | Show the minutes segment |
+| `showSeconds` | `boolean` | `true` | Show the seconds segment |
+| `showCard` | `boolean` | `true` | Render card border, background, and shadow |
+
+**Label formats**
+
+| Value | Example |
+|-------|---------|
+| `"city"` | `Berlin` |
+| `"offset"` | `UTC+2` |
+| `"abbreviation"` | `CET` |
+| `"full"` | `Central European Time` |
+| `"raw"` | `Europe/Berlin` |
+
+**TypeScript type**
+
+```typescript
+type ClockCardConfig = {
+  timeZone?: string;
+  label?: string;
+  labelFormat?: "city" | "offset" | "abbreviation" | "full" | "raw";
+  showHours?: boolean;
+  showMinutes?: boolean;
+  showSeconds?: boolean;
+  showCard?: boolean;
+};
+```
+
+---
+
+## Layout
+
+All chart types accept an optional `layout` field to position the chart on the dashboard's 12-column grid.
+
+```typescript
+new Chart("my-chart", {
+  // ...
+  layout: { x: 0, y: 0, w: 6, h: 3 },
+});
+```
+
+Omit `layout` to let WeTrack auto-place the chart. See [SDK Reference](/docs/sdk-reference#layout) for typical sizes.

@@ -3,6 +3,7 @@
   "pages": [
     "index",
     "sdk-reference",
+    "chart-types",
     "cli-reference",
     "credential-vault",
     "ci-cd"

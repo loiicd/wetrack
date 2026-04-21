@@ -3,7 +3,7 @@ import ClockWidget from "@/components/widgets/clockWidget";
 import StatCard from "@/components/widgets/statCard";
 import WidgetErrorCard from "@/components/widgets/widgetErrorCard";
 import ChartGrid from "@/components/chartGrid";
-import { Badge } from "@/components/ui/badge";
+import EnvironmentTabs from "@/components/dashboard/environmentTabs";
 import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
 import DashboardSkeleton from "@/components/dashboard/dashboardSkeleton";
 import Container from "@/components/layout/container";
@@ -43,7 +43,10 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
     return notFound();
   }
 
-  const charts = await chartInterface.getByDashboardId(dashboardId);
+  const [charts, envVariants] = await Promise.all([
+    chartInterface.getByDashboardId(dashboardId),
+    dashboardInterface.getEnvironmentsByKey(dashboard.key, orgId ?? ""),
+  ]);
 
   const rawSearchParams = props.searchParams ? await props.searchParams : {};
   const filterContext = Object.fromEntries(
@@ -159,41 +162,25 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
     }),
   );
 
-  const env = dashboard.stack?.environment;
-  const envBadge =
-    env === "PRODUCTION"
-      ? "default"
-      : env === "STAGING"
-        ? "secondary"
-        : "outline";
-  const envLabel =
-    env === "PRODUCTION"
-      ? "Production"
-      : env === "STAGING"
-        ? "Staging"
-        : env === "DEVELOPMENT"
-          ? "Development"
-          : null;
-
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-row gap-4 justify-between items-center">
+      <div className="flex flex-row gap-4 justify-between items-center flex-wrap">
         <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-2xl font-bold">{dashboard.label}</h1>
-            {envLabel && (
-              <Badge variant={envBadge} className="text-xs">
-                {envLabel}
-              </Badge>
-            )}
-          </div>
+          <h1 className="text-2xl font-bold">{dashboard.label}</h1>
           {dashboard.description ? (
             <p className="text-sm text-muted-foreground mt-0.5">
               {dashboard.description}
             </p>
           ) : null}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <EnvironmentTabs
+            currentId={dashboardId}
+            environments={envVariants.map((v) => ({
+              id: v.id,
+              environment: v.stack!.environment as "PRODUCTION" | "STAGING" | "DEVELOPMENT",
+            }))}
+          />
           <RefreshDashboardButton dashboardId={dashboardId} />
         </div>
       </div>

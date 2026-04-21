@@ -98,6 +98,18 @@ export const dashboardInterface = {
     return Array.from(latestByKey.values());
   },
 
+  /** Returns all environment variants of a dashboard (same key, same org) */
+  async getEnvironmentsByKey(dashboardKey: string, orgId: string) {
+    return await prisma.dashboard.findMany({
+      where: {
+        key: dashboardKey,
+        stack: { orgId },
+      },
+      select: { id: true, stack: { select: { environment: true } } },
+      orderBy: { createdAt: "asc" },
+    });
+  },
+
   async deleteNotInKeys(
     stackId: string,
     keys: string[],

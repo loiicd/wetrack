@@ -14,7 +14,10 @@ const directUrl =
   process.env.POSTGRES_URL_NON_POOLING ??
   datasourceUrl;
 
-if (!datasourceUrl) {
+// Only validate DB URL for commands that actually connect to the database.
+// `prisma generate` only reads the schema and does not need a connection.
+const isGenerateOnly = process.argv.some((a) => a === "generate");
+if (!datasourceUrl && !isGenerateOnly) {
   throw new Error(
     "Cannot resolve database URL. Set DATABASE_URL, POSTGRES_PRISMA_URL, or POSTGRES_URL.",
   );
@@ -26,6 +29,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: directUrl,
+    url: directUrl ?? "postgresql://localhost/placeholder",
   },
 });

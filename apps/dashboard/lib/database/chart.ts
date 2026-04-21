@@ -63,6 +63,13 @@ export const chartInterface = {
     });
   },
 
+  async getById(id: string) {
+    return await prisma.chart.findUnique({
+      where: { id },
+      include: { query: true },
+    });
+  },
+
   async deleteNotInKeys(
     stackId: string,
     keys: string[],

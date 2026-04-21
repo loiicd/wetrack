@@ -7,19 +7,14 @@ import EnvironmentTabs from "@/components/dashboard/environmentTabs";
 import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
 import DashboardFilters from "@/components/dashboard/dashboardFilters";
 import DashboardSkeleton from "@/components/dashboard/dashboardSkeleton";
+import ChartWidget from "@/components/dashboard/chartWidget";
 import Container from "@/components/layout/container";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
 import { filterInterface } from "@/lib/database/filter";
-import { toDataFrame } from "@/lib/dataframe";
 import { getQueryData } from "@/lib/workflows/getQueryData";
-import {
-  cartesianChartConfigSchema,
-  clockCardConfigSchema,
-  statCardConfigSchema,
-} from "@/schemas/dashboard";
-import type { TimeZone } from "@/types/timezone";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { connection } from "next/server";
@@ -29,6 +24,17 @@ type DashboardPageProps = {
   params: Promise<{ dashboardId: string }>;
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
+
+const ChartSkeleton = () => (
+  <Card className="h-full">
+    <CardHeader>
+      <Skeleton className="h-4 w-32" />
+    </CardHeader>
+    <CardContent>
+      <Skeleton className="h-full w-full min-h-24" />
+    </CardContent>
+  </Card>
+);
 
 const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
   await connection();
@@ -66,114 +72,18 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
     Object.entries(rawSearchParams || {}).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v]),
   ) as Record<string, string | undefined>;
 
-
-  const widgets = await Promise.all(
-    charts.map(async (chart) => {
-      try {
-        if (
-          chart.type === "CARTESIAN" ||
-          chart.type === "BAR" ||
-          chart.type === "LINE"
-        ) {
-          const config = cartesianChartConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId!, filterContext);
-          const dataFrame = toDataFrame(queryResult, [
-            config.categoryField,
-            ...config.valueFields,
-          ]);
-          const chartConfig = Object.fromEntries(
-            config.valueFields.map((vf, i) => [
-              vf,
-              {
-                label: vf,
-                color: config.colors?.[i] ?? `var(--chart-${(i % 5) + 1})`,
-                type: (config.seriesTypes?.[i] ?? "bar") as
-                  | "bar"
-                  | "line"
-                  | "area"
-                  | "scatter",
-              },
-            ]),
-          );
-          return {
-            id: chart.id,
-            x: chart.layoutX,
-            y: chart.layoutY,
-            w: chart.layoutW,
-            h: chart.layoutH,
-            content: (
-              <CartesianChart
-                title={chart.label}
-                description={chart.description ?? undefined}
-                data={dataFrame}
-                config={chartConfig}
-              />
-            ),
-          };
-        }
-
-        if (chart.type === "STAT") {
-          const config = statCardConfigSchema.parse(chart.config);
-          const queryResult = await getQueryData(chart.queryId!, filterContext);
-          const dataFrame = toDataFrame(queryResult, [config.valueField]);
-          return {
-            id: chart.id,
-            x: chart.layoutX,
-            y: chart.layoutY,
-            w: chart.layoutW,
-            h: chart.layoutH,
-            content: (
-              <StatCard
-                title={chart.label}
-                description={chart.description}
-                data={dataFrame}
-                config={config}
-              />
-            ),
-          };
-        }
-
-        if (chart.type === "CLOCK") {
-          const config = clockCardConfigSchema.parse(chart.config);
-          return {
-            id: chart.id,
-            x: chart.layoutX,
-            y: chart.layoutY,
-            w: chart.layoutW,
-            h: chart.layoutH,
-            content: (
-              <ClockWidget
-                timeZone={config.timeZone as TimeZone | undefined}
-                label={config.label}
-                labelFormat={config.labelFormat}
-                showHours={config.showHours}
-                showMinutes={config.showMinutes}
-                showSeconds={config.showSeconds}
-              />
-            ),
-          };
-        }
-
-        throw new Error(
-          `Chart type '${chart.type}' wird noch nicht unterstützt.`,
-        );
-      } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Unbekannter Fehler beim Laden des Charts.";
-
-        return {
-          id: chart.id,
-          x: chart.layoutX,
-          y: chart.layoutY,
-          w: chart.layoutW,
-          h: chart.layoutH,
-          content: <WidgetErrorCard title={chart.label} message={message} />,
-        };
-      }
-    }),
-  );
+  const widgets = charts.map((chart) => ({
+    id: chart.id,
+    x: chart.layoutX,
+    y: chart.layoutY,
+    w: chart.layoutW,
+    h: chart.layoutH,
+    content: (
+      <Suspense key={chart.id} fallback={<ChartSkeleton />}>
+        <ChartWidget chartId={chart.id} filterContext={filterContext} />
+      </Suspense>
+    ),
+  }));
 
   return (
     <div className="flex flex-col gap-4">

@@ -9,7 +9,7 @@
     "test:coverage": "vitest run --coverage",
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "migrate": "prisma migrate deploy",
+    "migrate": "[ -z \"$DATABASE_URL$POSTGRES_PRISMA_URL$POSTGRES_URL\" ] && echo 'Skipping migrate: no database URL configured' || prisma migrate deploy",
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint",

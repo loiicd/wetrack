@@ -22,7 +22,6 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { connection } from "next/server";
 import { getPageAuth } from "@/lib/auth/getPageAuth";
-import Test from "@/components/dashboard/test";
 
 type DashboardPageProps = {
   params: Promise<{ dashboardId: string }>;
@@ -178,7 +177,6 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <Test dashboard={dashboard} />
       <div className="flex flex-row gap-4 justify-between items-center">
         <div>
           <div className="flex items-center gap-2 flex-wrap">

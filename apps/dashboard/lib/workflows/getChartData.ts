@@ -1,5 +1,6 @@
 import { dataSourceInterface } from "../database/dataSource";
 import { credentialInterface } from "../database/credential";
+import { filterInterface } from "../database/filter";
 import { decryptSecret } from "../vault/encryption";
 import { CredentialError } from "../errors/CredentialError";
 import { unstable_cache } from "next/cache";
@@ -7,6 +8,7 @@ import {
   RestApiConfig,
   RestApiConfigSchema,
 } from "@/schemas/configs/restApiConfig";
+import { extractFilterValue } from "./getQueryData";
 
 const DEFAULT_CACHE_TTL = 60; // seconds
 
@@ -28,6 +30,44 @@ function stableSerialize(obj: unknown): string {
   } catch (e) {
     return String(obj);
   }
+}
+
+/** Build an injected config by applying filter values to URL/headers/body */
+function applyFilterInjects(
+  config: RestApiConfig,
+  filters: any[],
+  filterContext?: Record<string, any>,
+): RestApiConfig {
+  if (!filters.length || !filterContext) return config;
+
+  let url = config.url;
+  const extraHeaders: Record<string, string> = {};
+  let body = config.body;
+
+  for (const filter of filters) {
+    const inject = filter.inject as { location: string; key: string } | undefined;
+    if (!inject) continue;
+
+    const value = extractFilterValue(filter, filterContext);
+    if (value === undefined || value === null || value === "") continue;
+
+    const strValue = typeof value === "object" ? JSON.stringify(value) : String(value);
+
+    if (inject.location === "query_param") {
+      const separator = url.includes("?") ? "&" : "?";
+      url = `${url}${separator}${encodeURIComponent(inject.key)}=${encodeURIComponent(strValue)}`;
+    } else if (inject.location === "header") {
+      extraHeaders[inject.key] = strValue;
+    } else if (inject.location === "body") {
+      if (body && typeof body === "object" && !Array.isArray(body)) {
+        body = { ...(body as Record<string, unknown>), [inject.key]: value };
+      } else {
+        body = { [inject.key]: value };
+      }
+    }
+  }
+
+  return { ...config, url, headers: { ...config.headers, ...extraHeaders }, body };
 }
 
 export const getChartData = async (dataSourceId: string, filterContext?: Record<string, any>): Promise<unknown> => {
@@ -81,8 +121,18 @@ export const getChartData = async (dataSourceId: string, filterContext?: Record<
     }
   }
 
+  // Load filters targeting this dataSource and inject values into the config
+  const rawFilters = await filterInterface.getByStackId(dataSource.stackId);
+  const normalizedFilters = rawFilters.map((f: any) => ({ ...(f || {}), ...(f.config || {}) }));
+  const injectableFilters = normalizedFilters.filter((f: any) =>
+    Array.isArray(f.targets)
+      ? f.targets.some((t: any) => t.type === "datasource" && t.key === dataSource.key)
+      : false,
+  );
+  const injectedConfig = applyFilterInjects(config, injectableFilters, filterContext);
+
   const cachedFetch = unstable_cache(
-    () => callRestApi(config, credentialHeaders),
+    () => callRestApi(injectedConfig, credentialHeaders),
     [`datasource:${dataSourceId}`, `filters:${stableSerialize(filterContext)}`],
     {
       revalidate: DEFAULT_CACHE_TTL,

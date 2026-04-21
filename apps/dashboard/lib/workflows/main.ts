@@ -69,7 +69,7 @@ export const mainWorkflow = async (
 ): Promise<{ stackId: string }> => {
   return prisma.$transaction(async (tx) => {
     const stack = { key: data.key, environment: data.environment };
-    const stackId = await createStack(stack, orgId, tx);
+    const stackId = await createStack(stack, orgId, data as unknown as Prisma.InputJsonValue, tx);
 
     await createDashboards(data.dashboards, stackId, tx);
     await createDataSources(stackId, data.dataSources, tx);
@@ -91,6 +91,7 @@ export const mainWorkflow = async (
 const createStack = async (
   stack: Stack,
   orgId: string,
+  rawJson: Prisma.InputJsonValue,
   db: DatabaseClient,
 ) => {
   return await stackInterface.create({
@@ -98,6 +99,7 @@ const createStack = async (
     environment: stack.environment,
     orgId,
     version: 1,
+    rawJson,
   }, db);
 };
 

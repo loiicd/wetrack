@@ -4,9 +4,9 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { ThemeToggle } from "@/components/theme-toggle";
-
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
+import { EnvironmentSwitcher } from "@/components/layout/environmentSwitcher";
 
 export function SiteHeader({ userSlot }: { userSlot?: React.ReactNode }) {
   const { toggleSidebar } = useSidebar();
@@ -36,6 +36,7 @@ export function SiteHeader({ userSlot }: { userSlot?: React.ReactNode }) {
           </div>
           <span className="hidden text-lg font-semibold sm:block">WeTrack</span>
         </Link>
+        <EnvironmentSwitcher />
       </div>
 
       <div className="flex h-(--header-height) items-center gap-1 px-4">

@@ -46,10 +46,7 @@ export function EnvironmentSwitcher() {
   const current = envs.find((e) => e.isCurrent);
 
   useEffect(() => {
-    if (!dashboardId) {
-      setEnvs([]);
-      return;
-    }
+    if (!dashboardId) return;
     fetch(`/api/dashboard/${dashboardId}/environments`)
       .then((r) => (r.ok ? r.json() : []))
       .then((data: EnvEntry[]) => setEnvs(data))

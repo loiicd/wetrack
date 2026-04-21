@@ -1,11 +1,55 @@
 import { dashboardInterface } from "@/lib/database/dashboard";
-import { auth } from "@clerk/nextjs/server";
 import { Card, CardContent } from "@/components/ui/card";
 import DashboardListItem from "./dashboardListItem";
 
 type Props = {
   orgId: string;
 };
+
+type Environment = "PRODUCTION" | "STAGING" | "DEVELOPMENT";
+
+type GroupedDashboard = {
+  key: string;
+  label: string;
+  description?: string | null;
+  environments: { id: string; environment: Environment }[];
+  preferredId: string;
+};
+
+const ENV_PRIORITY: Environment[] = ["PRODUCTION", "STAGING", "DEVELOPMENT"];
+
+function groupDashboards(
+  dashboards: Awaited<ReturnType<typeof dashboardInterface.getMany>>,
+): GroupedDashboard[] {
+  const groups = new Map<string, GroupedDashboard>();
+
+  for (const d of dashboards) {
+    const env = d.stack?.environment as Environment | undefined;
+    if (!env) continue;
+
+    if (!groups.has(d.key)) {
+      groups.set(d.key, {
+        key: d.key,
+        label: d.label,
+        description: d.description,
+        environments: [],
+        preferredId: d.id,
+      });
+    }
+
+    const group = groups.get(d.key)!;
+    group.environments.push({ id: d.id, environment: env });
+  }
+
+  for (const group of groups.values()) {
+    const sorted = [...group.environments].sort(
+      (a, b) => ENV_PRIORITY.indexOf(a.environment) - ENV_PRIORITY.indexOf(b.environment),
+    );
+    group.preferredId = sorted[0].id;
+  }
+
+  return Array.from(groups.values());
+}
 
 const DashboardList = async ({ orgId }: Props) => {
   const dashboards = await dashboardInterface.getMany(orgId);
@@ -32,10 +76,12 @@ const DashboardList = async ({ orgId }: Props) => {
     );
   }
 
+  const grouped = groupDashboards(dashboards);
+
   return (
     <div className="flex flex-col gap-4">
-      {dashboards.map((dashboard) => (
-        <DashboardListItem key={dashboard.id} dashboard={dashboard} />
+      {grouped.map((group) => (
+        <DashboardListItem key={group.key} dashboard={group} />
       ))}
     </div>
   );

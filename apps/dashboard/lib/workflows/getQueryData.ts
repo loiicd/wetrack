@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { JSONPath } from "jsonpath-plus";
 import alasql from "@/lib/vendors/alasql";
 import { queryInterface } from "../database/query";
@@ -14,7 +15,6 @@ function stableSerialize(obj: unknown): string {
         return Object.keys(value)
           .sort()
           .reduce((acc, k) => {
-            // @ts-ignore
             acc[k] = value[k];
             return acc;
           }, {} as Record<string, unknown>);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { dataSourceInterface } from "../database/dataSource";
 import { credentialInterface } from "../database/credential";
 import { filterInterface } from "../database/filter";
@@ -20,7 +21,6 @@ function stableSerialize(obj: unknown): string {
         return Object.keys(value)
           .sort()
           .reduce((acc, k) => {
-            // @ts-ignore
             acc[k] = value[k];
             return acc;
           }, {} as Record<string, unknown>);
@@ -32,11 +32,13 @@ function stableSerialize(obj: unknown): string {
   }
 }
 
+type FilterContext = Record<string, any>;
+
 /** Build an injected config by applying filter values to URL/headers/body */
 function applyFilterInjects(
   config: RestApiConfig,
   filters: any[],
-  filterContext?: Record<string, any>,
+  filterContext?: FilterContext,
 ): RestApiConfig {
   if (!filters.length || !filterContext) return config;
 
@@ -70,7 +72,7 @@ function applyFilterInjects(
   return { ...config, url, headers: { ...config.headers, ...extraHeaders }, body };
 }
 
-export const getChartData = async (dataSourceId: string, filterContext?: Record<string, any>): Promise<unknown> => {
+export const getChartData = async (dataSourceId: string, filterContext?: FilterContext): Promise<unknown> => {
   const dataSource = await dataSourceInterface.getById(dataSourceId);
 
   if (!dataSource) {
@@ -123,7 +125,7 @@ export const getChartData = async (dataSourceId: string, filterContext?: Record<
 
   // Load filters targeting this dataSource and inject values into the config
   const rawFilters = await filterInterface.getByStackId(dataSource.stackId);
-  const normalizedFilters = rawFilters.map((f: any) => ({ ...(f || {}), ...(f.config || {}) }));
+  const normalizedFilters: any[] = rawFilters.map((f: any) => ({ ...(f || {}), ...(f.config || {}) }));
   const injectableFilters = normalizedFilters.filter((f: any) =>
     Array.isArray(f.targets)
       ? f.targets.some((t: any) => t.type === "datasource" && t.key === dataSource.key)

@@ -1,5 +1,4 @@
 import { StackCreateInput } from "@/generated/prisma/models";
-import { Prisma } from "@/generated/prisma/client";
 import prisma from "./prisma";
 import { StackId } from "@/types/ids";
 import type { DatabaseClient } from "./client";

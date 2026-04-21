@@ -46,6 +46,13 @@ export const chartInterface = {
     );
   },
 
+  async getByStackId(stackId: string, db: DatabaseClient = prisma) {
+    return await db.chart.findMany({
+      where: { stackId },
+      orderBy: [{ layoutY: "asc" }, { layoutX: "asc" }],
+    });
+  },
+
   async getByDashboardId(dashboardId: string) {
     return await prisma.chart.findMany({
       where: { dashboardId },

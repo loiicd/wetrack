@@ -6,6 +6,100 @@ import { mainWorkflow } from "@/lib/workflows/main";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
+import { stackInterface } from "@/lib/database/stack";
+import { dataSourceInterface } from "@/lib/database/dataSource";
+import { queryInterface } from "@/lib/database/query";
+import type { ChartType } from "@/generated/prisma/enums";
+import type { QueryType } from "@/generated/prisma/enums";
+
+function mapChartType(type: ChartType): string {
+  switch (type) {
+    case "STAT": return "stat";
+    case "CLOCK": return "clock";
+    default: return "cartesian"; // CARTESIAN, BAR, LINE
+  }
+}
+
+function mapQueryType(type: QueryType): string {
+  switch (type) {
+    case "SQL": return "sql";
+    default: return "jsonpath";
+  }
+}
+
+export const GET = async (request: NextRequest) => {
+  console.log("[GET /api/dashboard] Request received");
+
+  const response = await auth({ acceptsToken: ["api_key"] });
+
+  if (!response.isAuthenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const orgId = response.orgId;
+  if (!orgId) {
+    return new NextResponse("Organization required", { status: 403 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const key = searchParams.get("key");
+  const env = searchParams.get("env");
+
+  if (!key || !env) {
+    return NextResponse.json({ error: "Missing required query params: key, env" }, { status: 400 });
+  }
+
+  const stack = await stackInterface.getByKeyAndEnv(key, env, orgId);
+  if (!stack) {
+    return NextResponse.json({ error: "Stack not found" }, { status: 404 });
+  }
+
+  const [dashboards, dataSources, queries, charts] = await Promise.all([
+    dashboardInterface.getByStackId(stack.id),
+    dataSourceInterface.getByStackId(stack.id),
+    queryInterface.getByStackId(stack.id),
+    chartInterface.getByStackId(stack.id),
+  ]);
+
+  const dashboardKeyById = new Map(dashboards.map((d) => [d.id, d.key]));
+  const dataSourceKeyById = new Map(dataSources.map((ds) => [ds.id, ds.key]));
+  const queryKeyById = new Map(queries.map((q) => [q.id, q.key]));
+
+  return NextResponse.json({
+    key: stack.key,
+    environment: stack.environment,
+    dashboards: dashboards.map((d) => ({
+      key: d.key,
+      label: d.label,
+      description: d.description ?? null,
+    })),
+    dataSources: dataSources.map((ds) => ({
+      key: ds.key,
+      type: ds.type,
+      config: ds.config,
+    })),
+    queries: queries.map((q) => {
+      const base = {
+        key: q.key,
+        type: mapQueryType(q.type),
+        dataSource: q.dataSourceId ? (dataSourceKeyById.get(q.dataSourceId) ?? undefined) : undefined,
+        sourceQuery: q.sourceQueryId ? (queryKeyById.get(q.sourceQueryId) ?? undefined) : undefined,
+      };
+      if (q.type === "JSONPATH") return { ...base, jsonPath: q.jsonPath };
+      return { ...base, sql: q.sql };
+    }),
+    charts: charts.map((c) => ({
+      key: c.key,
+      dashboard: dashboardKeyById.get(c.dashboardId) ?? c.dashboardId,
+      label: c.label,
+      description: c.description ?? undefined,
+      type: mapChartType(c.type),
+      config: c.config,
+      query: c.queryId ? (queryKeyById.get(c.queryId) ?? undefined) : undefined,
+      layout: { x: c.layoutX, y: c.layoutY, w: c.layoutW, h: c.layoutH },
+    })),
+  });
+};
 
 export const POST = async (request: NextRequest) => {
   console.log("[POST /api/dashboard] Request received");

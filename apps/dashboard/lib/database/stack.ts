@@ -22,6 +22,23 @@ export const stackInterface = {
     return stackRecord.id as StackId;
   },
 
+  async getByKeyAndEnv(
+    key: string,
+    environment: string,
+    orgId: string,
+    db: DatabaseClient = prisma,
+  ) {
+    return await db.stack.findUnique({
+      where: {
+        key_environment_orgId: {
+          key,
+          environment: environment as import("@/generated/prisma/enums").Environment,
+          orgId,
+        },
+      },
+    });
+  },
+
   async getMany(orgId?: string) {
     return await prisma.stack.findMany({
       where: orgId ? { orgId } : undefined,

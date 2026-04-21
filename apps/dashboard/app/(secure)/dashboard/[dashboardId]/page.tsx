@@ -5,11 +5,13 @@ import WidgetErrorCard from "@/components/widgets/widgetErrorCard";
 import ChartGrid from "@/components/chartGrid";
 import EnvironmentTabs from "@/components/dashboard/environmentTabs";
 import RefreshDashboardButton from "@/components/dashboard/refreshDashboardButton";
+import DashboardFilters from "@/components/dashboard/dashboardFilters";
 import DashboardSkeleton from "@/components/dashboard/dashboardSkeleton";
 import Container from "@/components/layout/container";
 import { Card, CardContent } from "@/components/ui/card";
 import { chartInterface } from "@/lib/database/chart";
 import { dashboardInterface } from "@/lib/database/dashboard";
+import { filterInterface } from "@/lib/database/filter";
 import { toDataFrame } from "@/lib/dataframe";
 import { getQueryData } from "@/lib/workflows/getQueryData";
 import {
@@ -43,10 +45,21 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
     return notFound();
   }
 
-  const [charts, envVariants] = await Promise.all([
+  const [charts, envVariants, rawFilters] = await Promise.all([
     chartInterface.getByDashboardId(dashboardId),
     dashboardInterface.getEnvironmentsByKey(dashboard.key, orgId ?? ""),
+    filterInterface.getByStackId(dashboard.stackId),
   ]);
+
+  const filters = rawFilters.map((f) => {
+    const cfg = (f.config as Record<string, unknown>) ?? {};
+    return {
+      key: f.key,
+      type: f.type as "select" | "date_range" | "string" | "number_range",
+      label: f.label,
+      options: Array.isArray(cfg.options) ? (cfg.options as string[]) : undefined,
+    };
+  });
 
   const rawSearchParams = props.searchParams ? await props.searchParams : {};
   const filterContext = Object.fromEntries(
@@ -184,6 +197,10 @@ const DashboardContent = async ({ props }: { props: DashboardPageProps }) => {
           <RefreshDashboardButton dashboardId={dashboardId} />
         </div>
       </div>
+
+      {filters.length > 0 && (
+        <DashboardFilters filters={filters} currentValues={filterContext} />
+      )}
 
       {widgets.length > 0 ? (
         <ChartGrid widgets={widgets} />

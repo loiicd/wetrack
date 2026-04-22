@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { shadcn } from "@clerk/ui/themes";
+import { Suspense } from "react";
 
 const nunitoSans = Nunito_Sans({ variable: "--font-sans" });
 
@@ -48,7 +49,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <Suspense>
+                {children}
+              </Suspense>
               <Toaster />
             </ThemeProvider>
           </ClerkProvider>

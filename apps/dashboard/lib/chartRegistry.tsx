@@ -66,9 +66,10 @@ import {
 } from "@/schemas/dashboard";
 import { toDataFrame } from "@/lib/dataframe";
 import { getQueryData } from "@/lib/workflows/getQueryData";
+import { CARTESIAN_DB_TYPES } from "@/lib/charts/chartTypeMap";
 import type { TimeZone } from "@/types/timezone";
 
-registerChartType(["CARTESIAN", "BAR", "LINE"], {
+registerChartType([...CARTESIAN_DB_TYPES], {
   configSchema: cartesianChartConfigSchema,
   async render({ chart, config, filterContext }) {
     if (!chart.queryId) {

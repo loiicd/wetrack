@@ -10,6 +10,7 @@ import type { Environment, StackId } from "@/types";
 import type { StackSyncInput } from "@/schemas/dashboard";
 import { QueryType } from "@/generated/prisma/enums";
 import { Prisma } from "@/generated/prisma/client";
+import { mapSdkChartType } from "@/lib/charts/chartTypeMap";
 
 type Stack = {
   key: string;
@@ -309,14 +310,7 @@ const createCharts = async (
       key: chart.key,
       dashboardId,
       queryId,
-      type:
-        chart.type === "cartesian"
-          ? ("CARTESIAN" as const)
-          : chart.type === "stat"
-            ? ("STAT" as const)
-            : chart.type === "clock"
-              ? ("CLOCK" as const)
-              : ("CARTESIAN" as const),
+      type: mapSdkChartType(chart.type),
       label: chart.label,
       description: chart.description ?? null,
       config: chart.config,

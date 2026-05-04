@@ -71,7 +71,10 @@ import type { TimeZone } from "@/types/timezone";
 registerChartType(["CARTESIAN", "BAR", "LINE"], {
   configSchema: cartesianChartConfigSchema,
   async render({ chart, config, filterContext }) {
-    const queryResult = await getQueryData(chart.queryId!, filterContext);
+    if (!chart.queryId) {
+      throw new Error(`Chart '${chart.label}': a queryId is required for type ${chart.type}.`);
+    }
+    const queryResult = await getQueryData(chart.queryId, filterContext);
     const dataFrame = toDataFrame(queryResult, [
       config.categoryField,
       ...config.valueFields,
@@ -104,7 +107,10 @@ registerChartType(["CARTESIAN", "BAR", "LINE"], {
 registerChartType("STAT", {
   configSchema: statCardConfigSchema,
   async render({ chart, config, filterContext }) {
-    const queryResult = await getQueryData(chart.queryId!, filterContext);
+    if (!chart.queryId) {
+      throw new Error(`Chart '${chart.label}': a queryId is required for type ${chart.type}.`);
+    }
+    const queryResult = await getQueryData(chart.queryId, filterContext);
     const dataFrame = toDataFrame(queryResult, [config.valueField]);
     return (
       <StatCard

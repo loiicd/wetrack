@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+import z from "zod";
 
 // ---------------------------------------------------------------------------
 // Mocks – must be declared before the SUT import so vitest hoists them
@@ -129,28 +130,24 @@ describe("chartRegistry", () => {
   });
 
   describe("registerChartType", () => {
+    const stubEntry = {
+      configSchema: z.object({}),
+      render: () => null as never,
+    } as const;
+
     it("accepts a single type string", () => {
-      registerChartType("TEST_SINGLE", {
-        configSchema: { parse: (v: unknown) => v } as never,
-        render: () => null as never,
-      });
+      registerChartType("TEST_SINGLE", stubEntry);
       expect(getChartEntry("TEST_SINGLE")).toBeDefined();
     });
 
     it("accepts an array of type strings", () => {
-      registerChartType(["TEST_A", "TEST_B"], {
-        configSchema: { parse: (v: unknown) => v } as never,
-        render: () => null as never,
-      });
+      registerChartType(["TEST_A", "TEST_B"], stubEntry);
       expect(getChartEntry("TEST_A")).toBeDefined();
       expect(getChartEntry("TEST_B")).toBeDefined();
     });
 
     it("all types in an array share the same entry object", () => {
-      registerChartType(["SHARED_X", "SHARED_Y"], {
-        configSchema: { parse: (v: unknown) => v } as never,
-        render: () => null as never,
-      });
+      registerChartType(["SHARED_X", "SHARED_Y"], stubEntry);
       expect(getChartEntry("SHARED_X")).toBe(getChartEntry("SHARED_Y"));
     });
   });

@@ -9,16 +9,8 @@ import { dashboardInterface } from "@/lib/database/dashboard";
 import { stackInterface } from "@/lib/database/stack";
 import { dataSourceInterface } from "@/lib/database/dataSource";
 import { queryInterface } from "@/lib/database/query";
-import type { ChartType } from "@/generated/prisma/enums";
+import { mapDbChartType } from "@/lib/charts/chartTypeMap";
 import type { QueryType } from "@/generated/prisma/enums";
-
-function mapChartType(type: ChartType): string {
-  switch (type) {
-    case "STAT": return "stat";
-    case "CLOCK": return "clock";
-    default: return "cartesian"; // CARTESIAN, BAR, LINE
-  }
-}
 
 function mapQueryType(type: QueryType): string {
   switch (type) {
@@ -93,7 +85,7 @@ export const GET = async (request: NextRequest) => {
       dashboard: dashboardKeyById.get(c.dashboardId) ?? c.dashboardId,
       label: c.label,
       description: c.description ?? undefined,
-      type: mapChartType(c.type),
+      type: mapDbChartType(c.type),
       config: c.config,
       query: c.queryId ? (queryKeyById.get(c.queryId) ?? undefined) : undefined,
       layout: { x: c.layoutX, y: c.layoutY, w: c.layoutW, h: c.layoutH },

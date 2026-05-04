@@ -5,6 +5,7 @@ import WidgetErrorCard from "@/components/widgets/widgetErrorCard";
 import { chartInterface } from "@/lib/database/chart";
 import { toDataFrame } from "@/lib/dataframe";
 import { getQueryData } from "@/lib/workflows/getQueryData";
+import { CARTESIAN_DB_TYPES } from "@/lib/charts/chartTypeMap";
 import {
   cartesianChartConfigSchema,
   clockCardConfigSchema,
@@ -26,11 +27,7 @@ export default async function ChartWidget({ chartId, filterContext }: Props) {
   }
 
   try {
-    if (
-      chart.type === "CARTESIAN" ||
-      chart.type === "BAR" ||
-      chart.type === "LINE"
-    ) {
+    if (CARTESIAN_DB_TYPES.has(chart.type)) {
       const config = cartesianChartConfigSchema.parse(chart.config);
       const queryResult = await getQueryData(chart.queryId!, filterContext);
       const dataFrame = toDataFrame(queryResult, [

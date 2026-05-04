@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from "vitest";
-import { applyFiltersToArray, extractFilterValue, getValueByPath } from "@/lib/workflows/getQueryData";
+import { applyFiltersToArray, extractFilterValue, getValueByPath } from "@/lib/filters";
 
 const data = [
   { id: 1, ts: "2026-01-10T00:00:00Z", value: 10, category: "A", name: "apple", nested: { a: { b: 5 } } },

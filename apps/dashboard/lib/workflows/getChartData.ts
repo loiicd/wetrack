@@ -9,7 +9,7 @@ import {
   RestApiConfig,
   RestApiConfigSchema,
 } from "@/schemas/configs/restApiConfig";
-import { extractFilterValue } from "./getQueryData";
+import { extractFilterValue, normalizeFilters } from "../filters";
 
 const DEFAULT_CACHE_TTL = 60; // seconds
 
@@ -125,7 +125,7 @@ export const getChartData = async (dataSourceId: string, filterContext?: FilterC
 
   // Load filters targeting this dataSource and inject values into the config
   const rawFilters = await filterInterface.getByStackId(dataSource.stackId);
-  const normalizedFilters: any[] = rawFilters.map((f: any) => ({ ...(f || {}), ...(f.config || {}) }));
+  const normalizedFilters = normalizeFilters(rawFilters);
   const injectableFilters = normalizedFilters.filter((f: any) =>
     Array.isArray(f.targets)
       ? f.targets.some((t: any) => t.type === "datasource" && t.key === dataSource.key)

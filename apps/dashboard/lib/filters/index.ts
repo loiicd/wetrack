@@ -23,7 +23,7 @@ export type NormalizedFilter = {
  * No caller needs to know about the DB storage detail.
  */
 export function normalizeFilters(rawFilters: any[]): NormalizedFilter[] {
-  return (rawFilters || []).map((f: any) => ({ ...(f || {}), ...(f.config || {}) }));
+  return (rawFilters || []).map((f: any) => ({ ...f, ...(f.config || {}) }));
 }
 
 export function getValueByPath(obj: any, path: string) {

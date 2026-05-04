@@ -10,27 +10,9 @@ import {
   RestApiConfigSchema,
 } from "@/schemas/configs/restApiConfig";
 import { extractFilterValue, normalizeFilters } from "../filters";
+import { stableSerialize } from "../serialization";
 
 const DEFAULT_CACHE_TTL = 60; // seconds
-
-function stableSerialize(obj: unknown): string {
-  if (obj === undefined) return "";
-  try {
-    return JSON.stringify(obj, (_key, value) => {
-      if (value && typeof value === "object" && !Array.isArray(value)) {
-        return Object.keys(value)
-          .sort()
-          .reduce((acc, k) => {
-            acc[k] = value[k];
-            return acc;
-          }, {} as Record<string, unknown>);
-      }
-      return value;
-    });
-  } catch (e) {
-    return String(obj);
-  }
-}
 
 type FilterContext = Record<string, any>;
 
